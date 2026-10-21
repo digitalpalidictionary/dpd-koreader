@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    uses: ./.github/workflows/portable.yml
+
+  release:
+    needs: checks
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check the tag matches dpd/version.lua
+        run: |
+          version=$(sed -n 's/^return "\(.*\)"$/\1/p' dpd/version.lua)
+          test "$GITHUB_REF_NAME" = "v$version" || { echo "Tag $GITHUB_REF_NAME does not match version $version"; exit 1; }
+      - name: Build the plugin ZIP
+        run: |
+          python3 tools/package.py
+          cd dist && sha256sum dpd-koplugin-*.zip > SHA256SUMS
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/dpd-koplugin-*.zip dist/SHA256SUMS --title "$GITHUB_REF_NAME" --generate-notes

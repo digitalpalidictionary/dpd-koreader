@@ -1,0 +1,35 @@
+Digital Pāḷi Dictionary for KOReader
+
+Original plugin code: MIT License. See LICENSE for the full text. The bundled
+Lua files contain the plugin's source code.
+
+DPD dictionary material: Digital Pāḷi Dictionary, copyright Bodhirasa Bhikkhu,
+licensed under CC BY-NC-SA 4.0. See LICENSE-DPD for the upstream license and
+https://www.dpdict.net/ and https://github.com/digitalpalidictionary/dpd-db
+for the project and sources. The official database is downloaded separately
+and is not included in this plugin or its download.
+
+Lua ports of DPD code are distributed under the plugin's MIT License with the
+DPD maintainer's permission, with credit to DPD: dpd/sortkey.lua
+(tools/pali_sort_key.py), dpd/traditional.lua (tools/lemma_traditional.py),
+dpd/rootinfo.lua (db/families/root_info.py and family_root.py), dpd/sutta.lua
+(the webapp's sutta panel and db/models.py), dpd/velthuis.lua (the webapp's
+Velthuis input conversion), and the generated tables in
+dpd/frequency_layout.lua and dpd/rootmatrix_rules.lua.
+
+Dictionary material keeps CC BY-NC-SA 4.0. This includes the regression
+fixtures spec/fixtures/sortkeys.lua and spec/fixtures/lookup_channels.json,
+and dictionary material reproduced in documentation screenshots and examples.
+The frequency template and root classification rules have been transformed
+into Lua tables; the plugin generates its own presentation of dictionary data.
+The screenshots in docs/images/ use DPD v0.4.20260926 and were captured,
+cropped, zoomed and arranged for the README's illustrations.
+
+Additional dictionary material displayed from the separately obtained database
+comes from sources included by DPD and may have separate attribution/licensing
+terms. Consult the DPD project for source details. The deeper.png illustration
+also contains excerpts of Critical Pali Dictionary and Nyanatiloka's Buddhist
+Dictionary content presented through DPD.
+This notice does not purport to relicense independently held source material.
+
+Changes and the presentation described above are by the plugin project.
