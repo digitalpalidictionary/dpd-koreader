@@ -1,0 +1,1310 @@
+{
+  "source": "digitalpalidictionary/dpd-db mobile v0.4.20260926 (schema 7), SQL payload snapshot; CC BY-NC-SA 4.0",
+  "lookup": {
+    "Buddha": {
+      "lookup_key": "Buddha",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "buddha": {
+      "lookup_key": "buddha",
+      "headwords": "[48511, 48512]",
+      "deconstructor": "",
+      "grammar": "[[\"buddha\", \"noun\", \"masc voc sg\"], [\"buddha\", \"pp\", \"masc voc sg\"], [\"buddha\", \"pp\", \"nt voc sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"SYA\": {\"THa\": [[\"yaṃ buddha\", \"ma.sambuddha....\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "hotī": {
+      "lookup_key": "hotī",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "[\"hotīti\"]",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN1\": [[\"nissaggiyaṃ hotī\", \"hotīti idaṃ padaṃ sabbapotthakesu atthi, sikkhāpade pana natthi, evamuparipi\"]]}, \"BJT\": {\"VIN3\": [[\"sātisāro hotī.”\", \"imesu (21-22) chedesu vākyāni peyyālamukhena potthakesu na vacatthatānita pāḷiyāgatanayato tāni paccekaṃ peyyālavasena niddisitabbāni.\"]], \"JA\": [[\"mayha hotī\", \"nasakkā gantuṃ mati mayhaṃ hoti – machasaṃ\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "hotīti": {
+      "lookup_key": "hotīti",
+      "headwords": "[71483, 71484, 71485]",
+      "deconstructor": "[\"hoti + iti\"]",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"MN1\": [[\"evarūpo hotī’ti\", \"vihārotveveso arahato’’ti (?)\"]], \"MN2\": [[\"na hotī’ti\", \"yo ayamāyasmā ābhisamācārikampi dhammaṃ na jānātīti (sī. syā. kaṃ. pī.)\"], [\"sacchikiriyā hotī’’ti\", \"sacchikiriyāyāti (ka.)\"], [\"evarūpo hotī’ti\", \"vihārotveveso arahato’’ti (?)\"], [\"avakkanti hotī’ti\", \"na mayaṃ jānāma bho yathā gabbhassa avakkanti hotīti. yathā kathaṃ pana bho gabbhassa avakkanti hotīti. (ka.)\"]], \"SN4\": [[\"upādānaṃ hotī’’ti\", \"hotīti…pe… (ka.)\"]], \"AN10\": [[\"dhammadesanā hotī’’ti\", \"ekantaṃ tathāgataṃ dhammadesanā paṭibhātīti (syā.)\"]], \"KV\": [[\"sammādiṭṭhi hotī’’ti\", \"saṃ. ni. 2.15\"], [\"pātubhāvo hotī’’ti\", \"saṃ. ni. 5.223\"], [\"khayo hotī’’ti\", \"saṃ. ni. 3.101; itivu. 102; saṃ. ni. 5.1095\"], [\"khayo hotī’’ti\", \"saṃ. ni. 5.1095\"], [\"niruddhā hotī’’ti\", \"saṃ. ni. 4.259, 263\"], [\"niruddhā hotī’’ti\", \"saṃ. ni. 4.259, 263\"], [\"niruddhā hotī’’ti\", \"saṃ. ni. 4.259, 263\"], [\"nimuggova hotī’’ti\", \"a. ni. 7.15\"], [\"patigādhappatto hotī’’ti\", \"a. ni. 7.15\"], [\"appāyukasaṃvattaniko hotī’’ti\", \"a. ni. 8.40\"], [\"ummattakasaṃvattaniko hotī’’ti\", \"a. ni. 8.40\"], [\"pātubhāvo hotī’’ti\", \"ma. ni. 1.306\"], [\"pātubhāvo hotī’’ti\", \"ma. ni. 1.306\"]], \"Aññā\": [[\"kātabbā hotī’’ti\", \"visuddhi. 2.581\"], [\"sataṃ hotī’’ti\", \"dī. ni. aṭṭha. 3.nigamanakathā\"], [\"paṭibaddhacitto hotī’’ti\", \"pārā. 73\"], [\"samāso hotī’’ti\", \"ka. 328; rū. 352; nī. 691\"], [\"kammabhūtova hotī’’ti\", \"(attho) (potthake)\"]]}, \"BJT\": {\"VIN1\": [[\"nissaggiyaṃ hotīti\", \"‘hotīti’ idaṃ padaṃ potthakesu atthi. sikkhāpade pana natthi.\"]], \"VIN3\": [[\"anatisāro hotī”ti\", \"18, 19, 20. esupi chedesu yyolamukhāni potthakesu na dissante\"]], \"SN2\": [[\"na hotī”ti\", \"jākivāro ta dissate – PTS\"]], \"AN5\": [[\"paṭivirato hotī’ti\", \"paṭiviratoti – machasaṃ; paṭivirato hoti – syā, PTS\"]], \"NIDD1\": [[\"parāyano hotīti\", \"niṭṭhāparāyanā hontīti – machasaṃ, sīmu11\"], [\"parāyano hotīti\", \"niṭṭhā parāyanā hontīti – machasaṃ; niṭṭhā honti parāyaṇā honti – sīmu11\"]]}, \"SYA\": {\"VIN2\": [[\"nissaggiyaṃ hotīti\", \"nissaggiyaṃ hotīti ettha hotisaddo atirekapāṭho   bhaveyya sutte anāgatattā. itarathā suttaṃ ūnaṃ siyā evaṃ nissaggiyaṃ hoti   pācittiyanti bhaveyya. vicāretvā gahetabbaṃ.\"]], \"DN2\": [[\"tuṇhī hotīti\", \"ma. yu. hoti.\"]], \"DN3\": [[\"hotīti\", \"ma. yu. itisaddo na dissati.\"]], \"MN2\": [[\"saṅkamo hotīti\", \"ma. yu. hohīti.\"], [\"ananuyutto hotīti\", \"yu. ananuyuttotissa.\"], [\"sacchikiriyā hotīti\", \"ma. sacchikiriyāyāti.\"]], \"KHP\": [[\"brāhmaṇo hotīti\", \"po. ma. taṃ.\"]], \"NIDD1\": [[\"pītimano hotīti\", \"ma. yu.   itisaddo na dissati.\"], [\"mayhaṃ hotīti\", \"po. ma. na mayhaṃ hoti ettāvatā vadāmīti na tassa hotīti ...\"]], \"PM\": [[\"maggabhāvanā hotīti\", \"ma. itisaddo na dissati.\"]], \"KV\": [[\"sammādiṭṭhi hotīti\", \"saṃ. ni.\"], [\"pātubhāvo hotīti\", \"saṃ. ma.\"], [\"khayo hotīti\", \"saṃ. kha.\"], [\"khayo hotīti\", \"saṃ. nidāna.\"], [\"niruddhā hotīti\", \"saṃ. saḷāyata.\"], [\"patigādhappatto hotīti\", \"aṃ. sattaka.\"], [\"appāyukasaṃvattaniko hotīti\", \"aṃ. aṭṭhaka.\"], [\"ummattakasaṃvattaniko hotīti\", \"aṃ. aṭṭhaka.\"], [\"pātubhāvo hotīti\", \"ma. mū.\"]], \"DNa\": [[\"vedanā hotīti\", \"abhiḍha.\"], [\"ettha hotīti\", \"aṅ. tika.\"], [\"saṃsibbitaṃ hotīti\", \"vinayu.\"], [\"samaṇo hotīti\", \"ma.mū.\"], [\"upāsako hotīti\", \"aṅ. aṭṭhaka.\"], [\"sīlavā hotīti\", \"aṅ. aṭṭhaka.\"], [\"hotīti\", \"aṅ. sattaka.\"], [\"ca hotīti\", \"cha.ma., i. hoti\"], [\"samudayo hotīti\", \"vinayu. mahāvagga\"], [\"sudassano hotīti\", \"cha.ma., i. hoti na dissati\"], [\"byantī hotīti\", \"ma. upari\"], [\"nimittaggāhī hotīti\", \"abhi. saṅ.\"]], \"MNa\": [[\"arahaṃ hotīti\", \"ma.mū.\"], [\"nirodho hotīti\", \"vinayu. mahā.\"], [\"ādittā hotīti\", \"vinayu. mahāvi.\"], [\"putto hotīti\", \"ma.ma.\"], [\"bahudhā hotīti\", \"dī.sī.\"], [\"upāsako hotīti\", \"saṃ. mahā.\"], [\"sīlavā hotīti\", \"saṃ. mahā.\"], [\"`itthasmī'ti hotīti\", \"abhi. vibhaṅga.\"], [\"sampajāno hotīti\", \"cha.ma. aṅ. aṭṭhaka.\"], [\"sammaggato hotīti\", \"cha.ma. akkhāyatīti\"], [\"sudiṭṭhaṃ hotīti\", \"ka. ahosīti\"], [\"kathitaṃ hotīti\", \"cha.ma. hoti\"], [\"sakkā hotīti\", \"cha.ma. hontīti\"], [\"samatikkamo hotīti\", \"ma. upari.\"], [\"kattā hotīti\", \"ma.mū.\"], [\"uppannaṃ hotīti\", \"abhi. saṃ.\"], [\"kalyāṇamitto hotīti\", \"khu. udāna.\"], [\"paṭisaṃviditā hotī'ti\", \"sī., ka. hoti, hoti .pe. evaṃ sā pīti   paṭisaṃviditā hotīti (?)\"]], \"SNa\": [[\"patiṭṭhito hotīti\", \"iti-saddo na dissati\"], [\"kalyāṇamittamūlakameva hotīti\", \"ma. hoti taṃ\"], [\"yatonidānaṃ hotīti\", \"cha.ma. hoti\"], [\"nirayasaṃvattanikā hotīti\", \"aṅ. aṭṭhaka.\"], [\"kalalaṃ hotīti,\", \"cha.ma. hoti\"], [\"itthasmīti hotīti\", \"pāthi.... asmīti hoti,   evasmīti hoti, abhi.vi.\"], [\"itthasmīti hotīti\", \"pāli....ñoti, iminā ca itthasmīti hoti, abhi.vi.\"], [\"samudayo hotīti\", \"cha.ma., i. avijjāpaccayā saṅkhārānaṃ samudayo hoti\"], [\"niratthakā hotīti\", \"cha.ma.,i. hoti\"], [\"maggo hotīti\", \"abhi.vi.\"], [\"sampajāno hotīti\", \"aṅ.aṭṭhaka.\"]], \"ANa\": [[\"khayo hotīti\", \"aṅ.chakka.\"], [\"nāma hotīti\", \"cha.ma.,i. vippamuttaṃ nāma hoti\"], [\"nāma hotīti\", \"cha.ma.,i. hoti\"], [\"nāma hotīti\", \"cha.ma. hoti\"], [\"vallabho hotīti\", \"cha.ma.,i. vallabhā   hontīti\"], [\"nāma hotīti\", \"cha.ma. hoti\"], [\"sīlavā hotīti\", \"saṃ.ma.\"], [\"samaṇo hotīti\", \"ma.mū.\"], [\"gabbhassāvakkanti hotīti\", \"ma.mū.\"], [\"ekodibhāvo hotīti\", \"cha.ma.,i. ekodi hotīti\"], [\"samudayo hotīti\", \"abhi.vi.\"], [\"bhāvanārāmo hotīti\", \"dī.pā.\"], [\"bhāvanārāmo hotīti\", \"ma.mū.\"], [\"bhāvanārāmo hotīti\", \"khu.mahā.\"], [\"ciraṭṭhitiko hotīti\", \"cha.ma. hoti\"], [\"akataṃ hotīti\", \"idaṃ saṃvaṇṇetabbapadaṃ pāliyaṃ na dissati\"], [\"lakkhaṇakusalo hotīti\", \"cha.ma. na lakkhaṇakusaloti\"]], \"KHPa\": [[\"pañcaṅgasamannāgataṃ hotīti\", \"aṅ. dasaka.\"], [\"asekho hotīti\", \"aṃ. dasaka.\"], [\"sādhu hotīti\", \"khu.su.\"], [\"subhāsitā hotīti\", \"khu.khu.\"], [\"uccākulino hotīti\", \"ma. upari.\"], [\"vipāko hotīti\", \"aṅ. catukka.\"]], \"UDa\": [[\"uppannaṃ hotīti\", \"abhi.saṅa.\"], [\"sampajāno hotīti\", \"aṅ. aṭṭhaka.\"], [\"samucchinno hotīti\", \"dī.sī.\"]], \"ITIa\": [[\"ca hotīti\", \"khu.jā.\"], [\"sekho hotīti\", \"saṃ.mahā.\"], [\"samaṇo hotīti\", \"ma.mū.\"], [\"arahaṃ hotīti\", \"ma.mū.\"], [\"jāgariyānuyogamanuyutto hotīti\", \"abhi.vi.\"], [\"khayo hotīti\", \"ma.mū.\"]], \"SNPa\": [[\"uppannaṃ hotīti\", \"vi. mahāvi.\"], [\"purisassa hotīti\", \"saṃ.sa.\"], [\"vipāko hotīti\", \"aṅ.catukka.\"], [\"samudayo hotīti\", \"abhi.vi.\"], [\"sādhu hotīti\", \"khu.su.\"], [\"samacariyā hotīti\", \"ma.mū.\"], [\"uccākulīno hotīti\", \"ma.u.\"], [\"brahmacārī hotīti\", \"dī.sī.\"], [\"viññāṇaṃ hotīti\", \"saṃ.saḷā.\"], [\"nirayasaṃvattanikā hotīti\", \"aṅ.aṭṭhaka.\"]], \"VVa\": [[\"upāsako hotīti\", \"saṃ.mahā.\"]], \"PVa\": [[\"na hotīti\", \"sī.,i. na arahatīti\"]], \"THa\": [[\"mandā hotīti\", \"sī. hoti\"], [\"dhammānudhammapaṭipanno hotīti\", \"aṅ.catukka.\"], [\"ukkaṭṭhoyeva hotīti\", \"sī.,i. ahosīti\"], [\"samudayo hotīti\", \"abhi.vi.\"]], \"NIDD1a\": [[\"uppannaṃ hotīti\", \"abhi.saṅ.\"], [\"apphuṭaṃ hotīti\", \"dī.sī.\"], [\"attamano hotīti\", \"aṅ.catukka.\"], [\"ca hotīti\", \"aṅ.pañcaka.\"], [\"paṭivirato hotīti\", \"dī.sī.\"]], \"PMa\": [[\"ghanavinibbhogapaṭisambhidāñāṇāvahā hotīti\", \"abhi.a.\"], [\"adhivāsakajātiko hotīti\", \"ma.mū.\"], [\"vuṭṭhānaṃ hotīti\", \"visuddhi.\"], [\"ñāṇaṃ hotīti\", \"vi.mahā.\"], [\"ca hotīti\", \"aṅ.pañcaka.\"], [\"paṭivirato hotīti\", \"dī.sī.\"], [\"kammaniyaṃ hotīti\", \"aṅ. ekaka.\"], [\"pātubhāvo hotīti\", \"aṅ.ekaka.\"], [\"moho hotīti\", \"abhi.saṅ.\"], [\"anavassavo hotīti\", \"aṅ.chakka.\"], [\"aṭṭhataṇhāvicaritasataṃ hotīti\", \"abhi.vi.\"], [\"patto hotīti\", \"dī.sī.\"]], \"BVa\": [[\"sīlavā hotīti\", \"ma.ma.\"], [\"jiṇṇo hotīti\", \"vi.mahāvi.\"], [\"sekho hotīti\", \"saṃ.mahā.\"]], \"DhSa\": [[\"vācetuñca hotīti\", \"cha.ma. pahotīti\"], [\"uppannaṃ hotīti\", \"vinayu.\"], [\"anavassutaṃ hotīti\", \"aṅ. tika.\"], [\"hotīti\", \"aṅ. catukka.\"], [\"bhinnā hotīti\", \"vinayu.\"], [\"sampajānamusāvādassa hotīti\", \"vinayu.\"], [\"ca hotīti\", \"aṅ. pañcaka.\"], [\"paṭivirato hotīti\", \"dī.sī.\"], [\"suparisuddho hotīti\", \"ma. u.\"], [\"upekkhindriyaṃ hotīti\", \"abhi.\"], [\"tadārammaṇaṃ hotīti\", \"cha.ma. hoti\"], [\"pātubhūtaṃ hotīti\", \"vinayu.\"], [\"hotīti\", \"aṅ.chakka.\"]], \"VIBHa\": [[\"suparisuddho hotīti\", \"ma.u.\"], [\"uppannā hotīti\", \"abhi.\"], [\"katā hotīti\", \"cha.ma. hoti\"], [\"suparisuddho hotīti\", \"ma.u.\"], [\"attamano hotīti\", \"aṅ. catukka.\"], [\"sampajāno hotīti\", \"aṅ.aṭṭhaka.\"], [\"ñāṇaparicchedo hotīti\", \"cha.ma. hoti\"]], \"ADha\": [[\"paṭivirato hotīti\", \"dī.sī.\"], [\"ca hotīti\", \"aṅ. pañcaka.\"], [\"paṭhavī hotīti\", \"cha.ma. sabbeva pathavīti\"], [\"nimuggova hotīti\", \"aṅ.sattaka.\"], [\"suparisuddho hotīti\", \"ma.u.\"], [\"moho hotīti\", \"abhi.\"], [\"avakkanti hotīti\", \"saṃṇi.\"], [\"gabbhassāvakkanti hotīti\", \"ma.mū.\"], [\"buddhasaraṇagamanaṃ hotīti\", \"saṃ.saḷā.\"]], \"VISM\": [[\"satokārī hotīti\", \". khu. pa.\"]]}, \"MST\": {\"SN1\": [[\"hotī”ti\", \"hotīti …pe… (mr)\"]], \"AN1\": [[\"hotī”ti\", \"paṭibhātīti (sya-all)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "sajjasīti": {
+      "lookup_key": "sajjasīti",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "[\"sajjesīti\"]",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN1\": [[\"antaravāsake sajjasī’’ti\", \"antaravāsakaṃ na sajjasīti (ka.), mayhaṃ antaravāsakaṃ vissajjehīti (syā.)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "sajjesīti": {
+      "lookup_key": "sajjesīti",
+      "headwords": "",
+      "deconstructor": "[\"sajjesi + iti\"]",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "di": {
+      "lookup_key": "di",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "[\"dī\"]",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "dī": {
+      "lookup_key": "dī",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "[\"√dī\"]",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "[{\"source\": \"CST\", \"meaning\": \"Dīgha (Nikāya)\", \"notes\": null}]",
+      "help": ""
+    },
+    "ittivu": {
+      "lookup_key": "ittivu",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "[\"itivu\"]",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "itivu": {
+      "lookup_key": "itivu",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "[{\"source\": \"CST\", \"meaning\": \"Itivuttaka\", \"notes\": null}]",
+      "help": ""
+    },
+    "√har": {
+      "lookup_key": "√har",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "[\"√har 1\", \"√har 2\", \"√har 3\", \"√har 4\"]",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "akkh": {
+      "lookup_key": "akkh",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "[\"√akkh\"]",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "loc": {
+      "lookup_key": "loc",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "{\n \"meaning\": \"locative case\",\n \"pāli\": \"sattamī, bhummavacana, okāsa, ādhāra\",\n \"example\": \"amhesu - pron, 1st <b>loc</b> pl of ahaṃ\",\n \"explanation\": \"showing place (in, on, at, among)<br/>(e.g. in us; among us)\",\n \"ru_abbrev\": \"мест\",\n \"ru_meaning\": \"местный падеж\"\n}",
+      "roots": "[\"√loc\"]",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "[{\"source\": \"Cone\", \"meaning\": \"locative\", \"notes\": null}, {\"source\": \"PTS\", \"meaning\": \"locative case\", \"notes\": null}]",
+      "help": ""
+    },
+    "kā": {
+      "lookup_key": "kā",
+      "headwords": "[19158, 19159, 19162, 20877, 20878, 21591, 86882]",
+      "deconstructor": "",
+      "grammar": "[[\"ka\", \"interr\", \"fem nom sg\"], [\"ka\", \"interr\", \"fem nom pl\"], [\"ka\", \"interr\", \"fem acc pl\"], [\"ka\", \"pron\", \"fem nom sg\"], [\"ka\", \"pron\", \"fem nom pl\"], [\"ka\", \"pron\", \"fem acc pl\"], [\"ka\", \"noun\", \"nt nom pl\"], [\"ka\", \"noun\", \"nt instr sg\"], [\"ka\", \"noun\", \"nt abl sg\"], [\"ka\", \"noun\", \"nt voc sg\"], [\"ka\", \"noun\", \"nt voc pl\"], [\"kā\", \"noun\", \"fem nom sg\"], [\"kā\", \"noun\", \"fem nom pl\"], [\"kā\", \"noun\", \"fem acc pl\"], [\"kā\", \"noun\", \"fem instr sg\"], [\"kā\", \"noun\", \"fem voc pl\"], [\"ki\", \"interr\", \"fem nom sg\"], [\"ki\", \"interr\", \"fem nom pl\"], [\"ki\", \"interr\", \"fem acc pl\"]]",
+      "abbrev": "",
+      "roots": "[\"√kā\"]",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"PV\": [[\"tattha kā\", \"kā tattha (sī.)\"]]}, \"BJT\": {\"SN1\": [[\"hi kā\", \"te – sīmu, syā\"]], \"JA\": [[\"kā\", \"tā – machasaṃ\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "dhammaṃ": {
+      "lookup_key": "dhammaṃ",
+      "headwords": "[34626, 34627, 34628, 34629, 34630, 34631, 34632, 34633, 34634, 34635, 34636, 34637, 34638, 34639, 34640, 34641, 77248]",
+      "deconstructor": "",
+      "grammar": "[[\"dhamma\", \"noun\", \"masc acc sg\"], [\"dhamma\", \"adj\", \"nt nom sg\"], [\"dhamma\", \"adj\", \"masc acc sg\"], [\"dhamma\", \"adj\", \"fem acc sg\"], [\"dhamma\", \"adj\", \"nt acc sg\"], [\"dhamma\", \"noun\", \"nt nom sg\"], [\"dhamma\", \"noun\", \"nt acc sg\"], [\"dhamma\", \"noun\", \"nt voc sg\"], [\"dhammā\", \"noun\", \"fem acc sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN5\": [[\"pārājikaṃ dhammaṃ\", \"dhammaṃ ajjhāpannaṃ (syā.)\"], [\"pārājikaṃ dhammaṃ\", \"pārājikaṃ dhammaṃ ajjhāpannaṃ (syā.)\"]], \"SN1\": [[\"vijānataṃ dhammaṃ\", \"ko pamādo vijānataṃ (sī. syā. kaṃ.)\"]], \"AN4\": [[\"imaṃ dhammaṃ\", \"temaṃ dhammaṃ (sī. syā. kaṃ.)\"]], \"Aññā\": [[\"bhagavā dhammaṃ\", \"dī. ni. 2.68\"], [\"vidhimhi-careyya dhammaṃ\", \"jā. 1.14.63\"]]}, \"BJT\": {\"VIN4\": [[\"yāhaṃ dhammaṃ\", \"yamahaṃ bhagavato dhammaṃ – sīmu\"]], \"VIN5\": [[\"pārājikaṃ dhammaṃ\", \"dhammaṃ ajjhāpanaṃ – syā\"], [\"pārājikaṃ dhammaṃ\", \"pārājika dhammaṃ ajjhāpannaṃ – syā\"]], \"SN1\": [[\"ativijjha dhammaṃ\", \"dhammaṃ iti natthi – machasaṃ, PTS\"]], \"SN4\": [[\"sabbaṃ dhammaṃ\", \"sabbadhammaṃ – sī.pavi\"]], \"AN4\": [[\"temaṃ dhammaṃ\", \"te imaṃ – machasaṃ\"]], \"AN5\": [[\"kaṇhaṃ dhammaṃ\", \"kaṇhadhammaṃ – machasaṃ\"]], \"ITI\": [[\"eka dhammaṃ\", \"ekaṃ dhammaṃ – sī, aṭṭhakathā, sīmu\"]], \"PV\": [[\"tasmā dhammaṃ\", \"tasmā – machasaṃ\"]], \"TH\": [[\"ativijjha dhammaṃ\", \"ativijjha – PTS\"]], \"APA\": [[\"cara dhammaṃ\", \"varadhamma – sī.selu\"]], \"JA\": [[\"yassāhi dhammaṃ\", \"yassa hi dhamma puriso vijaññā – machasaṃ\"], [\"satañca dhammaṃ\", \"dhammo – machasaṃ\"]], \"PM\": [[\"atthi dhammaṃ\", \"taṃ sabbaṃ – machasaṃ, sī.mopa; atthadhammaṃ – syā, PTS\"]]}, \"SYA\": {\"DN2\": [[\"buddhassa dhammaṃ\", \"ma. ... dhammāni paṭiggahesuṃ.\"]], \"MN2\": [[\"sutvā dhammaṃ\", \"ma. dhammesu.\"]], \"SN1\": [[\"ativijjha dhammaṃ\", \"ma. yu. ayaṃpāṭhonatthi.\"]], \"SN5\": [[\"akusalaṃ dhammaṃ\", \"yu. ayaṃ pāṭho natthi.\"]], \"JA\": [[\"hetaṃ dhammaṃ\", \"ma. na hetadhammaṃ.\"]], \"NIDD2\": [[\"attapaccakkhaṃ dhammaṃ\", \"ma. taṃ.\"], [\"attapaccakkhaṃ dhammaṃ\", \"ma. yaṃ.\"]], \"PM\": [[\"kañci dhammaṃ\", \"ma. sabbadhamme.\"]], \"APA\": [[\"sabbe dhammaṃ\", \"ma. dhammevaṃ vijanayiṃ ahaṃ.   yu. ... vijaṭāyahaṃ.\"]], \"API\": [[\"khippaṃ dhammaṃ\", \"ma. yu. dhammanisantitā.\"]], \"MNa\": [[\"dhammaṃ\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"SNa\": [[\"amhākaṃ dhammaṃ\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"ANa\": [[\"satthu dhammaṃ\", \"cha.ma. ṭhatvā\"], [\"catupārijuññapaṭimaṇḍitaṃ dhammaṃ\", \"ma.ma.\"], [\"dasabalassa dhammaṃ\", \"cha.ma.,i. dhammadesanaṃ\"], [\"gantvā dhammaṃ\", \"cha.ma.,i. dhammakathaṃ\"], [\"dhammaketu. dhammaṃ\", \"cha.ma.,i. temeva\"], [\"dasakusalakammapatha- dhammaṃ\", \"ma....ḍhammasmimpi\"]], \"KHPa\": [[\"bhikkhūnaṃ dhammaṃ\", \"cha.ma., i. dhammakathaṃ\"]], \"UDa\": [[\"ajjhāsayānurūpaṃ dhammaṃ\", \"cha.ma. ajjhāsayassa anurūpaṃ kathaṃ\"]], \"SNPa\": [[\"taṃ dhammaṃ\", \"sī.,i. tathā dhamme\"]], \"THa\": [[\"yatodha dhammaṃ\", \"sī. yathāva dhammaṃ\"], [\"buddhasāsane dhammaṃ\", \"sī. yathādhammaṃ\"], [\"rattiṃ dhammaṃ\", \"ma. dhammassavanaṃ\"]], \"DhSa\": [[\"avasesā dhammaṃ\", \"cha.ma. dhammakathaṃ\"]]}, \"MST\": {\"NP\": [[\"dhammaṃ\", \"yaṃ dhammaṃ (csp1ed)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "dhammā": {
+      "lookup_key": "dhammā",
+      "headwords": "[34626, 34627, 34628, 34629, 34630, 34631, 34632, 34633, 34634, 34635, 34636, 34637, 34638, 34639, 34640, 34641, 77248]",
+      "deconstructor": "",
+      "grammar": "[[\"dhamma\", \"noun\", \"masc nom pl\"], [\"dhamma\", \"noun\", \"masc instr sg\"], [\"dhamma\", \"noun\", \"masc abl sg\"], [\"dhamma\", \"noun\", \"masc voc sg\"], [\"dhamma\", \"noun\", \"masc voc pl\"], [\"dhamma\", \"adj\", \"masc nom pl\"], [\"dhamma\", \"adj\", \"fem nom sg\"], [\"dhamma\", \"adj\", \"fem nom pl\"], [\"dhamma\", \"adj\", \"nt nom pl\"], [\"dhamma\", \"adj\", \"fem acc pl\"], [\"dhamma\", \"adj\", \"masc instr sg\"], [\"dhamma\", \"adj\", \"nt instr sg\"], [\"dhamma\", \"adj\", \"masc abl sg\"], [\"dhamma\", \"adj\", \"nt abl sg\"], [\"dhamma\", \"adj\", \"masc voc sg\"], [\"dhamma\", \"adj\", \"masc voc pl\"], [\"dhamma\", \"adj\", \"fem voc pl\"], [\"dhamma\", \"adj\", \"nt voc sg\"], [\"dhamma\", \"noun\", \"nt nom pl\"], [\"dhamma\", \"noun\", \"nt instr sg\"], [\"dhamma\", \"noun\", \"nt abl sg\"], [\"dhamma\", \"noun\", \"nt voc sg\"], [\"dhamma\", \"noun\", \"nt voc pl\"], [\"dhammā\", \"noun\", \"fem nom sg\"], [\"dhammā\", \"noun\", \"fem nom pl\"], [\"dhammā\", \"noun\", \"fem acc pl\"], [\"dhammā\", \"noun\", \"fem instr sg\"], [\"dhammā\", \"noun\", \"fem voc pl\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"DN2\": [[\"dve dhammā\", \"ime dhammā (ka.)\"], [\"abbhutā dhammā\", \"abbhutadhammā (syā. ka.)\"]], \"DN3\": [[\"te dhammā\", \"vodhammā (ka.), te dhammā (syā.)\"], [\"vo dhammā\", \"napi ye kho dhammā (sī.), napi ye te dhammā (syā.), napi ye ca vo dhammā (ka.)\"], [\"vo dhammā\", \"napi ye kho dhammā (sī.), napi ye te dhammā (syā.), napi ye ca vo dhammā (ka.)\"]], \"MN3\": [[\"ye dhammā\", \"ye te dhammā (sī.)\"]], \"SN5\": [[\"te dhammā\", \"saṃvijjante ratanadhammā (sī.)\"]], \"AN4\": [[\"abbhutā dhammā\", \"abbhutadhammā (syā. kaṃ. ka.)\"]], \"AN8\": [[\"abbhutā dhammā\", \"abbhutadhammā (syā. ka.) cūḷava. 384 passitabbaṃ\"]], \"APA\": [[\"aho dhammā\", \"aho buddho aho dhammo (sī.) theragā. 201 theragāthāya tadaṭṭhakathāya ca saṃsandetabbaṃ\"]], \"PTP\": [[\"ye dhammā\", \"mahāva. 60\"], [\"sabbe dhammā\", \"dha. pa. 279\"]], \"Aññā\": [[\"bhikkhave dhammā\", \"aṅguttaranikāye\"], [\"bhikkhave dhammā\", \"a. ni. 2.3\"], [\"bhikkhave dhammā\", \"a. ni. 3.17\"], [\"chayime dhammā\", \"a. ni. 6.11\"], [\"navayime dhammā\", \"a. ni. 9.9\"], [\"dasayime dhammā\", \"a. ni. 10.16\"], [\"cittasahabhuno dhammā\", \"dha. sa. dukamātikā 61\"], [\"asaṅkhatā dhammā\", \"dha. sa. dukamātikā 8\"], [\"uppādino dhammā\", \"dha. sa. tikamātikā 17\"]]}, \"BJT\": {\"VIN1\": [[\"ete dhammā\", \"atthi ca ete dhamme mayi. ahañca etesu dhammesu ... – machasaṃ\"], [\"ete dhammā\", \"natthī ca ete dhamme mayi. na cāhaṃ...  – machasaṃ\"]], \"DN3\": [[\"vo dhammā\", \"vo ne dhammā – PTS\"], [\"vo dhammā\", \"na pi ye ne dhammā – syā\"]], \"MN3\": [[\"te dhammā\", \"ye dhammā – machasaṃ, syā, PTS\"], [\"te dhammā\", \"ye dhammā – machasaṃ, syā, PTS\"]], \"SN4\": [[\"sabbe dhammā\", \"upādāya sabbo dhammo – sī.pævi, sī.pavi\"]], \"SN5\": [[\"te dhammā\", \"saṃvijjante ratanadhammo mayi – sīmu, sī.pævi, sī.pavi\"]], \"APA\": [[\"aho dhammā\", \"dhammo – itipi\"], [\"aho dhammā\", \"dhammo – machasaṃ\"]], \"PM\": [[\"sabbe dhammā\", \"sabbadhammā – sī.mopa, sī.pāsi\"]], \"NP\": [[\"bodhaṅgamā dhammā\", \"bojjhaṅgā dhammā – sīmu\"]], \"PTP\": [[\"sabbe dhammā\", \"sabbesu dhammesu – machasaṃ\"], [\"ca dhammā\", \"ye ca dhamme – machasaṃ, PTS\"]], \"VIBH\": [[\"gehasitā dhammā,\", \"cha chandarāgā – sirimu, machasaṃ\"]]}, \"SYA\": {\"VIN2\": [[\"antarāyikā dhammā\", \"ma. yu. antarāyikā. evaṃ sabbattha ñātabbaṃ\"], [\"adhikaraṇasamathā dhammā\", \"ma. ayaṃ pāṭho natthi.\"]], \"VIN4\": [[\"aṭṭha dhammā\", \"yu. ovādenaṭṭha te dhammā.\"]], \"VIN5\": [[\"dve dhammā\", \"yu. dhamme.\"], [\"sārāṇīyā dhammā\", \"idaṃ pāṭhadavyaṃ atirekaṃ   viya dissati uddāne anāgatattā. yuropiyapotthakepi na dissati.\"]], \"DN2\": [[\"abbhutā dhammā\", \"ma. athakho. sabbattha īdisameva.\"]], \"DN3\": [[\"te dhammā\", \"ma. yu. akusalā ceva vo dhammā.\"], [\"dve dhammā\", \"ma. yu. ayaṃ na dissati.\"]], \"MN3\": [[\"ca dhammā\", \"po. ma. yu. dhammo.\"], [\"ca dhammā\", \"po. ma. yu. dhammo.\"]], \"AN\": [[\"sataṃ dhammā\", \"po. ma. yu. dhammo.\"], [\"bhikkhave dhammā\", \"yu. casaddo atthi.\"], [\"dhammā\", \"yu. casaddo atthi.\"]], \"DNa\": [[\"sesā dhammā\", \"cha.ma., i. cha mānā\"]], \"MNa\": [[\"akusalā dhammā\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"SNa\": [[\"vimuttiparipācariyā dhammā\", \"cha. dhammāva\"], [\"dasa dhammā\", \"su.vi.\"]], \"ANa\": [[\"pañca dhammā\", \"ka. maraṇasaccadhammā\"], [\"visiṭṭhatarā dhammā\", \"cha.ma. uttaritarāvisiṭṭhataro dhammo\"]], \"UDa\": [[\"ajjhattā dhammā,\", \"abhi.saṅ.\"], [\"asaṅkhatā dhammā,\", \"abhi. saṅ.\"]], \"ITIa\": [[\"asaṅkhatā dhammā\", \"abhi.saṅ.\"], [\"sevitabbāsevitabbā dhammā,\", \"pāḷiyaṃ. natthi\"]], \"PMa\": [[\"cittacetasikā dhammā\", \"abhi. saṅ.\"], [\"cittacetasikā dhammā\", \"abhi.saṅ.\"], [\"sabbe dhammā\", \"cha.ma. \\\"dhammā\\\"ti pāṭho na dissati\"]], \"DhSa\": [[\"avasesā dhammā\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"VIBHa\": [[\"ete dhammā\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"sevitabbāsevitabbā dhammā\", \"pāliyaṃ \\\"sevitabbāsevitabbā dhammā\\\"ti pāṭhā na dissanti\"]], \"ADha\": [[\"ye dhammā\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"atītāyeva dhammā\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"sabbe dhammā\", \"cha.ma. sabbadhammā\"]]}, \"MST\": {\"DN1\": [[\"dhammā\", \"ime dhammā (mr)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "ānanda": {
+      "lookup_key": "ānanda",
+      "headwords": "[11717, 11718, 11719, 11725]",
+      "deconstructor": "",
+      "grammar": "[[\"ānanda\", \"noun\", \"masc voc sg\"], [\"ānandati\", \"verb\", \"imp 2nd sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN1\": [[\"te, ānanda\", \"honti yevānanda (syā.), honti te ānanda (sī.)\"]], \"DN2\": [[\"kho, ānanda\", \"satta kho imā ānanda (ka. sī. syā.)\"]], \"SN2\": [[\"hevaṃ, ānanda\", \"mā hevaṃ ānanda avaca mā hevaṃ ānanda avaca (dī. ni. 2 mahānidānasutte)\"]], \"AN5\": [[\"siyā, ānanda\", \"ānandāti bhagavā āvoca (syā. pī.)\"]], \"AN10\": [[\"vā, ānanda\", \"ahañcānanda (sī. syā. ka.) a. ni. 6.44 passitabbaṃ\"]], \"UD\": [[\"evametaṃ, ānanda\", \"evametaṃ ānanda evametaṃ ānanda (syā.)\"]], \"KV\": [[\"vā, ānanda\", \"hānanda (saṃ. ni. 2.25)\"], [\"vā, ānanda\", \"hānanda (saṃ. ni. 2.25)\"], [\"vā, ānanda\", \"hānanda (saṃ. ni. 2.25)\"]], \"Aññā\": [[\"māhevaṃ ānanda\", \"dī. ni. 2.95\"]]}, \"BJT\": {\"VIN3\": [[\"bhante ānanda,\", \"bhante – machasaṃ\"]], \"MN3\": [[\"kho ānanda\", \"tassa kho evaṃ ānanda – sīmu, syā, PTS\"], [\"bho ānanda\", \"atthi kho ānanda – PTS\"], [\"bho ānanda\", \"kāyanuttha ānanda – PTS\"], [\"sampajāno ānanda\", \"uppajjamāno ānanda – PTS\"]], \"SN4\": [[\"ahañca ānanda\", \"ahañcānanda – sīmu\"]], \"SN5\": [[\"hevaṃ ānanda,\", \"ānanda avaca – syā\"], [\"te ānanda\", \"atha kho ānanda – machasaṃ\"]], \"AN8\": [[\"ākaṅkhamāno ānanda\", \"yo ākaṅkamāno ānanda – dīni\"], [\"ākaṅkhamāno ānanda\", \"so ākaṅkhamāno ānanda – dīni\"], [\"me ānanda\", \"aṭṭha kho ime ānanda – dīni.mahāparinibbānasutta\"], [\"so ānanda\", \"so kho ānanda – dīni.mahāparinibbānasutta\"], [\"ayaṃ ānanda\", \"‘ānanda’ itipadaṃ mahāparinibbāna sutte natthi.\"], [\"ayaṃ ānanda\", \"‘ānanda’ ihi padaṃ  mahāparinibbāna suteta natthi. \\n“acchariyaṃ vata bho abbhutaṃ vata bho mahāvatāyaṃ bhūmicālo” icchādivasena mahāparinibbānasutte dissati.\"]]}, \"SYA\": {\"DN2\": [[\"kho ānanda\", \"ma. yu. panānanda.\"]], \"SN2\": [[\"imesu ānanda\", \"yu. chasu.\"]], \"SN5\": [[\"bho ānanda\", \"ma. evamevaṃ bhotā ānandena.\"]], \"AN\": [[\"khemaindriyā ānanda\", \"ma. yu. khemadhindriya   ānanda.\"]], \"API\": [[\"parinibbutā. ānanda\", \"ma. yu. aho acchariyaṃ mayhaṃ.\"]], \"THa\": [[\"kathesi ānanda\", \"cha.ma. ānandī\"]]}, \"MST\": {\"VIN1\": [[\"ānanda\", \"honti te ānanda (bj)\"], [\"ānanda\", \"honti yevānanda (cck)\"], [\"ānanda\", \"hontiyevānanda (sya1ed, sya2ed)\"]], \"AN5\": [[\"ānanda\", \"ānandāti bhagavā avoca (sya-all, pts1ed)\"]], \"KV\": [[\"ānanda\", \"hānanda (sn12.25:1 [25. Bhūmijasutta])\"], [\"ānanda\", \"hānanda (sn12.25:1 [25. Bhūmijasutta])\"], [\"ānanda\", \"hānanda (sn12.25:1 [25. Bhūmijasutta])\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "bhikkhaveti": {
+      "lookup_key": "bhikkhaveti",
+      "headwords": "[49868, 49885]",
+      "deconstructor": "[\"bhikkhave + iti\"]",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"AN10\": [[\"āvuso bhikkhave’’ti\", \"bhikkhavoti (sī. syā.)\"]], \"AN11\": [[\"āvuso bhikkhave’’ti\", \"bhikkhavoti (sī. syā. pī.) evaṃ sabbattha a. ni. 10.4\"]]}, \"SYA\": {\"SN3\": [[\"āvuso bhikkhaveti\", \"yu. bhikkhavo.\"]], \"SN4\": [[\"āvuso bhikkhaveti\", \"yu. bhikkhavoti.\"]], \"MNa\": [[\"pacchā bhikkhaveti\", \"pāli. bhikkhavoti\"]]}, \"MST\": {\"AN1\": [[\"bhikkhave”ti\", \"bhikkhavoti (bj, sya-all, pts1ed)\"], [\"bhikkhave”ti\", \"bhikkhavoti (bj, sya-all, pts1ed)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "yodha": {
+      "lookup_key": "yodha",
+      "headwords": "[54290, 54291]",
+      "deconstructor": "[\"yo + idha\"]",
+      "grammar": "[[\"yodha\", \"noun\", \"masc voc sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"JA\": [[\"ca yo’dha\", \"yo ca (pī.)\"]]}, \"SYA\": {\"KHP\": [[\"saṃyojanakkhayā yodha\", \"ma. yu. yo ca.\"]], \"JA\": [[\"[] yodha\", \"ma. yo ca.\"], [\"ca yodha\", \"yu. yo ca.\"], [\"phassayaṃ. yodha\", \"ma. yo ca.\"]]}, \"MST\": {\"JA\": [[\"yodha\", \"yo ca (ja448:9 [Kukkuṭajātaka] kukkuṭajātake)\"], [\"yodha\", \"yo ca (pts-vp-pli1)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "tasseva": {
+      "lookup_key": "tasseva",
+      "headwords": "[29188, 29189, 30163, 30164, 30165, 30166, 30195, 30196]",
+      "deconstructor": "[\"tassa + eva\"]",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN5\": [[\"ca, tasseva\", \"tatheva (ka.)\"]], \"AN3\": [[\"karoti tasseva\", \"tassameva (sī. ka.), tassa ceva (syā. kaṃ. pī.)\"]], \"AN4\": [[\"vā tasseva\", \"tassa tasseva (sī. syā. kaṃ.)\"]], \"API\": [[\"tasseva\", \"kāyesu (syā.)\"], [\"tasseva\", \"kāyeva (pī.)\"]], \"NIDD2\": [[\"tasseva\", \"taṃyeva (ka.) aṭṭhakathā oloketabbā\"], [\"rājā tasseva\", \"tassa (syā.)\"]], \"PTH\": [[\"parikammaṃ tasseva\", \"paṭhamassa jhānassa (?)\"], [\"parikammaṃ tasseva\", \"nevasaññānāsaññāyatanassa (?) aññesu tikesu oloketabbaṃ\"]]}, \"BJT\": {\"VIN1\": [[\"aggahesi, tasseva\", \"tasseva – machasaṃ\"]], \"VIN5\": [[\"- tasseva\", \"tatheva – sīmu, hemu\"]], \"AN3\": [[\"karoti, tasseva\", \"tassameva – sīmu\"]]}, \"SYA\": {\"VIN5\": [[\"aḍḍhayojanaṃ tasseva\", \"ma. tattheva.\"]], \"VV\": [[\"bhusasobhamānaṃ tasseva\", \"ma. tassīdha.\"]], \"API\": [[\"nibbuto tasseva\", \"ma. tatthevassa thūpavaro.\"]], \"DNa\": [[\"ma. tasseva\", \"cha.ma. diṭṭhaṃ nāmaṃ bhāro\"], [\"uppajjissati, tasseva\", \"i. tassesa.\"]], \"MNa\": [[\"mayā tasseva\", \"cha.ma. tasseva pana.\"], [\"tasseva\", \"cha.ma. tassevaṃ\"]], \"SNa\": [[\"vijjhati. tasseva\", \"cha.ma.,i. tassevaṃ\"]], \"ANa\": [[\"adāsi. tasseva\", \"sī.,i. tassa ca\"], [\"anussarati. tasseva\", \"cha.ma. tassevaṃ\"], [\"dassāmīti. tasseva\", \"cha.ma. tassevaṃ\"], [\"vibhavañcāti tasseva\", \"cha.ma. tassa\"]], \"SNPa\": [[\"abhisameccāti. tasseva\", \"cha.ma. tassevaṃ\"]], \"VVa\": [[\"sobhamānaṃ tasseva\", \"sī. katapuññā\"]], \"NIDD1a\": [[\"dhammo. tasseva\", \"cha.ma. sova\"], [\"garahitapāpā. tasseva\", \"sī.,cha.ma. taṃyeva\"]], \"NIDD2a\": [[\"nāma. tasseva\", \"cha.ma. tassa\"]], \"PMa\": [[\"gahetvā tasseva\", \"abhi.a.\"], [\"vuccati, tasseva\", \"sī. taññeva\"]], \"VIBHa\": [[\"nipatitvā tasseva\", \"cha.ma. tassa\"]]}, \"MST\": {\"VIN5\": [[\"tasseva\", \"tatheva (sya-all, pts1ed, mr)\"]], \"AN3\": [[\"tasseva\", \"tassa ceva (sya-all, km, pts1ed)\"]], \"APA\": [[\"tasseva\", \"kāyesu (sya1ed, sya2ed)\"], [\"tasseva\", \"tāyeva (pts-vp-pli1)\"]], \"NIDD2\": [[\"tasseva\", \"taṃyeva (mr)\"], [\"tasseva\", \"tassa (bj, sya-all)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "saṃ": {
+      "lookup_key": "saṃ",
+      "headwords": "[56233, 56234, 56236, 56237, 58152, 58153, 58154, 61525, 61527, 61528, 62984, 62985]",
+      "deconstructor": "",
+      "grammar": "[[\"sa\", \"letter\", \"masc acc sg\"], [\"sa\", \"pron\", \"nt nom sg\"], [\"sa\", \"pron\", \"masc acc sg\"], [\"sa\", \"pron\", \"fem acc sg\"], [\"sa\", \"pron\", \"nt acc sg\"], [\"sa\", \"adj\", \"nt nom sg\"], [\"sa\", \"adj\", \"masc acc sg\"], [\"sa\", \"adj\", \"fem acc sg\"], [\"sa\", \"adj\", \"nt acc sg\"], [\"sa\", \"noun\", \"masc acc sg\"], [\"santa\", \"prp\", \"masc nom sg\"], [\"santa\", \"prp\", \"nt nom sg\"], [\"santa\", \"noun\", \"masc nom sg\"], [\"santa\", \"noun\", \"masc acc sg\"], [\"siyā\", \"verb\", \"opt 1st sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"JA\": [[\"kareyya saṃ\", \"kareyyāsaṃ (syā.), kareyya sa (ka.), bhareyya saṃ (?)\"]]}, \"BJT\": {\"DN1\": [[\"appasanno __saṃ__\", \"mehi ‘saṃ’ væḍipura vacanayak lesa yedī æti bava peneyi.\"]], \"AN3\": [[\"yañca saṃ\", \"yañcassaṃ – sabbattha\"]], \"APA\": [[\"evaṃ saṃ\", \"evāhaṃ – sabbattha\"]]}}",
+      "abbrev_other": "[{\"source\": \"CST\", \"meaning\": \"Saṃyutta (Nikāya)\", \"notes\": null}]",
+      "help": ""
+    },
+    "dhamma": {
+      "lookup_key": "dhamma",
+      "headwords": "[34626, 34627, 34628, 34629, 34630, 34631, 34632, 34633, 34634, 34635, 34636, 34637, 34638, 34639, 34640, 34641, 77248]",
+      "deconstructor": "",
+      "grammar": "[[\"dhamma\", \"noun\", \"masc voc sg\"], [\"dhamma\", \"adj\", \"masc voc sg\"], [\"dhamma\", \"adj\", \"nt voc sg\"], [\"dhamma\", \"noun\", \"nt voc sg\"], [\"dhammā\", \"noun\", \"fem voc sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"BJT\": {\"SNP\": [[\"dhamma\", \"nāvā – sīmu\"]], \"CP\": [[\"dhamma\", \"dhammā dhamma deva putta – sīmu\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "akaṭaanudhammena": {
+      "lookup_key": "akaṭaanudhammena",
+      "headwords": "",
+      "deconstructor": "[\"akaṭa + anudhammena\"]",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "akaṇhaasukkaṃ": {
+      "lookup_key": "akaṇhaasukkaṃ",
+      "headwords": "[28]",
+      "deconstructor": "",
+      "grammar": "[[\"akaṇhaasukka\", \"adj\", \"nt nom sg\"], [\"akaṇhaasukka\", \"adj\", \"masc acc sg\"], [\"akaṇhaasukka\", \"adj\", \"fem acc sg\"], [\"akaṇhaasukka\", \"adj\", \"nt acc sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"AN4\": [[\"kammaṃ akaṇhaasukkaṃ\", \"akaṇhaṃ asukkaṃ (sī. syā. pī.) (dī. ni. 3.312; ma. ni. 2.81)\"]]}, \"MST\": {\"AN4\": [[\"akaṇhaasukkaṃ\", \"akaṇhaṃ asukkaṃ (sya-all)\"], [\"akaṇhaasukkaṃ\", \"akaṇhamasukkaṃ (pts1ed)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "DN1-13": {
+      "lookup_key": "DN1-13",
+      "headwords": "[63156]",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "akaṭa": {
+      "lookup_key": "akaṭa",
+      "headwords": "[13, 14, 15]",
+      "deconstructor": "",
+      "grammar": "[[\"akaṭa\", \"pp\", \"masc voc sg\"], [\"akaṭa\", \"pp\", \"nt voc sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "anudhammena": {
+      "lookup_key": "anudhammena",
+      "headwords": "[4579, 4580]",
+      "deconstructor": "",
+      "grammar": "[[\"anudhamma\", \"adj\", \"masc instr sg\"], [\"anudhamma\", \"adj\", \"nt instr sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "bhikkhave": {
+      "lookup_key": "bhikkhave",
+      "headwords": "[49868, 49885]",
+      "deconstructor": "",
+      "grammar": "[[\"bhikkhu\", \"noun\", \"masc voc pl\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN1\": [[\"yo, bhikkhave\", \"yo pana bhikkhave bhikkhu (sī.) yo kho bhikkhave bhikkhu (syā.)\"], [\"kho, bhikkhave\", \"yo ca kho bhikkhave bhikkhu (sī. syā.)\"], [\"anāpatti, bhikkhave\", \"iddhimato (sī.)\"], [\"anāpatti, bhikkhave\", \"iddhimantassa (syā.)\"]], \"VIN4\": [[\"kho, bhikkhave\", \"tassa kho taṃ bhikkhave (syā. ka.)\"], [\"kho, bhikkhave\", \"tassa kho taṃ bhikkhave (ka.) tassa khvataṃ bhikkhave (syā.)\"], [\"kho, bhikkhave\", \"bhikkhave bhikkhunā (syā.)\"], [\"ca, bhikkhave\", \"na ca bhikkhave bhikkhunā (syā. kaṃ.)\"]], \"DN2\": [[\"kho, bhikkhave\", \"animisanto pekkhati, jātassa kho pana bhikkhave (ka.)\"]], \"MN1\": [[\"na, bhikkhave\", \"bhikkhave na (sī. syā. pī.)\"]], \"MN3\": [[\"kho, bhikkhave\", \"ete kho (sī.), ete te (syā. kaṃ. pī.)\"]], \"SN2\": [[\"dissati, bhikkhave\", \"dissati hi bhikkhave (sī. syā. kaṃ.)\"]], \"SN5\": [[\"hi, bhikkhave\", \"yo ca kho bhikkhave (syā. ka.)\"]], \"AN2\": [[\"hidaṃ, bhikkhave\", \"akusalaṃ bhikkhave (ka.)\"]], \"AN3\": [[\", bhikkhave\", \"pu. pa. 107-108\"]], \"AN4\": [[\", bhikkhave\", \"cūḷava. 447\"], [\"sabrahmakāni, bhikkhave\", \"itivu. 106\"], [\"attavadhāya, bhikkhave\", \"cūḷava. 252; saṃ. ni. 2.184\"], [\"pana, bhikkhave\", \"dī. ni. 2.217\"], [\"bhikkhu, bhikkhave\", \"idha bhikkhave bhikkhu (pī. ka.)\"]], \"AN5\": [[\"dānāhaṃ, bhikkhave\", \"panāhaṃ (sī. syā. kaṃ.)\"]], \"AN7\": [[\"pana, bhikkhave\", \"ye kho bhikkhave (sī. syā.)\"]], \"AN9\": [[\"navayimā, bhikkhave\", \"nava bhikkhave (?)\"]], \"UD\": [[\"ayaṃ, bhikkhave\", \"ayampi (sabbattha)\"]], \"PM\": [[\", bhikkhave\", \"a. ni. 4.49 passitabbā\"], [\", bhikkhave\", \"saṃ. ni. 5.1090\"], [\"me, bhikkhave\", \"saṃ. ni. 3.26\"], [\", bhikkhave\", \"saṃ. ni. 5.200\"], [\", bhikkhave\", \"saṃ. ni. 5.1851\"], [\", bhikkhave\", \"a. ni. 3.61 passitabbā\"]], \"MIL\": [[\"aṭṭhime, bhikkhave\", \"aṭṭhime ānanda (a. ni. 8.70)\"]], \"NP\": [[\"ce, bhikkhave\", \"passa saṃ. ni. 2.64\"], [\"cattārome, bhikkhave\", \"passa a. ni. 4.5\"], [\"cattārimāni, bhikkhave\", \"passa a. ni. 4.232-233\"], [\"seyyathāpi, bhikkhave\", \"passa saṃ. ni. 2.55\"], [\"vijjā, bhikkhave\", \"vijjā ca kho bhikkhave (saṃyuttanikāye)\"]], \"PTP\": [[\"mayā, bhikkhave\", \"saṃ. ni. 4.135\"], [\"tīṇimāni, bhikkhave\", \"itivu. 62 tikanipāte\"], [\"samādhiṃ, bhikkhave\", \"passa saṃ. ni. 3.5\"], [\"idha, bhikkhave,\", \"passa dīghanikāye\"]], \"Aññā\": [[\"vo bhikkhave\", \"ma. ni. 1.416\"], [\"vo bhikkhave\", \"ma. ni. 1.416\"], [\"vo bhikkhave\", \"dī. ni. 2.218 (visadisaṃ)\"], [\"tasmātiha bhikkhave\", \"saṃ. ni. 2.157\"], [\"vo bhikkhave\", \"ma. ni. 1.416\"], [\"vo bhikkhave\", \"dī. ni. 2.218\"]]}, \"BJT\": {\"VIN3\": [[\"kho bhikkhave,\", \"vīsativasso ca bhikkhave – sī.avi, sī.javi, manupa, sī.tovi, __sa__\"], [\"na bhikkhave\", \"na ca bhikkhave – machasaṃ, PTS\"], [\"kathañca bhikkhave,\", \"kathañca pana bhikkhave – machasaṃ\"]], \"MN1\": [[\"nanu bhikkhave\", \"tanu kho bhikkhave – sīmu9\"], [\"hetaṃ bhikkhave\", \"lohitaṃ bhikkhave – sī.avi\"], [\"tumhe bhikkhave\", \"tatra bhikkhave – sī.væa\"]], \"MN3\": [[\"so bhikkhave,\", \"so bhikkhave – sīmu, machasaṃ\"], [\"so bhikkhave\", \"so bhikkhave – sīmu, machasaṃ\"]], \"SN2\": [[\"kho bhikkhave,\", \"ime bhikkhave – machasaṃ; ime ca bhikkhave – syā; ime – sīmu3\"], [\"hi bhikkhave,\", \"na bhikkhave – machasaṃ\"], [\"yaṃ bhikkhave,\", \"bhikkhaveti sabbaṃ vitthāretabbaṃ – sīmu3, PTS, sī.pævi, sī.pavi\"], [\"hi bhikkhave,\", \"bhikkhave taṃ – PTS\"], [\"kho bhikkhave\", \"apariyādinnā ca bhikkhave – machasaṃ; apariyādinnā ca bhikkhave – syā; apariyādinnā bhikkhave – PTS\"]], \"SN4\": [[\"ca bhikkhave\", \"santi bhikkhave – sī.pævi, syā\"], [\"ca bhikkhave\", \"katamā ca sā bhikkhave – sī.pævi\"]], \"SN5\": [[\"kho bhikkhave,\", \"evameva kho – sī.pævi\"], [\"kho bhikkhave\", \"ayaṃ bhikkhave – sī.pævi, sī.pavi\"], [\"kho bhikkhave\", \"atthi nu kho me bhikkhave – sī.pævi, sī.pavi\"]], \"AN2\": [[\"dvinnaṃ bhikkhave\", \"dvinnaṃ dhammānaṃ bhikkhave – machasaṃ\"]], \"AN3\": [[\"dhammavinayo, bhikkhave\", \"tathāgatappavedito bhikkhave dhammavinayo – milindapañhe\"], [\"ye bhikkhave,\", \"ye bhikkhave – machasaṃ\"]], \"AN5\": [[\"kho bhikkhave\", \"evarūpopi bhikkhave – machasaṃ\"], [\"kho bhikkhave\", \"yaṃ bhikkhave – machasaṃ\"]], \"AN6\": [[\"kho bhikkhave\", \"eso bhikkhave – machasaṃ\"], [\"atthi bhikkhave\", \"bhikkhave - machasaṃ potthake natthi.\"]], \"AN7\": [[\"ca bhikkhave\", \"satta bhikkhave – sīmu\"], [\"kho bhikkhave\", \"ye kho pana bhikkhave – machasaṃ\"]], \"AN9\": [[\"ākāsānañcāyatanampahaṃ bhikkhave\", \"jhānaṃ – sī\"]], \"AN10\": [[\"vo bhikkhave\", \"bhikkhave dhammaṃ – machasaṃ\"]], \"ITI\": [[\"tayo’me bhikkhave\", \"bhikkhave’ti potthakesu nadissati.\"]], \"NIDD1\": [[\"vo bhikkhave\", \"bhikkhave vo – sīmu11\"]], \"KV\": [[\"kho bhikkhave\", \"sabbaṃ ca kho bhikkhave – machasaṃ\"], [\"kho bhikkhave\", \"sabbañca kho bhikkhave – machasaṃ\"], [\"kho bhikkhave\", \"sabbañca kho bhikkhave – machasaṃ\"]]}, \"SYA\": {\"VIN2\": [[\"caparaṃ bhikkhave\", \"ma. yu. rañño.\"]], \"VIN3\": [[\"kacci bhikkhave\", \"ma. bhikkhu.\"], [\"bhikkhave\", \"ma. moghapurisā.\"], [\"ce bhikkhave\", \"-6 ma. ce bhikkhaveti   na dissati.\"], [\"ce bhikkhave\", \"-6 ma. ce bhikkhaveti   na dissati.\"], [\"aññatrāpi bhikkhave\", \"ma. yu. ayaṃ pāṭho na dissati.\"], [\"pana bhikkhave\", \"ma. ayaṃ pāṭho natthi.\"], [\"pana bhikkhave\", \"ma. ayaṃ pāṭho na dissati.\"]], \"VIN4\": [[\"tassapāpiyasikākammakatena bhikkhave\", \"yu. bhikkhavetyālapanaṃ na dissati.\"], [\"ce bhikkhave\", \"ma. yu. bhikkhaveti natthi.\"], [\"so bhikkhave\", \"ma. bhikkhaveti natthi.\"], [\"pana bhikkhave\", \"ma. yu. bhikkhaveti natthi.\"], [\"ce bhikkhave\", \"ma. bhikkhaveti natthi.\"], [\"loke bhikkhave\", \"yu. sadevake bhikkhave loke.\"], [\"pana bhikkhave\", \"ma. bhikkhu.\"]], \"MN2\": [[\"te bhikkhave\", \"po. ma. yu. bhikkhū.\"]], \"SN1\": [[\"kho bhikkhave\", \"po. ma. yu. bhikkhaveti ālapanapadaṃ na dissati.\"]], \"SN2\": [[\"tenahi bhikkhave\", \"yu. taṃ.\"], [\"vo bhikkhave\", \"ma. yu. bhikkhaveti natthi.\"], [\"taṃ bhikkhave\", \"ma. yu. maraṇañhetaṃ bhikkhaveti dissati.\"]], \"SN3\": [[\"vuccati bhikkhave\", \"ma. yu. sakkāyasamudayagāminī paṭipadā.\"], [\"vedanā bhikkhave\", \"sī. ma. bhikkhaveti pāṭho na dissati.\"], [\"tiha bhikkhave\", \"po. yu. bhikkhunāti dissati.\"], [\"kho bhikkhave\", \"ma. yu. yato kho bhikkhave bhikkhu.\"]], \"SN4\": [[\"kho bhikkhave\", \"ma. yu. bhikkhu. evamuparipi.\"], [\"kho bhikkhave\", \"ma. yu. bhikkhu.\"], [\"vuccati bhikkhave\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"phassāyatanāni bhikkhave\", \"ma. yu. bhikkhavo.\"], [\"vo bhikkhave\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"kathañca bhikkhave\", \"ma. ayaṃ pāṭho natthi.\"], [\"kathañca bhikkhave\", \"ma. bhikkhu.\"], [\"ce bhikkhave\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"bhikkhave\", \"ma. yu. sabbattha bhikkhaveti pāṭho natthi.\"], [\"so bhikkhave\", \"ma. yu. puriso.\"], [\"seyyathāpi bhikkhave\", \"yu. bhikkhu.\"], [\"atthi bhikkhave\", \"ma. yu. ayaṃ pāṭho natthi.\"]], \"SN5\": [[\"vuccati bhikkhave\", \"yu. ayaṃ pāṭho natthi.\"], [\"idha bhikkhave\", \"ma. ayaṃ pāṭho natthi.\"], [\"idha bhikkhave\", \"po. ayaṃ pāṭho   na dissati.\"], [\"keci bhikkhave\", \"yu. bhikkhu.\"], [\"tiha bhikkhave\", \"yu. ayaṃ pāṭho natthi.\"], [\"keci bhikkhave\", \"yu. bhikkhu. evamuparipi.\"]], \"AN\": [[\"catūsu bhikkhave\", \"po. dhammesu.\"], [\"kho bhikkhave\", \"ma. yu. puggalo.\"], [\"ca bhikkhave\", \"ma. paṭhamo.\"], [\"ayaṃ bhikkhave\", \"ma. paṭhamo.\"], [\"attaguttodāni bhikkhave\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"yampidaṃ bhikkhave\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"tenahi bhikkhave\", \"ma. desessāmi taṃ.\"], [\"kho bhikkhave\", \"ma. dasāti dissati.\"], [\"nīvaraṇepahaṃ bhikkhave\", \"yu. pañcapahaṃ   bhikkhave nīvaraṇe.\"], [\"micchādiṭṭhi bhikkhave\", \"ma. ayaṃ pāṭho natthi.\"], [\"vo bhikkhave\", \"po. ma. dhammanti atthi.\"], [\"vo bhikkhave\", \"ma. yu. etthantare dhammanti atthi.\"], [\"vo bhikkhave\", \"ma. yu. etthantare dhammanti desessāmi.\"], [\"panesā bhikkhave\", \"yu. brahmunā.\"], [\"tatra bhikkhave\", \"ma. yu. ālapanamidaṃ natthi.\"], [\"siyā bhikkhave\", \"ma. yu. bhikkhave siyā.\"]], \"KHP\": [[\"yeva bhikkhave\", \"yu. ayaṃ pāṭho natthi.\"], [\"kho bhikkhave\", \"ma. aṭṭha.\"], [\"kho bhikkhave\", \"ma. yu. puggalo.\"], [\"kho bhikkhave\", \"ma. bhikkhu.\"]], \"PM\": [[\"kho bhikkhave\", \"ma. gotamassa bodhisattassa.\"]], \"ANa\": [[\"aniccasaññino bhikkhave\", \"ma. meghiya\"], [\"idampi bhikkhave\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"KHPa\": [[\"kho bhikkhave\", \"cha.ma., i. kho tissa\"], [\"kho bhikkhave\", \"cha.ma., i. bhikakhu\"]], \"NIDD1a\": [[\"idha bhikkhave\", \"cha.ma. idhāvuso.   evamuparipi\"]], \"PMa\": [[\"idha bhikkhave\", \"dī.pā.\"], [\"santi bhikkhave\", \"dī.pā.\"], [\"navayime bhikkhave\", \"dī.pā.\"]], \"VIBHa\": [[\"koci bhikkhave\", \"pāli. bhante, cha.ma. bhikkhu\"]], \"MD\": [[\"esā bhikkhave\", \". adhisīlampi sikkhati adhicittampi sikkhati   adhipaññampi sikkhati.\"]]}, \"MST\": {\"VIN1\": [[\"bhikkhave\", \"yo pana bhikkhave bhikkhu (bj, pts1ed)\"], [\"bhikkhave\", \"yo kho bhikkhave bhikkhu (sya-all)\"]], \"NP\": [[\"bhikkhave\", \"vijjā ca kho bhikkhave (sn45.1:1 [1. Avijjāsutta])\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "eva": {
+      "lookup_key": "eva",
+      "headwords": "[18051, 18052, 18053, 18054, 18055]",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"JA\": [[\"mataṃ eva\", \"matamatameva (sī. syā. pī.)\"], [\"eva\", \"eta (sī. pī.)\"]], \"Aññā\": [[\"māgadhe eva\", \"saddeeva (potthake)\"]]}, \"BJT\": {\"SN4\": [[\"vādo eva\", \"evaṃ – syā, machasaṃ\"]], \"SN5\": [[\"so eva\", \"sveva – syā\"]], \"AN5\": [[\"khippaṃ eva\", \"khippameva – machasaṃ\"]]}, \"SYA\": {\"DNa\": [[\"yojetvā eva\", \"ka. evaṃ\"], [\"mahāparādho eva\", \"cha.ma.. i. esa\"], [\"bhagavā eva,\", \"cha.ma. eva na dissati\"]], \"MNa\": [[\"parikittanena eva\", \"cha.ma., i. evaṃ.\"], [\"katvā eva\", \"ma. katvā etassa, cha. katvāvāyaṃ\"]], \"SNa\": [[\"saraṇāni eva\", \"sī.,ka. sarakānieva\"]], \"KHPa\": [[\"byattatāya eva\", \"cha.ma., i. evaṃ\"], [\"bhikkhū eva\", \"cha.ma. eva-saddo na dissati\"]], \"UDa\": [[\"attajjhāsayādiko eva\", \"sī. gattajjhāsayādito\"], [\"kālo eva\", \"sī.,ma. kālotveva\"], [\"anivabbattanāya eva\", \"sī. anivattitāya, ka. anibbattanāyaeva\"], [\"obhāsābhāvato eva\", \"cha.ma. lokasabhāvābhāvato eva\"], [\"dosakopā eva\", \"sī.,ma. dosakopā evāti pāṭho na dissati\"], [\"anāgatattā eva,\", \"sī. pubbe ceva etarahi ca anāgatattā eva\"]], \"ITIa\": [[\"pacchimadivase eva\", \"sī.,ma.,ka. majjhimadivaseeva\"]], \"SNPa\": [[\"ekavāso eva\", \"cha.ma. ekībhāvo eva\"], [\"lobhasampayuttaṃ eva\", \"sī. lokasampayuttattā eva\"], [\"ṭhitā eva,\", \"cha.ma. ṭhitā\"], [\"jānantā eva\", \"sī.,ka. evaṃ\"], [\"te eva\", \"cha.ma. te evaṃ\"], [\"karonti eva,\", \"sī. na karonti eva\"], [\"ito eva\", \"cha.ma.,i. eva-saddo na dissati\"]], \"VVa\": [[\"vaṇṇo eva\", \"cha.ma. vaṇṇova\"], [\"dhāreti eva\", \"sī. dhāretīti dhammo, evaṃ\"]], \"THa\": [[\"yāvacarimakacittaṃ- eva\", \"sī. yāvacarimakacittā\"]], \"NIDD1a\": [[\"cittaṃ eva\", \"cha.ma. nissayabhūte citte eva\"], [\"taṃ eva\", \"sī. taṃ evaṃ\"], [\"nāhu eva,\", \"cha.ma. evaṃ\"], [\"antagamake eva\", \"ka. atthaṅgamake eva\"]], \"NIDD2a\": [[\"tathāgatassa eva\", \"cha.ma. evaṃ\"], [\"tathāgatassa eva\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"so eva\", \"cha.ma. te eva\"], [\"lokiyā eva\", \"ka. lokikā eva\"], [\"atthakkhāyino eva\", \"cha.ma. atthakkhāyino\"], [\"lobhasampayuttaṃ eva\", \"sī. lobhasampayuttattā eva\"]], \"PMa\": [[\"pakāsanā eva\", \"sī. desanatāti ca pakāsanatā eva\"], [\"phalassuppattiyā eva\", \"phalassuppattiyā evaṃ, visuddhi.\"], [\"puthujjanakalyāṇo eva\", \"cha.ma. va\"]], \"CPa\": [[\"paññavā eva\", \"sī. paññāya eva\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "hoti": {
+      "lookup_key": "hoti",
+      "headwords": "[71483, 71484, 71485]",
+      "deconstructor": "",
+      "grammar": "[[\"hoti\", \"verb\", \"pr 3rd sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN2\": [[\"vā hoti\", \"hotu (ka.)\"]], \"VIN4\": [[\"hoti\", \"(anujānāmi bhikkhave koṭṭhakanti. koṭṭhako nīcavatthuko hoti…pe… anujānāmi bhikkhave uccavatthukaṃ kātunti. cayo paripatati…pe… anujānāmi bhikkhave cinituṃ tayo caye iṭṭhakācayaṃ silācayaṃ dārucayanti. ārohantā vihaññanti…pe… anujānāmi bhikkhave tayo sopāne iṭṭhakāsopānaṃ silāsopānaṃ dārusopānanti. ārohantā paripatanti…pe… anujānāmi bhikkhave ālambanabāhanti. koṭṭhakassa kavāṭaṃ na hoti.) (syā. kaṃ.)\"]], \"DN1\": [[\"ca hoti\", \"na hoti ca (sī. ka.)\"]], \"DN2\": [[\"vā hoti\", \"ahosi (?)\"]], \"DN3\": [[\"mahā hoti\", \"parisā hoti (sī. syā. pī.)\"]], \"MN1\": [[\"ekodi hoti\", \"ekodibhoti (syā. ka.)\"], [\"paṭivirato hoti\", \"imassa anantaraṃ ‘‘so iminā ariyena sīlakkhandhena samannāgato ajjhattaṃ anavajjasukhaṃ paṭisaṃvedetī’’ti vacanaṃ dīghanikāye āgataṃ, taṃ idha santosakathāvasāne āgataṃ, sā ca santosakathā tattha satisampajaññānantarameva āgatā\"], [\"ettha hoti\", \"evaṃ no ettha hotīti (ka.)\"], [\"paṭivirato hoti\", \"passa ma. ni. 1.293 cūḷahatthipadopame\"]], \"MN2\": [[\"paṭivirato hoti\", \"passa ma. ni. 1.293 cūḷahatthipadopame\"], [\"avakkanti hoti\", \"na mayaṃ jānāma bho yathā gabbhassa avakkanti hotīti. yathā kathaṃ pana bho gabbhassa avakkanti hotīti. (ka.)\"]], \"MN3\": [[\"paṭivirato hoti\", \"passa ma. ni. 1.293 cūḷahatthipadopame\"], [\"ekodi hoti\", \"ekodī hoti (sī.)\"], [\"ekodi hoti\", \"ekodibhoti (syā. kaṃ.)\"], [\"evaṃ hoti\", \"etadahosi (syā. kaṃ. ka.)\"]], \"SN2\": [[\"viññāṇaṃ hoti,\", \"( ) etthantare pāṭhā kesuci potthakesu na dissantīti sī. pī. potthakesu dassitā. tathā sati anantarasuttaṭīkāya sameti\"], [\"viññāṇaṃ hoti;\", \"( ) etthakesu pāṭhā kesuci potthakesu na dissantīti sī. pī. potthakesu dassitā. tathā sati anantarasuttaṭīkāya sameti\"], [\"na hoti,\", \"( ) etthantare pāṭhāpi tattha tatheva dassitā\"], [\"na hoti;\", \"( ) etthantare pāṭhāpi tattha tatheva dassitā\"]], \"SN5\": [[\"kāyo hoti\", \"tathāgatassa hoti (bahūsu)\"]], \"AN3\": [[\"ekodi hoti\", \"ekodibhāvaṃ gacchati (sī.), ekodibhāvo hoti (syā. kaṃ. ka.)\"], [\"ekodi hoti\", \"ekodihoti (pī.)\"]], \"AN5\": [[\"itissa hoti\", \"itissa hoti avippaṭisāro, (sī. syā.)\"], [\"kālaṅkatā hoti\", \"natthi (sī.)\"], [\"momūho hoti\", \"mando hoti momūho (sī.)\"]], \"AN6\": [[\"musāvādī hoti\", \"musāvādī hoti, pisuṇavācā hoti, pharusavāco hoti, samphappalāpī hoti, (sī. syā. pī.) evaṃ sukkapakkhepi\"], [\"dukkhaṃ hoti\", \"dukkhaṃ na hoti (syā. pī. ka.)\"]], \"AN7\": [[\"rājā hoti\", \"homi (sī. syā.)\"], [\"yasavā hoti\", \"homi (sī. syā.)\"]], \"AN11\": [[\"upagantukāmo hoti\", \"ahosi (ka.)\"]], \"DHP\": [[\"dhammassa hoti\", \"hotī (sī. pī.)\"], [\"so hoti\", \"thero hoti (sī. syā.)\"]], \"ITI\": [[\"dātā hoti\", \"( ) natthi syāmapotthake\"], [\"vigato hoti\", \"thinamiddhaṃ uddhaccakukkuccaṃ vicikicchā (a. ni. 4.12)\"]], \"VV\": [[\"vipulaṃ hoti\", \"vipulaphalaṃ (ka.)\"]], \"APA\": [[\"āloko hoti\", \"ālokā honti (syā. ka.)\"]], \"JA\": [[\"yā hoti\", \"honti (sī. syā.)\"], [\"sabbhi hoti\", \"hotu (pī.)\"], [\"sukhito hoti\", \"hohi (syā.)\"], [\"avajjho hoti\", \"bhavati (sī. syā. pī.)\"]], \"PP\": [[\"dukkhassantakaro hoti\", \"dukkhassantaṃ karoti (sī.) evamuparipi\"]], \"Aññā\": [[\"so hoti\", \"dha. pa. 396; su. ni. 625\"], [\"āraṅa hoti\", \"nī. 414\"], [\"viññāṇaṃ hoti\", \"saṃ. ni. 2.50\"], [\"suppatiṭṭhitapādo hoti\", \"dī. ni. 3.201\"], [\"na hoti\", \"saṃ. ni. 2.21\"], [\"ekattho hoti\", \"moggallāne aññathāvutti dassitā\"], [\"na hoti\", \"nī. 681\"], [\"na hoti\", \"rū. 341; nī. 681\"], [\"samāso hoti\", \"ka. 336; rū. 347; nī. 689\"], [\"taṇhānānāttaputhuttapabhedo hoti\", \"dha. sa. aṭṭha. 1\"]]}, \"BJT\": {\"VIN1\": [[\"bhiṃsanakatasmiṃ hoti\", \"bhiṃsanakattasmintiyeva vā pāṭho – syā.pā, hemu (128pi)\"], [\"pabhaggo hoti\", \"ahosi – machasaṃ\"], [\"nissaggiyo hoti.]\", \"[-] sīmu natthi\"]], \"VIN2\": [[\"paññattaṃ hoti\", \"hoti itipi marammachaṭṭhasaṃgītipiṭake na dissate.\"], [\"taruṇapabbajitā hoti,\", \"taruṇapabbajitā abhirūpā hoti – machasaṃ\"]], \"VIN3\": [[\"otthaṭo hoti\", \"anutthaṭo – machasaṃ, PTS; panthaṭo – sī.tovi\"], [\"upasampanno hoti\", \"ahosi – machasaṃ\"], [\"evaṃ hoti\", \"etadahosi – machasaṃ\"], [\"uppannaṃ hoti\", \"ussannaṃ – machasaṃ\"], [\"amanāpā hoti\", \"amanāpā – machasaṃ, PTS\"], [\"uppanno hoti\", \"bhagavato etamatthaṃ ārocesuṃ – machasaṃ, PTS, sī.avi, sī.javi\"], [\"sātisāro hoti\", \"imesu chedesu peyyālacakkāni upaggatthe visadīkatāni\"], [\"uppanno hoti\", \"dohaḷo hoti – __sīmu 1__\"]], \"VIN4\": [[\"anavassavo hoti\", \"yo hoti – __na__, machasaṃ\"], [\"so hoti\", \"yo hoti – __na__, machasaṃ\"], [\"hoti\", \"ahosi – syā\"]], \"DN3\": [[\"parisā hoti\", \"mahā hoti – machasaṃ\"], [\"upakkileso hoti\", \"upakkilesā hoti – kām\"]], \"MN1\": [[\"khayo hoti?\", \"khayaṃ vadāmi – machasaṃ\"], [\"evaṃ hoti:\", \"etadahosi – machasaṃ\"], [\"ekodi hoti\", \"hosi – machasaṃ\"]], \"MN2\": [[\"abhippavuṭṭho hoti\", \"abhippavā hoti – sīmu8\"], [\"evaṃ hoti\", \"etadahosi – syā\"], [\"saccānubodho hoti\", \"ettāvatā ..pe.. hoti – machasaṃ ūnaṃ.\"]], \"MN3\": [[\"vippakatā hoti\", \"vippakathā ahosi – sīmu, machasaṃ, syā\"], [\"yāvatā hoti\", \"yāvatā bho – machasaṃ\"]], \"SN1\": [[\"mahapphalaṃ hoti\", \"mahapphalaṃ – sīmu\"], [\"aciraarahattappatto hoti\", \"hutvā – machasaṃ, PTS\"]], \"SN2\": [[\"viññāṇaṃ hoti.]\", \"[ - ] imehi saṅkhataihi antarika pāṭhā syāmapotthake ca likhitasīhaḷapotthakesu ca na dissante.\"], [\"paṭipanno hoti\", \"‘hoti’ iti sabbattha natthi.\"], [\"paṭipanno hoti\", \"‘hoti’ iti natthi, machasaṃ, syā, PTS, sī\"]], \"SN4\": [[\"pahīnā hoti\", \"honti – machasaṃ\"]], \"SN5\": [[\"opapātiko hoti\", \"opapātiko tatva – machasaṃ, syā\"]], \"AN1\": [[\"anekadhātupaṭisambhidā hoti\", \"hotīti – machasaṃ\"]], \"AN2\": [[\"ānutappā hoti\", \"hotīti – machasaṃ, syā, PTS\"]], \"AN3\": [[\": hoti\", \"hoti kho – machasaṃ\"], [\"ekodi hoti\", \"ekodibhāvaṃ gacchati – sīmu\"]], \"AN4\": [[\"santuṭṭho hoti\", \"tuṭṭho – machasaṃ\"]], \"AN5\": [[\"vipāko hoti\", \"buddha jayanti tripiṭaka mudraṇaye mema paricchedaya magahærī æta.\"]], \"AN6\": [[\"na hoti,\", \"pariyantakatassa dukkhaṃ hoti – machasaṃ\"]], \"AN9\": [[\"paricitaṃ hoti\", \"yato kho – machasaṃ\"], [\"paricitaṃ hoti\", \"cetasā vitaṃ hoti – machasaṃ\"]], \"AN10\": [[\"nābhijjhitā hoti\", \"taṃ anabhijjhitā hoti – machasaṃ\"]], \"APA\": [[\"āloko hoti\", \"ālokā honti – machasaṃ\"]], \"API\": [[\"me hoti\", \"homi – machasaṃ\"]], \"NIDD1\": [[\"ca hoti\", \"āpāthakajjhāyī ca – machasaṃ, syā, PTS, sīmu11\"]], \"NIDD2\": [[\"gato hoti\", \"atthaṃ gamiko, hoti – syā\"], [\"ca hoti\", \"āpāthakajjhāyī ca hoti – katthaci\"]], \"PM\": [[\"satokārī hoti:\", \"‘hoti’ – syā potthake natthi.\"], [\"upapatti hoti:\", \"rūpāvacarānaṃ..... arūpāvacarānaṃ devānaṃ channaṃ hetūnaṃ paccayā upapatti hoti – PTS adhikaṃ.\"]], \"NP\": [[\"ca hoti\", \"yāvatā hoti – sīmu, machasaṃ\"]], \"PTP\": [[\"naṃ hoti\", \"taṃ hoti – machasaṃ, PTS\"]]}, \"SYA\": {\"VIN1\": [[\"nikkhittaṃ hoti\", \"ito paraṃ yuropiyamarammapotthakesu nikhātantipi atthi.\"]], \"VIN2\": [[\"ṭhapito hoti\", \"ma. yu. ṭhapiyyati.\"], [\"nissaggiyaṃ hoti\", \"ma. yu. nissaggiyaṃ pācittiyaṃ. sabbattha īdisameva.\"], [\"nissaggiyo hoti\", \"ma. yu. sabbattha itisaddo dissati. so atirekoti veditabbo. tassa   atirekatā paṭhamakaṭhinasikkhāpade vuttanayena veditabbā.\"], [\"nissaggiyaṃ hoti\", \"ito paraṃ sabbattha itisaddo dissati. so atirekoti veditabbo. tassa   atirekatā paṭhamakaṭhinasikkhāpade vuttanayena veditabbā.\"], [\"nissaggiyaṃ hoti\", \"ma. yu. sabbattha nissaggiyaṃ pācittiyanti dissati.\"], [\"nissaggiyaṃ hoti\", \"ma. yu. sabbattha nissaggiyaṃ pācittiyanti dissati.\"], [\"nissaggiyaṃ hoti\", \"ma. yu. sabbattha nissaggiyaṃ pācittiyanti dissati.\"], [\"na hoti\", \"imepi pāṭhā vuttanayena vicāretabbā.\"]], \"BHI VIN\": [[\"nissaggiyo hoti\", \"ito paraṃ sabbattha itisaddo dissati so atirekoti veditabbo   īdisānaṃ pāṭhānaṃ mātikāyaṃ anāgatattā.\"], [\"nissaggiyaṃ hoti\", \"sabbattha nissaggiyaṃ pācittiyanti dissati.\"]], \"VIN3\": [[\"kārāpitā hoti\", \"ma. yu. ito paraṃ kiriyāpadaṃ na dissati.\"], [\"uppannaṃ hoti\", \"yu. atirekacīvaraṃ uppajjati.\"]], \"VIN4\": [[\"bālo hoti\", \"ma. ayaṃ pāṭho na dissati.\"], [\"nimantetukāmo hoti\", \"ma. tadā.\"], [\"paripūrīkārī hoti\", \"ma. yu. hotīti natthi.   evamupari.\"], [\"āgataṃ hoti\", \"yu. hotīti na paññāyati.\"], [\"phāsu hoti\", \"ma. na tassa vinā mallakena phāsu hoti.\"], [\"na hoti\", \"ma. na phāsu hoti. yu. chattena na phāsu hoti.\"], [\"rodito hoti\", \"ma. yu. bhagavato avidūre rodamāno ṭhito hotīti.\"]], \"VIN5\": [[\"vinicchayakusalo hoti\", \"ma. yu. āpattiyā na vinicchayakusalo hoti.\"], [\"vinicchayakusalo hoti\", \"ma. yu. adhikaraṇassa na   vinicchayakusalo hoti.\"], [\"vinicchayakusalo hoti\", \"ma. adhikaraṇassa na vinicchayakusalo hoti.\"]], \"DN2\": [[\"samannāgato hoti\", \"ma. yu. ahosi.\"]], \"DN3\": [[\"ca hoti\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"antaradhānaṃ hoti\", \"ma. yu. hotīti.\"], [\"antaradhānaṃ hoti\", \"ma. yu. hotīti.\"], [\"āvikataṃ hoti\", \"ma. yu. ayaṃ pāṭho na dissati.\"], [\"attā hoti\", \"ma. yu. saññī ca ... hotīti ime pāṭhā na   dissanti.\"], [\"karavikabhāṇī hoti\", \"ma. ayaṃ pāṭho na dissati.\"], [\"manussabhūtenidha hoti\", \"yu. manussabhūtena na hoti.\"], [\"chadisāpaṭicchādī hoti\", \"ma. yu. ayaṃ na dissati.\"], [\"acirakāritaṃ hoti\", \"yu. ayaṃ na dissati.\"], [\"āvuso hoti\", \"yu. ayaṃ pāṭho na dissati.\"], [\"paccājāto hoti\", \"ma. yu. hoti so ca hoti.\"], [\"hoti\", \"ma. yu. ayaṃ na dissati.\"]], \"MN1\": [[\"evaṃ hoti\", \"ma. etadahosi.\"], [\"paṭisallānārāmo hoti\", \"ma. ayaṃ pāṭho sabbattha natthi.\"]], \"MN2\": [[\"acirakāritaṃ hoti\", \"yu. hotīti natthi.\"], [\"āraddhaviriyo hoti\", \"ma. yu. viharati.\"], [\"na hoti\", \"yu. aguttadvāro hoti.\"], [\"ca hoti\", \"ma. honti.\"], [\"nisinnā hoti\", \"yu. homa.\"], [\"āraddhaviriyo hoti\", \"yu. viharati.\"], [\"ābādhiko hoti\", \"yu. ahosi.\"], [\"ñāṇaṃ hoti\", \"yu. ahosi.\"]], \"MN3\": [[\"arahā hoti\", \"po. ma. tatrapi sammāñāṇena aneke pāpakā akusalā dhammā   vigatā bhāvanāpāripūriṃ gacchanti.\"]], \"SN1\": [[\"tatvassa hoti\", \"sī. yato sā ca kittī ca taṃ tassa hotītipi vataṃ tassa hotītipi   pāṭho.\"], [\"hi hoti\", \"ma. sova. yu. soti.\"], [\"paccupaṭṭhito hoti\", \"sī. ayaṃ pāṭho na dissati.\"], [\"bandhāpito hoti\", \"sī. ma. yu. ayaṃ pāṭho na dissati.\"], [\"acirārahattappatto hoti\", \"ma. yu. hutvā.\"], [\"upasaṅkamitukāmo hoti\", \"yu. ahosi.\"]], \"SN2\": [[\"samudayo hoti\", \"yu. itisaddo dissati.\"], [\"nirodho hoti\", \"ma. itisaddo dissati.\"]], \"SN3\": [[\"neva hoti\", \"yu. etthantare tathāgatoti dissati.\"]], \"SN4\": [[\"dukkaraṃ hoti\", \"ma. tesaṃ taṃ sukaraṃ hoti.\"], [\"purisassa hoti\", \"ma. ayaṃ pāṭho natthi.\"], [\"suvisuddhaṃ hoti\", \"ma. yu. hotīti.\"], [\"suvisuddhaṃ hoti\", \"yu. ayaṃ pāṭho natthi.\"]], \"AN\": [[\"phuṭo hoti\", \"po. ma. yu. ahosi.\"], [\"paṭivirato hoti\", \"ma. paṭiviratoti.\"], [\"saṅgaṇikārāmo hoti\", \"yu. etthantare .pe. iti atthi.\"], [\"hatthiyāyī hoti\", \"ma. yu. manasānupekkhamāno neva hatthiyāyī bhavissati.\"], [\"apāyakusalo hoti\", \"ma. ca hoti.\"], [\"ca hoti\", \"ma. ime pāṭhā natthi.\"], [\"ñāṇaṃ hoti\", \"ma. saupādisese vā saupādisesoti.\"], [\"vedagū hoti\", \"ma. ārakattā ariyo hoti.\"], [\"bahukārā hoti\", \"po. bhikkhu paccavekkhamāno   bahukāro hoti.\"], [\"parittaṃ hoti\", \"po. ma. yu. ahosi.\"]], \"KHP\": [[\"sakkato hoti\", \"po. ma. yu. ayaṃ pāṭho natthi.\"], [\"antarākathā hoti\", \"yu. ayaṃ pāṭho natthi.\"], [\"kulaputto hoti\", \"ma. yu. so ca hoti.\"]], \"VV\": [[\"vipulaṃ hoti\", \"ma. na vipulaphalaṃ hoti. yu. na vipulaṃ na phalaṃ hoti.\"]], \"JA\": [[\"hoti\", \"ma. hohiti. * sī. kāko .pe. satthāti ime pāṭhā natthi.\"], [\"sadhanena hoti\", \"ma. bhariyā yāpi dhanena hoti kītā.\"], [\"pana hoti\", \"ma. niccaṃ.\"], [\"sabbhi hoti\", \"yu. hotu.\"]], \"NIDD1\": [[\"vā hoti\", \"ma. kaṇabhakkho vā hoti.\"], [\"vā hoti\", \"ma. tilabhakkho vā hoti.\"], [\"anuyutto hoti\", \"ma. yu. rūpadassanāya.\"]], \"NIDD2\": [[\"paccuppannañcepi hoti\", \"ma. cunda.\"], [\"ca hoti\", \"ma. ayaṃ pāṭho natthi.\"]], \"PM\": [[\"suviditā hoti\", \"sabbapotthake kiñcikāle na suviditā hotīti dissati.\"], [\"na hoti\", \"po. ca.\"], [\"hoti\", \"ma. yu. ayaṃ pāṭho   natthi.\"], [\"abhiniveso hoti\", \"ma. yu. ime cha pāṭhā natthi.\"], [\"assādo hoti\", \"ma. ayaṃ pāṭho natthi. evamuparipi.\"]], \"API\": [[\"sabbapati hoti\", \"ma. hohi. yu. sabbā patī honti.\"]], \"DhS\": [[\"saññā hoti\", \"imāni padabhājanāni purimehi na samenti. tattha hi   tajjāmanoviññāṇadhātusamphassajanti ca tajjāmanoviññāṇadhātusamphassajāti   ca dissati. tasmā tattha atirekaṃ vā idha ūnaṃ vā siyā.\"], [\"cetanā hoti\", \"imāni padabhājanāni purimehi na samenti. tattha hi   tajjāmanoviññāṇadhātusamphassajanti ca tajjāmanoviññāṇadhātusamphassajāti   ca dissati. tasmā tattha atirekaṃ vā idha ūnaṃ vā siyā.\"]], \"DNa\": [[\"kucchiparihārikā hoti\", \"cha.ma., i. ayaṃ pāṭho na dissati.\"], [\"dadhītiādivohāro hoti,\", \"cha.ma. vohārā honti\"], [\"paripākagataṃ hoti,\", \"cha.ma., i. hotīti na dissati\"], [\"pakkho hoti,\", \"cha.ma., i. hosi.\"], [\"pañcavidho hoti\", \"cha.ma. hotīti na   dissati\"], [\"pañcavidho hoti\", \"cha.ma. hotīti na dissati\"], [\"na hoti\", \"cha.ma.,i. nāhosi\"], [\"majjhantiko hoti,\", \"cha.ma. hotīti saddo na dissati\"], [\"gāthā hoti\", \"cha.ma. honti\"], [\"paripuṇṇasīso hoti,\", \"i. piyāyamānehi\"], [\"kāmāvacaro hoti\", \"cha.ma., i. hotītipadaṃ na dissati\"], [\"kathitaṃ hoti\", \"cha.ma., i. kathitaṃ hoti na dissati.\"], [\"dvimūlā hoti,\", \"cha.ma. hoti na dissati\"]], \"MNa\": [[\"maraṇaṃ hoti\", \"cha.ma., i. hehiti\"], [\"vuttaṃ hoti\", \"cha.ma. vuttaṃ   hotīti na dissati.\"], [\"hoti\", \"cha.ma. hotīti\"], [\"uddhataṃ hoti\", \"cha.ma. uddhataṃ hotīti pāṭhā na dissanti\"], [\"vipariṇataṃ hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"diṭṭhiggāho hoti\", \"cha.ma. ayaṃ saddo na dissati\"], [\"sakkā hoti\", \"cha.ma. honti\"], [\"viya hoti\", \"cha.ma. hotīti\"], [\"na hoti,\", \"cha.ma. na hotīti\"], [\"na hoti,\", \"cha.ma. upacchijjati\"], [\"sakkā hoti,\", \"cha.ma. honti\"], [\"pana hoti\", \"cha.ma. mūḷho pana hoti.\"], [\"kantārātikkamanadivaso hoti\", \"cha.ma. ahosi\"], [\"khuddakasarāvakaṃ hoti,\", \"cha.ma. khuddakasarāvā honti\"], [\"paṭisaṃviditā hoti?\", \"() natthi visuddhimagge\"], [\"sābādho hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"SNa\": [[\"na hoti\", \"i. samannāgato nāma hoti\"], [\"pavatti hoti\", \"cha.ma., i. pavattitoti\"], [\"pāpaṃ hoti,\", \"cha.ma., i. ayaṃ pāṭho na dissati\"], [\"kaṅkhā hoti\", \"cha.ma.,i. kaṅkhati\"], [\"na hoti\", \"sī. diṭṭhiyā thāmabhāve diṭṭhiparāmāso ca hoti\"], [\"paharitukāmatāsadisaṃ hoti\", \"ma. hoti, paṭivātaṃ khittarajova\"], [\"rakkhitabbo hoti\", \"cha.ma. tehi tathā karontehi na attāpi rakkhitabbo hoti\"]], \"ANa\": [[\"saṃsayapakkhanno hoti\", \"cha.ma. saṃsayapakkhando hoti   vimatipakkhando, i....pakkhanto\"], [\"dullabho hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"viya hoti\", \"cha.ma.,i. ahosi\"], [\"viya hoti\", \"cha.ma.,i. nipanno viya ahosi\"], [\"viya hoti\", \"cha.ma. ahosi\"], [\"dātukāmo hoti,\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"nāma hoti\", \"cha.ma.,i. phalaṃ patto parimutto nāma hotīti\"], [\"āpaṇiko hoti\", \"cha.ma.,i. assāmiko hoti\"], [\"paññācakkhumā hoti\", \"cha.ma.,i. paññācakkhunā cakkhumā hoti\"], [\"cakkhumā hoti\", \". ma. vuttaṃ pāpaṇiyena kayena taṃ taṃ   kītasaṅkhātaṃ, cha. vuttapaṇiye yena kayena taṃ kītaṃ, taṃ kayasaṅkhātaṃ\"], [\"vuttaṃ hoti?\", \"ma. na bhajitabboti vuttaṃ hoti\"], [\"tuṇhī hoti\", \"cha.ma. ahosi\"], [\"viya hoti\", \"cha.ma.,i. āropetvā tasmiṃ visajjenti. tesaṃ camme pavaṭṭantānaṃ saddo meghagajjitaṃ hoti\"], [\"santuṭṭho hoti\", \"cha.ma. hotīti\"], [\"purisassa hoti\", \"saṃ.sa.\"], [\"laddhaṃ hoti,\", \"cha.ma. yena laddho\"], [\"vā hoti\", \"cha.ma. hotu\"], [\"samannāgato hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"KHPa\": [[\"ekattaṃ hoti,\", \"cha.ma. ayaṃ saddo na dissati\"], [\"sakkā hoti\", \"ka. hoti saddo na disasti\"], [\"vuttaṃ hoti\", \"ma. kiṃva\"], [\"vuttaṃ hoti\", \"cha.ma....virahitanti attho\"]], \"UDa\": [[\"na hoti\", \"ma. ṭhānaṃ hoti\"], [\"sakkato hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"SNPa\": [[\"pariccattaṃ hoti\", \"dī. pā.\"], [\"dubbodhaneyyo hoti\", \"cha.ma. bhavissati\"], [\"mahācoro hoti,\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"samuppanno hoti,\", \"cha.ma. hotīti\"], [\"nāma hoti,\", \"ka. ahosi\"], [\"na hoti,\", \"ka. jātā na honti\"], [\"jāti hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"ca hoti\", \"cha.ma.,i. hotīti\"]], \"VVa\": [[\"vipulaṃ hoti\", \"ma. vipulaṃ phalaṃ\"]], \"PVa\": [[\"ca hoti\", \"cha.ma. honto\"], [\"vipulaṃ hoti\", \"cha.ma. na vipulaṃ phalaṃ hoti\"], [\"phalaṃ hoti\", \"sī.,i. hotīti\"]], \"THa\": [[\"na hoti\", \"sī.,i. tasmā sā āsā sappurisānaṃ buddhādīnaṃ na hoti\"], [\"atthitvevassa hoti\", \"ma. honti\"]], \"THIa\": [[\"vuttaṃ hoti\", \"cha.ma. hi vuttaṃ\"]], \"NIDD1a\": [[\"pasaṃsāraho hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"patiṭṭhā hoti\", \"cha.ma. patiṭṭhāho\"], [\"icchitālābhadukkhaṃ hoti\", \"cha.ma. na hoti\"], [\"sakkā hoti,\", \"cha.ma. sakkoti\"], [\"seṭṭho hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"parājayo hoti\", \"cha.ma. hotīti\"], [\"vuttaṃ hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"NIDD2a\": [[\"adhigatā hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"vuttaṃ hoti\", \"visuddhi.\"]], \"PMa\": [[\"vuttaṃ hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"APAa\": [[\"uposatho hoti\", \"ka. ahosi.\"]], \"DhSa\": [[\"uppannaṃ hoti\", \"cha.ma. hotu\"], [\"gahitameva hoti,\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"nibbattito hoti,\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"nāma hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"VIBHa\": [[\"chāyā hoti,\", \"cha.ma. honti\"], [\"vattā hoti\", \"cha.ma. vattāro honti\"], [\"mahantaṃ hoti,\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"akusalasseva hoti\", \"cha.ma. hotīti\"], [\"vutto hoti,\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"ADha\": [[\"dassitaṃ hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"nāma hoti\", \"cha.ma. ekaccaṃ atthīti kathā hoti\"], [\"paccayo hoti\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"purejātapaccayo hoti\", \"cha.ma. purejātapaccayā honti\"], [\"pañho hoti\", \"cha.ma. hotīti\"], [\"na hoti\", \"cha.ma. vipākassa na upanissayo hoti\"]]}, \"MST\": {\"DN1\": [[\"hoti\", \"ahosi (?)\"]], \"MN1\": [[\"hoti\", \"ekodibhoti (sya-all, km)\"], [\"hoti\", \"ekodibhoti (sya-all, mr)\"], [\"hoti\", \"imassa anantaraṃ so iminā ariyena sīlakkhandhena samannāgato ajjhattaṃ anavajjasukhaṃ paṭisaṃvedeti vacana d ta idha santosakath ca tattha satisampaja\"]], \"AN1\": [[\"hoti\", \"ahosi (mr)\"]], \"AN7\": [[\"hoti\", \"homi (bj, sya-all, pts1ed)\"], [\"hoti\", \"homi (bj, sya-all, pts1ed)\"]], \"ITI\": [[\"hoti\", \"idaṃ padaṃ sya-all potthakesu\"]], \"JA\": [[\"hoti\", \"honti (bj, sya1ed, sya2ed)\"], [\"hoti\", \"hotu (pts-vp-pli1)\"], [\"hoti\", \"hohi (sya1ed, sya2ed)\"], [\"hoti\", \"bhavati (bj, sya1ed, sya2ed, pts-vp-pli1)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "idha": {
+      "lookup_key": "idha",
+      "headwords": "[13686, 13687, 13688]",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"MN2\": [[\"pucchāmā’’ti. idha\", \"idha kira (syā. kaṃ. ka.)\"]], \"SN4\": [[\"pubbekatahetū’ti. idha\", \"idha pana (syā. kaṃ. pī. ka.)\"]], \"TH\": [[\"akhilo idha\", \"akhilo (sī.)\"], [\"akhilo idha\", \"akhilodha (saṃ. ni. 1.211)\"]], \"NIDD2\": [[\"virato idha\", \"ārato idheva (syā.) passa su. ni. 536\"]], \"Aññā\": [[\"aṭṭhakathā idha\", \"ettha sagībhittayārūḷhā moggaliputtatissattherassa santikā uggahitā sissānusissaparamparātatā mūlaṭṭhakathā kasmā jambudīpe sabbaso antarahitāti vimaṃsitabbaṃ\"], [\"ekacciyā idha\", \"jā. 1.13.123\"]]}, \"BJT\": {\"MN2\": [[\"brahmadāyādā”ti. idha\", \"iti – sīmu8, idaṃ – syā\"], [\"idha\", \"idha kira – syā\"]], \"AN5\": [[\"idha\", \"imaṃ – machasaṃ\"]], \"AN10\": [[\"me idha\", \"idaṃ – machasaṃ\"]], \"API\": [[\"idha\", \"tattha – syā\"]], \"JA\": [[\"no idha\", \"idaṃ – machasaṃ\"], [\"na idha\", \"hi – machasaṃ\"]], \"PTP\": [[\"so idha\", \"ayaṃ so – machasaṃ, PTS\"]]}, \"SYA\": {\"VIN3\": [[\"hoti. idha\", \"po. pana.\"], [\"dunnissārito. idha\", \"ma. yu. pana.\"]], \"DN3\": [[\"[] idha\", \"ma. yu. pana.\"], [\"tassānuyantā idha\", \"ma. tassānuyantādha. yu. tassānuyuttā idha.\"]], \"MN1\": [[\"yaṃ idha\", \"po. ma. ayaṃ pāṭho natthi.\"]], \"MN2\": [[\"nipajji idha\", \"yu. idheva.\"], [\"bhogapārijuññaṃ. idha\", \"yu. bho.\"], [\"māṇava idha\", \"yu. idhassa.\"]], \"SN4\": [[\"gacchatīti. idha\", \"yu. idha kho.\"]], \"AN\": [[\"tatthevantaradhāyi. idha\", \"po. ma. yu. atha.\"], [\"kulaputtaṃ idha\", \"ma. imaṃ.\"], [\"hotīti idha\", \"yu. idheva.\"], [\"upakappati idha\", \"ma. yu. idha pana.\"], [\"ekādasahi idha\", \"ma. yu. bhikkhave.\"]], \"KHP\": [[\"etadavoca idha\", \"ma. yu. mayhaṃ.\"], [\"catūhi idha\", \"ma. yu. bhikkhave bhikkhu.\"], [\"na idha\", \"ma. yu. nayidha.\"]], \"JA\": [[\"no idha\", \"ma. idaṃ.\"], [\"bhogā idha\", \"ma. ime.\"], [\"manuññaṃ idha\", \"ma. cidha.\"]], \"NIDD1\": [[\"hoti. idha\", \"ma. yu. idhekacco.\"]], \"NIDD2\": [[\"hoti. idha\", \"ma. idhekacco.\"]], \"API\": [[\"santhavito idha\", \"ma. ito sattamake muni. yu. ...sattamakehani.\"], [\"rūpavaṇṇavibhūsitā. idha\", \"ma. tadā mamatthe. yu idaṃ me matthesakyānaṃ. sakyānaṃ.\"]], \"DNa\": [[\"nāma. idha\", \"ma. iti\"], [\"dhammacakkhunti idha\", \"cha.ma. ettha\"], [\"jānātūti idha\", \"cha.ma., i. idha saddo na dissati\"]], \"MNa\": [[\"bhikkhaveti idha\", \"cha.ma. idaṃ\"], [\"pasādoti idha\", \"cha.ma. idaṃ\"], [\"puggalāti idha\", \"ma. idaṃ\"], [\"āharatha idha\", \"cha.ma. ayaṃ saddo na dissati\"]], \"SNa\": [[\"mahārājāti idha\", \"sī., i. iti\"], [\"cāti idha\", \"sī., i. ime, ma. idha pana\"], [\"idha\", \"cha.ma.,i. idaṃ\"], [\"ṭhitā. idha\", \"cha.ma. idhāpi\"]], \"ANa\": [[\"vaṭṭati. idha\", \"cha.ma.,i. tattha\"], [\"etāsu idha\", \"cha.ma. samaṅgitāsu idha\"], [\"nibbiriyā. idha\", \"cha.ma. iminā nayena\"], [\"pahoti, idha\", \"cha.ma. idaṃ\"]], \"KHPa\": [[\"ayaṃ idha\", \"cha.ma., i. ayaṃ saddo na dissati\"]], \"SNPa\": [[\"abhikkantavaṇṇāti idha\", \"cha.ma. ettha\"], [\"tatrāyamadhippāyo:- idha\", \"ka. yathā\"], [\"kho idha\", \"cha.ma. ayaṃ saddo na dissati\"]], \"PVa\": [[\"me idha\", \"sī.,i. sakkā idheva\"]], \"THa\": [[\"kūṭaṃ idha\", \"cha.ma. kakudhaṃ\"], [\"itarītarena idha\", \"pāli. itarītareneva\"]], \"THIa\": [[\"yasmā idha\", \"cha.ma. ayaṃ pāṭho na dissati\"]]}, \"MST\": {\"MN1\": [[\"idha\", \"idha kira (sya-all, km, mr)\"]], \"SN1\": [[\"idha\", \"idha pana (sya-all, km, pts1ed, mr)\"]], \"NIDD2\": [[\"idha\", \"ko'dha (bj, sya-all)\"], [\"idha\", \"so'dha (bj)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "iti": {
+      "lookup_key": "iti",
+      "headwords": "[13466]",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"DN1\": [[\"iti\", \"iti vā, iti (syā. kaṃ. ka.)\"]], \"MN3\": [[\"– iti\", \"passa ma. ni. 1.440 sāleyyakasutte\"]], \"DHP\": [[\"thero’’ iti\", \"so theroti (syā. ka.)\"]], \"SNP\": [[\"nibbānaṃ iti\", \"nibbānamīti (sī.)\"]], \"PM\": [[\"vasalo iti’’\", \"ime (syā.) su. ni. 116 passitabbā\"]], \"PTP\": [[\"cittānupassanā. iti\", \"( ) natthi pī. potthake\"]], \"KV\": [[\"āmantā. i’’ti\", \"īti (syā. pī.)\"]]}, \"BJT\": {\"MN3\": [[\"saṃvattatī’ti iti\", \"saṃvattati iti – sīmu\"]], \"SN1\": [[\"iti\", \"itiha – machasaṃ\"]], \"NIDD1\": [[\"bhedā iti\", \"purā bhedāti – syā, PTS\"], [\"bhedā iti\", \"bhedāti – sīmu10, machasaṃ, PTS\"], [\"jānissāma iti\", \"jānissamāti – sīmu11, machasaṃ\"], [\"suddhiṃ iti\", \"suddhi iti – sīmu11; suddhimiti – suni\"]]}, \"SYA\": {\"DN2\": [[\"sambhavantīti iti\", \"ma. yu. iti kho panetaṃ   vuttaṃ .pe. veditabbaṃ yathāti ime pāṭhā natthi.\"]], \"DN3\": [[\"karissāmīti. iti\", \"po. ma. yu. atha.\"], [\"dhataraṭṭho iti\", \"ma. dhataraṭṭhoti.\"], [\"virūpakkho iti\", \"nāgānañca adhipati virūpakkhoti.\"]], \"MN1\": [[\"pavedesi iti\", \"po. itisaddo natthi.\"]], \"MN3\": [[\"[] iti\", \"ma. yu. idha..\"]], \"SN1\": [[\"iti\", \"ma. itiha.\"]], \"SN3\": [[\"saṅkhāro. iti\", \"po. evaṃ kho.\"]], \"SN4\": [[\"kaṇṭakoti iti\", \"yu. itisaddo natthi.\"]], \"SN5\": [[\"bhāveti iti\", \"yu. kho.\"]], \"AN\": [[\"kusalanti iti\", \"ma. itisaddo natthi.\"], [\"veyyākaraṇānīti iti\", \"ma. yu. ayaṃ saddo natthi.\"]], \"KHP\": [[\"jāniyāma iti\", \"ma. jāniyāmāti.\"]], \"JA\": [[\"morarājetamatthaṃ iti\", \"ma. ito.\"]], \"PM\": [[\"appamāṇo iti\", \"ma.   ce. evamuparipi.\"]], \"DNa\": [[\"adhivacanaṃ. iti\", \"idaṃ padaṃ cha.ma.sī.i. potthakesu na dissati\"], [\"kesakambalo. iti\", \"ka. iminā. suttanta.\"], [\"gahitāni, iti\", \"cha.ma., i. itisaddo na dissati\"], [\"āgatā, iti\", \"cha.ma.,i. itisaddo na dissati.\"], [\"hoti iti\", \"cha.ma.,i.   itisaddo na dissati.\"], [\"vipariṇāmadhammā, iti\", \"cha.ma. tassa.\"], [\"yojetabbaṃ. iti\", \"pāliyamapi idhaṭṭhakathāyampi tettiṃseva. saṅgaṇiyaṃ pana sassatucchedadiṭṭhi   antavānantavādiṭṭhi pubbantāparantānudiṭṭhi cāti dukattayaṃ dissati   avihiṃsāsoceyyadukaṃ ca satisamādhibaladukaṃ ca na dissati. taṃ ce dukattayaṃ pakkhipati diṭṭhivisuddhi kho pana yathādiṭṭhissa ca padhānanti idañca vīsuṃdukaṃ   na gaṇeti pañcatiṃsa paripuṇṇāni.\"]], \"MNa\": [[\"vadanti. iti\", \"cha.ma. idaṃ\"], [\"hoti, iti\", \"sī. idha\"]], \"SNa\": [[\"santakoti iti\", \"cha.ma. ayaṃ saddo na dissati\"], [\"sampajjati, iti\", \"cha.ma., i. ayaṃ saddo na dissati\"], [\"yojitāneva. iti\", \"cha.ma. ayaṃ saddo na dissati\"]], \"ANa\": [[\"honti. iti\", \"cha.ma.,i. dhammasatāni hontīti\"], [\"karoti. iti\", \"cha.ma. idaṃ\"], [\"santakoti iti\", \"cha.ma. ayaṃ saddo na dissati\"]], \"UDa\": [[\"dīpeti, iti\", \"cha.ma. evaṃ\"], [\"nipphāditāti. iti\", \"cha.ma. evaṃ\"]], \"THIa\": [[\"natthi, iti\", \"cha.ma. iti-saddo na dissati\"]], \"NIDD2a\": [[\"jano iti\", \"su. vi.\"]], \"DhSa\": [[\"bhinnāevāti. iti\", \"cha.ma. iti-saddo na dissati\"], [\"jano iti\", \"su.vi.\"]], \"VIBHa\": [[\"bhavo, iti\", \"cha.ma. ayaṃ saddo natthi\"]]}, \"MST\": {\"DN1\": [[\"iti\", \"iti (bj, mr)\"]], \"PM\": [[\"iti\", \"ime (sya-all)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "sajjesi": {
+      "lookup_key": "sajjesi",
+      "headwords": "[57227, 57228, 57232]",
+      "deconstructor": "",
+      "grammar": "[[\"sajjeti\", \"verb\", \"pr 2nd sg\"], [\"sajjesi\", \"verb\", \"aor 3rd sg\"], [\"sajjesi\", \"verb\", \"aor 2nd sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "tassa": {
+      "lookup_key": "tassa",
+      "headwords": "[29188, 29189, 30163, 30164, 30165, 30166]",
+      "deconstructor": "",
+      "grammar": "[[\"ta\", \"pron\", \"masc dat sg\"], [\"ta\", \"pron\", \"nt dat sg\"], [\"ta\", \"pron\", \"masc gen sg\"], [\"ta\", \"pron\", \"nt gen sg\"], [\"ta\", \"letter\", \"masc dat sg\"], [\"ta\", \"letter\", \"masc gen sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN3\": [[\"tammūlakaṃ tassa\", \"dve dve mūlā katā kassa (syā.)\"], [\"tammūlakaṃ tassa\", \"dodotamūlakantassa (ka.)\"]], \"DN3\": [[\"yaso tassa\", \"tassa yeso (bahūsu, vinayepi)\"], [\"yaso tassa\", \"tassa yeso (bahūsu, vinayepi)\"]], \"MN1\": [[\"assa, tassa\", \"maggo tassāssa (sī. syā. pī.)\"]], \"MN2\": [[\"– tassa\", \"appatissotissa (sī. pī.)\"], [\"kā tassa\", \"kā cassa (sī.)\"]], \"MN3\": [[\"so tassa\", \"taṃ tassa (ka.)\"], [\"so tassa\", \"tassa (sī. pī.)\"], [\"taṃ tassa\", \"ettha pana pāṭhabhedo natthi\"]], \"AN6\": [[\"tañhi tassa\", \"taṃ hissa (pī. ka.)\"]], \"AN7\": [[\"guyhañca tassa\", \"guyhamassa ca (syā.)\"], [\"tañhi tassa\", \"taṃ hissa (ka.)\"]], \"AN9\": [[\"anabhisametaṃ. tassa\", \"yassa (?)\"]], \"AN10\": [[\"ceva tassa\", \"eso cevetassa (ma. ni. 1.205)\"], [\"ceva tassa\", \"eso cevetassa (ma. ni. 1.205)\"]], \"VV\": [[\"tassa\", \"tāhaṃ (ka.)\"]], \"PV\": [[\"tassa\", \"taṃ’sa (?)\"]], \"APA\": [[\"hiraññaṃ tassa\", \"hiraññassa ca (sī. ka.)\"], [\"dhārayuṃ tassa\", \"tattha (syā.)\"]], \"JA\": [[\"paññaṃ tassa\", \"paññamassa (syā. ka.)\"], [\"nandati tassa\", \"bhave nandati tassa ca (ka.)\"], [\"yo tassa\", \"yo ca tathā (pī.)\"], [\"tassa\", \"kassa (sī. pī.)\"], [\"tassa\", \"tassā (syā.)\"]], \"NIDD1\": [[\"bhagavā tassa\", \"natthi sī. syā. potthakesu\"]], \"KV\": [[\"appāṭihāriyaṃ; tassa\", \"yañcassa (sī. pī. ka.)\"]], \"AP\": [[\"tassa\", \"sujātā’ssa (ṭīkā)\"]], \"Aññā\": [[\"yaṃ tassa\", \"caṃ. 1.1.6; pā. 1.1.72; vidhibbisesanantassa (bahūsu)\"], [\"vā tassa\", \"ka. 210; rū. 239; nī. 435\"], [\"yaso tassa\", \"dī. ni. 3.246\"]]}, \"BJT\": {\"VIN1\": [[\"dassāmā”ti. tassa\", \"tassa taṃ adāsi – machasaṃ na dissate.\"]], \"VIN2\": [[\"samanubhāsitabbā, tassa\", \"tassa vatthussa – sīmu2\"]], \"VIN3\": [[\"āgacchissati. tassa\", \"tadā tassa – machasaṃ\"]], \"VIN4\": [[\"osārīyati, tassa\", \"osāriyayati – machasaṃ\"]], \"DN3\": [[\"te tassa\", \"tattha – sīmu\"]], \"MN1\": [[\"desentassa. tassa\", \"tassevaṃ – syā\"]], \"MN2\": [[\"idampi tassa\", \"idampissa – sīmu8\"]], \"MN3\": [[\"antogadhā tassa\", \"antogadhāvassa – machasaṃ\"], [\"so tassa\", \"tassa – sīmu, PTS\"]], \"SN1\": [[\"tanu tassa\", \"tanukassa – machasaṃ, syā\"]], \"SN3\": [[\"hoti. tassa\", \"tasmiṃ – sī.pævi, sī.pavi\"]], \"SN4\": [[\"bhikkhu, tassa\", \"tassāyaṃ – machasaṃ, syā\"]], \"SN5\": [[\"upaṭṭhitā tassa\", \"upaṭṭhitāssa – machasaṃ, syā\"], [\"kālakato. tassa\", \"ovādito, tassa – sī.pavi\"]], \"AN7\": [[\"kiṃ tassa\", \"kiṃ taṃ tassa – machasaṃ\"]], \"APA\": [[\"brahaṃ tassa\", \"mahanta’ssa – machasaṃ\"]], \"BV\": [[\"saraṇaṃ tassa\", \"tattha – a.pu\"], [\"tatthe’va tassa\", \"tatthevassa – machasaṃ\"], [\"tassa\", \"tassāpi – machasaṃ, sīmu, syā\"]], \"JA\": [[\"saccaṃ tassa\", \"saccañcassa – sī.vivi\"], [\"paññaṃ tassa\", \"paññamassa – machasaṃ\"], [\"mā tassa\", \"khavassa – machasaṃ, syā\"], [\"pubbe tassa\", \"cassa – machasaṃ; vassa – syā\"], [\"nacāhaṃ tassa\", \"tasmiṃ – machasaṃ, syā\"]], \"NIDD2\": [[\"vimokkho tassa\", \"na sati – machasaṃ\"], [\"rājā tassa\", \"tassa ca – machasaṃ\"]], \"PM\": [[\"vesārajjappatto. tassa\", \"tassa me – machasaṃ\"], [\"paṭibhānapaṭisambhidā tassa\", \"tassā – machasaṃ, syā, PTS\"]], \"NP\": [[\"pahīyanti, tassa\", \"kissa – machasaṃ\"]], \"PTP\": [[\"natthi tassa\", \"natthidāni – machasaṃ, PTS\"], [\"so tassa\", \"yassa – machasaṃ\"], [\"ājānīyajjhāyino, tassa\", \"tassā – machasaṃ\"]], \"KV\": [[\"sappaṭihāriyaṃ. tassa\", \"yañcassa – sīmu, PTS\"]], \"YAM\": [[\"uppajjittha tassa\", \"tesaṃ – PTS\"]]}, \"SYA\": {\"VIN3\": [[\"karoti tassa\", \"po. ma. ca.\"], [\"tasmiṃ tassa\", \"ma. saddhā.\"]], \"VIN4\": [[\"saṅgho tassa\", \"ma. tassa saṅgho.\"], [\"pāvisi. tassa\", \"ma. yu. tassāti saddo natthi.\"]], \"DN2\": [[\"mahānubhāvo tassa\", \"sī. yu. yassa.\"], [\"pana tassa\", \"ma. tena bhagavatā.\"]], \"DN3\": [[\"dhammassavanāya. tassa\", \"ma. yu. me.\"], [\"vimuccati tassa\", \"ma. tassa taṃ. sabbavāresu īdisameva.\"]], \"MN1\": [[\"uttareyya tassa\", \"ma. purisassa.\"]], \"MN2\": [[\"appatissoti tassa\", \"yu. agāravo appatissotissa.\"], [\"jānātīti tassa\", \"yu. jānātītissa.\"], [\"paṭikkamatīti tassa\", \"yu. paṭikkamatītissa.\"], [\"samudācaratīti tassa\", \"yu. samudācaratītissa.\"], [\"vikiṇṇavācoti tassa\", \"yu. vikiṇṇavācotissa.\"], [\"hotīti tassa\", \"yu. aguttadvārotissa.\"], [\"hotīti tassa\", \"yu. amattaññatissa.\"], [\"asamāhitoti tassa\", \"yu. asamāhitotissa.\"], [\"duppaññoti tassa\", \"yu. duppaññotissa.\"], [\"sampāyatīti tassa\", \"yu. sampāyatītissa.\"], [\"sampāyatīti tassa\", \"yu. sampāyatītissa.\"], [\"sampāyati tassa\", \"yu. sampāyatissa.\"], [\"jānātīti tassa\", \"yu. jānātītissa.\"], [\"tassa\", \"ma. taṃ.\"], [\"tassa\", \"yu. kassa.\"], [\"piyappabhūtikāti tassa\", \"yu. kassa. bhanteti natthi.\"]], \"MN3\": [[\"hoti tassa\", \"po. ma. nāssa.\"], [\"antogadhā tassa\", \"ma. vāssa.\"], [\"paṭikkujjito. tassa\", \"aññattha tattā ayomayātipi dissati.\"]], \"SN3\": [[\"upaparikkheyya tassa\", \"ma. yu. tanti dissati.\"]], \"AN\": [[\"karoti tassa\", \"ma. tasseva.\"], [\"sikkhissasi tassa\", \"yu. tasmā.\"], [\"evamassu tassa\", \"po. ma. ayaṃ pāṭho natthi\"], [\"vā tassa\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"vā tassa\", \"ma. tanti disasti. ito paraṃ īdisameva.\"], [\"hi tassa\", \"yu. taṃ hissa.\"], [\"desetūti tassa\", \"po. tassa ca.\"], [\"aniccucchādanaparimaddanabhedanaviddhaṃsanadhammassa tassa\", \"ma. tassassu gaṇḍassa.\"], [\"cāyaṃ tassa\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"esoceva tassa\", \"po. esocevetassa.\"]], \"KHP\": [[\"viharāmīti. tassa\", \"ma. yu. tassapi kho.\"], [\"na tassa\", \"po. nassa.\"], [\"duveva tassa\", \"po. dveyevassa.\"]], \"VV\": [[\"vesāliyā tassa\", \"ma. ayaṃ pāṭho na dissati.\"]], \"JA\": [[\"yo tassa\", \"yu. yo ca tathā.\"], [\"[] tassa\", \"sī. yu. kassa.\"], [\"pāpaya tassa\", \"ma. tattha.\"]], \"NIDD2\": [[\"kiṃ tassa\", \"ma. ayaṃ pāṭho natthi.\"], [\"hoti tassa\", \"ma. tasseva.\"], [\"rājā tassa\", \"ma. tasseva.\"], [\"rājā tassa\", \"ayaṃ pāṭho natthi.\"]], \"PM\": [[\"vesārajjappatto tassa\", \"ma. me.\"]], \"APA\": [[\"nibbattate tassa\", \"ma. bhogā nibbattare tassa.\"], [\"vippasannamanāvilaṃ. tassa\", \"ma. tattha.\"]], \"API\": [[\"asaṅkhayaṃ tassa\", \"ma. tassa kammanissandena.\"], [\"chaṭṭhā tassa\", \"ma. yu. tassāsahaṃ.\"], [\"saṅgāmavijayuttamaṃ tassa\", \"yu. tasmiṃ.\"]], \"DNa\": [[\"catuttiṃsasuttasaṅgaho. tassa\", \"ka. tesu\"]], \"MNa\": [[\"appaccayaṃ, tassa\", \"sī. nibbānāmatassa\"], [\"saṅkampati, tassa\", \"cha.ma. tesaṃ\"], [\"kathito. tassa\", \"cha.ma. yassa\"], [\"pucchissati, tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"kataṃ. tassa\", \"cha.ma. tassā\"], [\"bhaveyya. tassa\", \"cha.ma. yassa\"], [\"āpo, tassa\", \"cha.ma. tāsaṃ\"], [\"gihiupaṭṭhākopi tassa\", \"cha.ma. vāssa\"]], \"SNa\": [[\"honti. tassa\", \"cha.ma., i. tasmā\"], [\"kuppati, tassa\", \"cha.ma. tasseva\"]], \"ANa\": [[\"vakkalīti tassa\", \"cha.ma. panassa\"], [\"nīlasāṭake tassa\", \"cha.ma. ayaṃ pāṭho na dissati, i. nivāsāpetvā\"], [\"patiṭṭhāpi tassa\", \"cha.ma. patiṭṭhāssa\"], [\"evameva tassa\", \"cha.ma. evametassa\"], [\"ahaṃ tassa\", \"sī. tava\"], [\"āha. tassa\", \"cha.ma.,i. tassa ca\"], [\"gacchissāmi tassa\", \"sī.,i. gacchissāmissa\"], [\"yaṃ tassa\", \"cha. yaṃsa\"], [\"sallapantīti tassa\", \"cha.ma.,i. ayaṃ pāṭho na dissati\"], [\"satikāraṇe. tassa\", \"cha.ma.,i. ayaṃ pāṭho na dissati\"], [\"gacchati, tassa\", \"ma. tatthassa\"], [\"hoti. tassa\", \"cha.ma. taṃ so\"], [\"evameva tassa\", \"cha.ma. evametassa\"], [\"ahaṃ, tassa\", \"cha.ma. dhammassa\"], [\"saṃghapitaro. tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"bhāsitoti tassa\", \"cha.ma. tayā\"], [\"parinibbānanti tassa\", \"cha.ma. tasseva\"], [\"natthi tassa\", \"sī. idaṃ tassa\"]], \"KHPa\": [[\"gato, tassa\", \"cha.ma. cassa\"]], \"UDa\": [[\"ime tassa\", \"ma. ekassa\"]], \"SNPa\": [[\"tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"etena tassa\", \"cha.ma. etenassa\"], [\"satataṃ tassa\", \"cha.ma.,i. sadā tassa\"], [\"addasa tassa\", \"cha.ma.,i. assa\"], [\"tena tassa\", \"ka. bhavaṃ\"]], \"VVa\": [[\"sopi tassa\", \"cha.ma. sopissa\"], [\"tāhaṃ tassa\", \"ma. tāhaṃ\"]], \"PVa\": [[\"ekapaññāsavatthupaṭimaṇḍitaṃ. tassa\", \"sī.,i. tattha\"], [\"assu, tassa\", \"ma. amaccā santi, saṃvijjamānassa tassa\"], [\"sampaṭicchitvā tassa\", \"ka. tassā\"]], \"THa\": [[\"gāthā. tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"gāthā. tassa\", \"cha.ma. ayaṃ pāṭho na   dissati. evamuparipi\"], [\"gākā. tassa\", \"cha.ma. ayaṃ pāṭho nadissati\"], [\"gāthā. tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"gahetvā, tassa\", \"sī. tassa vā\"], [\"uppajjeyya, tassa\", \"sī.,i. samucchinnakodhassa kuto nāma   hetu kodhassa tassa tas\"], [\"jānanto tassa\", \"sī. kappassa\"]], \"THIa\": [[\"sā tassa\", \"cha.ma. cassa\"]], \"JAa\": [[\"so tassa\", \"tattha.\"]], \"NIDD1a\": [[\"abhiññāṇena tassa\", \"cha.ma. taṃ\"], [\"tassimeti tassa\", \"cha.ma. yassimeti yassa\"], [\"katakammaṃ tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"NIDD2a\": [[\"ākiñcaññāyatanalābhī tassa\", \"cha.ma. tañca\"], [\"hi tassa\", \"cha.ma. paṭissutaṃ hi tasseva\"]], \"PMa\": [[\"arahattamaggañāṇuppattiṃ, tassa\", \"sī. arahattamaggañāṇuppattikassa\"], [\"sabbamūlaṃ tassa\", \"cha.ma. tasseva\"]], \"APAa\": [[\"porāṇapāṭho, tassa\", \"sī., i. tattha.\"]], \"CPa\": [[\"taṃ tassa\", \"sī. gatassa\"]], \"DhSa\": [[\"datvā tassa\", \"cha.ma. satthu\"], [\"mahājanasammatattā tassa\", \"cha.ma. mahāsammatassa\"]], \"VIBHa\": [[\"sāeva tassa\", \"cha.ma. tassā\"], [\"tassa tassa\", \"cha.ma. tassa\"], [\"ca tassa\", \"cha.ma. cassa\"], [\"tasmā tassa\", \"cha.ma. tasmāssa\"]], \"ADha\": [[\"ṭhitaṃ. tassa\", \"cha.ma. tattha\"], [\"tassa tassa\", \"cha.ma. ekameva \\\"tassā\\\"ti padaṃ dissati\"], [\"hotīti tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"passatīti tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"saṅkhārakkhandhapariyāpannāti tassa\", \"cha.ma......pariyāpannātissa\"], [\"tassa tassa\", \"cha.ma. ekameva \\\"tassā\\\"ti padaṃ dissati\"], [\"vattabbaṃ tassa\", \"cha.ma. tasmiṃ\"], [\"paravādissa, tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"], [\"sahajātādayo tassa\", \"cha.ma. ayaṃ pāṭho na dissati\"]]}, \"MST\": {\"DN1\": [[\"tassa\", \"tassa yaso (bahūsu)\"], [\"tassa\", \"tassa yaso (bahūsu, vinayepi)\"]], \"MN1\": [[\"tassa\", \"tassa (si, pts1ed)\"], [\"tassa\", \"taṃ tassa (mr)\"], [\"tassa\", \"ettha pana pāṭhabhedo\"], [\"tassa\", \"kā cassa (bj)\"]], \"AN9\": [[\"tassa\", \"yassa (?)\"]], \"VV\": [[\"tassa\", \"tāhaṃ (mr)\"]], \"PV\": [[\"tassa\", \"taṃ'sa (?)\"]], \"TH\": [[\"tassa\", \"tattha (bj, sya1ed, sya2ed, pts2ed)\"]], \"THI\": [[\"tassa\", \"tassāhaṃ (sya1ed, sya2ed, pts1ed, pts2ed)\"]], \"APA\": [[\"tassa\", \"tattha (sya1ed, sya2ed, pts-vp-pli1)\"]], \"JA\": [[\"tassa\", \"yo ca tathā (pts-vp-pli1)\"], [\"tassa\", \"kassa (bj, pts-vp-pli1)\"], [\"tassa\", \"tassā (sya1ed, sya2ed)\"]], \"NIDD1\": [[\"tassa\", \"idaṃ padaṃ bj, sya-all potthakesu\"]], \"NIDD2\": [[\"tassa\", \"kiṃ tassa (bj, sya-all)\"]], \"KV\": [[\"tassa\", \"yañcassa (si, pts-vp-pli1, mr)\"], [\"tassa\", \"yañca (sya1ed, sya2ed)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "yo": {
+      "lookup_key": "yo",
+      "headwords": "[53444, 53445, 53446, 53447, 54208]",
+      "deconstructor": "",
+      "grammar": "[[\"ya\", \"letter\", \"masc nom sg\"], [\"ya\", \"pron\", \"masc nom sg\"], [\"ya\", \"cs\", \"masc nom sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"DN1\": [[\"paccuppanno? yo\", \"yo vā (pī.)\"], [\"paccuppanno? yo\", \"yo vā (pī.)\"]], \"MN2\": [[\"yo\", \"so (sī. pī.)\"]], \"MN3\": [[\"paccuppannañca yo\", \"yaṃ (nettipāḷi)\"]], \"SN1\": [[\"yo\", \"so (sī. pī.)\"]], \"SN3\": [[\"yo\", \"so (sabbattha)\"]], \"AN3\": [[\"– yo\", \"mayā (syā. kaṃ. pī.)\"], [\"yo\", \"yo kho (syā. kaṃ.), yo ca kho (ka.)\"]], \"SNP\": [[\"yo\", \"yo ve (syā.)\"], [\"ca yo\", \"so (sī. syā. pī.)\"]], \"VV\": [[\"mātāpitūnañca yo\", \"so (?)\"]], \"PV\": [[\"natthi yo\", \"so (sabbattha)\"]], \"THI\": [[\"yo\", \"yā (syā.)\"]], \"APA\": [[\"adāsi yo\", \"so (ka.)\"]], \"JA\": [[\"paggayha yo\", \"so (pī.)\"], [\"yo\", \"so (syā. ka.)\"], [\"yo\", \"ko (sī. syā. pī.)\"], [\"pāṇado yo\", \"pāṇada’ssa (sī. syā. pī.)\"], [\"sarīravaṇṇo yo\", \"na sarīrāvakāso (sī. syā. pī.)\"], [\"yo\", \"ko (sī. pī.)\"], [\"kaniṭṭho, yo\", \"so (sī. syā. pī.)\"], [\"paresaṃ, yo\", \"so (pī.)\"], [\"rājā yo\", \"rājā na so yo (ka.)\"], [\"yo\", \"ko (sī. pī.)\"], [\"pānañca yo\", \"so (sī. syā. ka.)\"]], \"PM\": [[\"yo\", \"ayaṃ gāthā itivu. 49 dissati\"]], \"Aññā\": [[\"gavādīhi yo\", \"ka. 353; rū. 378; nī. 781\"], [\"vadādīhi yo\", \"ka. 541; rū. 552; nī. 1126\"]]}, \"BJT\": {\"VIN3\": [[\"yo\", \"yo so bhikkhave – machasaṃ\"]], \"DN1\": [[\"paccuppanno. yo\", \"yo ca – syā; yo vā – PTS\"]], \"DN3\": [[\"sammanneyyāma, yo\", \"kho – PTS\"]], \"MN1\": [[\"hoti: yo\", \"so – katthaci\"]], \"MN2\": [[\"asu yo\", \"amuko yo – machasaṃ; amuko – syā\"]], \"SN1\": [[\"nandati yo\", \"yohi – sīmu3\"], [\"amaraṇaṃ. yo\", \"yo hi – sīmu3\"], [\"yo\", \"so – PTS\"]], \"SN4\": [[\"etadavocuṃ: yo\", \"so – syā\"], [\"uppannoti. yo\", \"so – sī.pævi, sī.pavi\"]], \"SN5\": [[\"yo\", \"yopi – syā\"]], \"AN1\": [[\"samanupassāmi, yo\", \"yaṃ – sabbattha\"]], \"SNP\": [[\"yo\", \"yo ce – syā\"]], \"APA\": [[\"yo\", \"yaṃ – machasaṃ, the\"], [\"kataṃ yo\", \"yaṃ – machasaṃ\"]], \"JA\": [[\"rājā yo\", \"rājā naso yo – machasaṃ\"]], \"NIDD1\": [[\"uppajjati, yo\", \"so – sīmu11,\"], [\"duraccayanti yo\", \"so – sīmu11\"], [\"vambheti. yo\", \"so – ani\"]], \"NIDD2\": [[\"ca yo\", \"vidvāca so – PTS\"]], \"PTP\": [[\"akusalamūlaṃ: yo\", \"lobho nāma so – machasaṃ, PTS \"], [\"akusalamūlaṃ: yo\", \"so – machasaṃ, PTS \"], [\"kusalamūlaṃ: yo\", \"yā – machasaṃ, PTS\"], [\"mettānupassiya yo\", \"mettānupassayo – PTS\"], [\"diṭṭhivipallāsappahānaṃ. yo\", \"yaṃ – machasaṃ\"], [\"samudayo. yo\", \"so – machasaṃ\"]]}, \"SYA\": {\"VIN3\": [[\"upasampādetabbo. yo\", \"po. ma. so.\"]], \"VIN4\": [[\"janeti yo\", \"yu. so.\"]], \"DN1\": [[\"yathāakusalaṃ yo\", \"sī. yaṃ.\"]], \"DN2\": [[\"bhante yo\", \"ma. yu. me..\"]], \"MN1\": [[\"pasādo yo\", \"yu. so.\"], [\"kālo yo\", \"ma. yo koci.\"], [\"acetananti. yo\", \"ma. yvāyaṃ.\"]], \"MN2\": [[\"bhante yo\", \"ma. yu. ko. poṭṭhakepi īdiso.\"], [\"ārādheyyaṃ yo\", \"yu. so.\"]], \"MN3\": [[\"appamattako yo\", \"ma. yu. so.\"]], \"SN1\": [[\"cakkhudo yo\", \"ma. yu. ko.\"], [\"[] yo\", \"yu. so.\"]], \"SN2\": [[\"ādīnavo yo\", \"yu. yaṃ.\"]], \"SN3\": [[\"apica yo\", \"po. kho.\"], [\"vihareyya. yo\", \"yu. so.\"], [\"sāvatthī. yo\", \"ma. yo kho. sabbattha evaṃ ñātabbaṃ.\"]], \"SN4\": [[\"assādo yo\", \"ma. yu. yaṃ.\"], [\"bhavissati. yo\", \"ma. yu. yā. evamuparipi.\"]], \"SN5\": [[\"iddhipādo. yo\", \"so.\"]], \"AN\": [[\"jīvitasmiñca yo\", \"ma. ye madā.\"], [\"viharatoti. yo\", \"yu. so.\"], [\"vadāmi yo\", \"yu. so. ito paraṃ īdisameva.\"], [\"janeti yo\", \"po. yu. so.\"], [\"bahulīkato yo\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"bahulīkato yo\", \"ma. yu. ayaṃ pāṭho natthi.\"], [\"ahu. yo\", \"ma. yu. ye.\"], [\"mayā yo\", \"ma. sārīputta dhammapariyāyo.\"]], \"KHP\": [[\"paradukkhūpadhānena yo\", \"ma. yu. ayaṃ pāṭho na dissati.\"], [\"vuccati yo\", \"ma. yu. ca.\"], [\"dve yo\", \"ma. ca.\"], [\"vuccati yo\", \"ma. yu. ye.\"], [\"sambodhimuttamaṃ. yo\", \"ma. yo ca caraṃ vā tiṭṭhaṃ vā. yu. yo caraṃ vā   yo tiṭṭhaṃ vā.\"], [\"avitiṇṇakaṅkhaṃ. yo\", \"yu. so.\"], [\"brāhmaṇaṃ. yo\", \"ma. yodha dīghaṃ va.\"], [\"yo\", \"ma. yu. yodha.\"]], \"VV\": [[\"māṇava yo\", \"yu. khosaddo atthi.\"], [\"jānanti yo\", \"yu. so.\"], [\"heraññakāni yo\", \"ma. ca.\"], [\"kalyāṇapañño yo\", \"ma. so.\"], [\"bhajamāno yo\", \"ma. ayaṃ gāthāya pādo na dissati.\"]], \"JA\": [[\"paggayha yo\", \"yu. so.\"], [\"giramudīritaṃ yo\", \"ma. yo ca ....\"], [\"khantisoraccassa yo\", \"ma. ayaṃ.\"], [\"yo\", \"ma. imaṃ.\"], [\"brāhmaṇa yo\", \"ma. yā.\"], [\"kiñcanaṃ yo\", \"sī. yu. ko.\"], [\"[] yo\", \"ma. ayaṃ pāṭho natthi.\"], [\"taṃ yo\", \"ma. so.\"], [\"paṇḍitaṃ yo\", \"sī yu. ko.\"]], \"NIDD1\": [[\"amaraṇaṃ yo\", \"yu. hi..\"], [\"bhañjissāmīti yo\", \"ma. yā evarūpā.\"], [\"kodhoti yo\", \"ma. evarūpo.\"], [\"kodhoti yo\", \"ma. evarūpo.\"]], \"NIDD2\": [[\"māno yo\", \"ma. yā.\"]], \"PM\": [[\"soko yo\", \"ma. ayaṃ pāṭho natthi.\"], [\"upāyāso yo\", \"ma. ayaṃ pāṭho natthi.\"]], \"APA\": [[\"manujānaṃ yo\", \"ma. yu. so.\"], [\"byapahanti yo\", \"ma. yu. so.\"], [\"vacanamabravi. yo\", \"yu. yaṃ.\"]], \"API\": [[\"bhikkhusaṅghassadāsahaṃ. yo\", \"ma. yu. yottha -- niyyādesi   mamaṃ tadā.\"], [\"jino yo\", \"ma. ... te titthikākiṇṇe. yu. janoghe titthikākiṇṇe.\"], [\"saddhā yo\", \"ma. yo ca piyo mahāmune.\"], [\"sabbasampadā. yo\", \"ma. yā.\"], [\"samāgamo. yo\", \"ma. yopi.\"]], \"DNa\": [[\"uṇṇāmayattharaṇo, yo\", \"i. so\"], [\"evaṃ yo\", \"ī. evaṃ yo yo, ma. evamādayo.\"], [\"anuvadantānaṃ yo\", \"cha.ma., i. yo na dissati\"]], \"MNa\": [[\"nikkhamanti. yo\", \"cha.ma. so\"], [\"uttarena yo\", \"cha.ma. yā\"], [\"appamattako yo\", \"cha.ma. so\"]], \"SNa\": [[\"idaṃ yo\", \"cha.ma., i. so\"], [\"navame yo\", \"cha.ma. yo so\"]], \"ANa\": [[\"sapañño yo\", \"cha.ma. so\"], [\"ariyasāvako, yo\", \"ma. so\"], [\"dutiyatatiyehi. yo\", \"cha.ma. koci\"], [\"natthīti yo\", \"cha.ma. so\"]], \"KHPa\": [[\"tañhi yo\", \"cha.ma. yvāyaṃ\"]], \"SNPa\": [[\"vā yo\", \"ka. yasmā tāya\"], [\"vā yo\", \"cha.ma. so\"]], \"PVa\": [[\"maññe, yo\", \"sī. yasmā\"], [\"natthi yo\", \"ka. so\"]], \"THa\": [[\"sukhādhivāhoti yo\", \"sī.,i. sukhādhivāho yo\"], [\"kalyāṇapañño yo\", \"cha.ma. so\"]], \"NIDD1a\": [[\"vuccanti. yo\", \"cha.ma. so\"], [\"paccayāppiccho. yo\", \"cha.ma. so\"]], \"BVa\": [[\"pakāsito yo\", \"sī.,i. so\"]], \"CPa\": [[\"alaṅkatā yo\", \"sī.,ma.,ka. ko\"], [\"brāhmaṇa yo\", \"cha.ma. yā\"], [\"brāhmaṇa yo\", \"cha.ma. yā\"]], \"ADha\": [[\"iti yo\", \"cha.ma. yo yo\"]]}, \"MST\": {\"DN1\": [[\"yo\", \"yo va (pts1ed)\"]], \"MN1\": [[\"yo\", \"so (si, pts1ed)\"]], \"SN1\": [[\"yo\", \"so (bj, sya-all, km, pts1ed)\"], [\"yo\", \"so (bj, pts1ed, pts2ed)\"]], \"AN3\": [[\"yo\", \"etthantare pāṭho si potthake, mayā (sya-all, km, pts1ed)\"], [\"yo\", \"yo kho (sya-all, km)\"], [\"yo\", \"yo ca kho (mr)\"]], \"SNP\": [[\"yo\", \"yo ve (sya-all)\"], [\"yo\", \"so (bj, sya-all, pts-vp-pli1)\"]], \"VV\": [[\"yo\", \"so (?)\"]], \"PV\": [[\"yo\", \"so (sabbattha)\"]], \"THI\": [[\"yo\", \"yā (sya1ed, sya2ed, pts1ed, pts2ed)\"]], \"APA\": [[\"yo\", \"so (sya1ed, sya2ed)\"], [\"yo\", \"so (mr)\"]], \"JA\": [[\"yo\", \"so (bj, pts-vp-pli1)\"], [\"yo\", \"so (sya1ed, sya2ed, mr)\"], [\"yo\", \"ko (bj, sya1ed, sya2ed, pts-vp-pli1)\"], [\"yo\", \"ko (bj, pts-vp-pli1)\"], [\"yo\", \"so (bj, sya1ed, sya2ed, pts-vp-pli1)\"], [\"yo\", \"so (pts-vp-pli1)\"], [\"yo\", \"ko (bj, pts-vp-pli1)\"], [\"yo\", \"so (bj, sya1ed, sya2ed, mr)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "indakhīle": {
+      "lookup_key": "indakhīle",
+      "headwords": "[13724, 13725]",
+      "deconstructor": "",
+      "grammar": "[[\"indakhīla\", \"noun\", \"masc acc pl\"], [\"indakhīla\", \"noun\", \"masc loc sg\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VIN1\": [[\"gāmassa indakhīle\", \"indakhile (ka.)\"]]}, \"MST\": {\"VIN1\": [[\"indakhīle\", \"indakhile (mr)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "avaharissāma": {
+      "lookup_key": "avaharissāma",
+      "headwords": "[10432]",
+      "deconstructor": "",
+      "grammar": "[[\"avaharati\", \"verb\", \"fut 1st pl\"]]",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "sammantayitvā": {
+      "lookup_key": "sammantayitvā",
+      "headwords": "[60749]",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"SYA\": {\"DNa\": [[\"hantabbāti sammantayitvā\", \"ma. mantayiṃsu\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "samantayitvā": {
+      "lookup_key": "samantayitvā",
+      "headwords": "",
+      "deconstructor": "[\"sa + mantayitvā\"]",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "vanditva": {
+      "lookup_key": "vanditva",
+      "headwords": "",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"BJT\": {\"VV\": [[\"sāhaṃ vanditva\", \"vanditvā – machasaṃ\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    },
+    "vanditvā": {
+      "lookup_key": "vanditvā",
+      "headwords": "[66262]",
+      "deconstructor": "",
+      "grammar": "",
+      "abbrev": "",
+      "roots": "",
+      "spelling": "",
+      "see": "",
+      "variant": "{\"CST\": {\"VV\": [[\"sāhaṃ vanditvā\", \"vanditva (sī.)\"], [\"pādāni vanditvā\", \"vanditva (sī.)\"]], \"APA\": [[\"sumano, vanditvā\", \"thometvā (syā.)\"]]}, \"BJT\": {\"APA\": [[\"sumano vanditvā\", \"thometva – syā\"]]}, \"SYA\": {\"MNa\": [[\"tumhākanti vanditvā\", \"ma. vatvā\"]], \"ANa\": [[\"disvā vanditvā\", \"cha.ma.,i. ayaṃ pāṭho na dissati\"], [\"ayyaṃ vanditvā\", \"cha.ma. ayyāti vatvā\"], [\"pāde vanditvā\", \"sī. vivaritvā\"]], \"SNPa\": [[\"upasaṅkamitvā vanditvā\", \"cha.ma. ayaṃ pāṭho na dissati\"]], \"VVa\": [[\"sāhaṃ vanditvā\", \"pāḷiyaṃ. vanditā\"], [\"pādāni vanditvā\", \"sī. vanditva\"]]}, \"MST\": {\"VV\": [[\"vanditvā\", \"vanditva (bj, pts-vp-pli1-2)\"], [\"vanditvā\", \"vanditva (bj, pts-vp-pli1-2)\"]], \"APA\": [[\"vanditvā\", \"thometvā (sya1ed, sya2ed)\"]]}}",
+      "abbrev_other": "",
+      "help": ""
+    }
+  },
+  "senses": [
+    {
+      "id": 13,
+      "lemma_1": "akaṭa 1",
+      "pos": "pp",
+      "meaning_1": "not done; not performed; not acted",
+      "meaning_2": "not made",
+      "meaning_lit": ""
+    },
+    {
+      "id": 14,
+      "lemma_1": "akaṭa 2",
+      "pos": "pp",
+      "meaning_1": "not made; not created; unfashioned",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 15,
+      "lemma_1": "akaṭa 3",
+      "pos": "pp",
+      "meaning_1": "",
+      "meaning_2": "not artificial; not prepared",
+      "meaning_lit": ""
+    },
+    {
+      "id": 28,
+      "lemma_1": "akaṇhaasukka",
+      "pos": "adj",
+      "meaning_1": "neither black nor white; neither good nor bad",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 4579,
+      "lemma_1": "anudhamma 2",
+      "pos": "adj",
+      "meaning_1": "according to Dhamma; in line with the teaching",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 4580,
+      "lemma_1": "anudhamma 3",
+      "pos": "adj",
+      "meaning_1": "legal; according to the rule",
+      "meaning_2": "conformity with the Dhamma",
+      "meaning_lit": ""
+    },
+    {
+      "id": 10432,
+      "lemma_1": "avaharati",
+      "pos": "pr",
+      "meaning_1": "takes away; carries away; steals",
+      "meaning_2": "steals, takes away",
+      "meaning_lit": "carries down"
+    },
+    {
+      "id": 11717,
+      "lemma_1": "ānanda 1",
+      "pos": "masc",
+      "meaning_1": "happiness; joy",
+      "meaning_2": "joy, pleasure",
+      "meaning_lit": ""
+    },
+    {
+      "id": 11718,
+      "lemma_1": "ānanda 2",
+      "pos": "masc",
+      "meaning_1": "name of an arahant monk; attendant of the Buddha; great disciple of the Buddha; foremost monk in great learning; foremost monk in excellent recollection; foremost monk in retention; foremost monk in total recall; foremost monk in assistance",
+      "meaning_2": "",
+      "meaning_lit": "happiness"
+    },
+    {
+      "id": 11719,
+      "lemma_1": "ānanda 3",
+      "pos": "masc",
+      "meaning_1": "name of four privately awakened Buddhas",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 11725,
+      "lemma_1": "ānandati",
+      "pos": "pr",
+      "meaning_1": "",
+      "meaning_2": "is happy; is joyful",
+      "meaning_lit": ""
+    },
+    {
+      "id": 13466,
+      "lemma_1": "iti",
+      "pos": "ind",
+      "meaning_1": "thus; like this; this is; and so",
+      "meaning_2": "thus",
+      "meaning_lit": ""
+    },
+    {
+      "id": 13686,
+      "lemma_1": "idha 1",
+      "pos": "ind",
+      "meaning_1": "here; now; in this world",
+      "meaning_2": "here, in this world or existence",
+      "meaning_lit": ""
+    },
+    {
+      "id": 13687,
+      "lemma_1": "idha 2",
+      "pos": "ind",
+      "meaning_1": "here; in this regard; in this case",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 13688,
+      "lemma_1": "idha 3",
+      "pos": "ind",
+      "meaning_1": "(comm) in this teaching; here in this doctrine",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 13724,
+      "lemma_1": "indakhīla 1",
+      "pos": "masc",
+      "meaning_1": "(of a city) Inda's column; gate post of a city",
+      "meaning_2": "strong post before a city gate",
+      "meaning_lit": ""
+    },
+    {
+      "id": 13725,
+      "lemma_1": "indakhīla 2",
+      "pos": "masc",
+      "meaning_1": "doorway; doorstep; threshold; entrance",
+      "meaning_2": "door-step, threshold",
+      "meaning_lit": "Inda's column"
+    },
+    {
+      "id": 18051,
+      "lemma_1": "eva 1",
+      "pos": "ind",
+      "meaning_1": "only; just; merely; exclusively",
+      "meaning_2": "only",
+      "meaning_lit": ""
+    },
+    {
+      "id": 18052,
+      "lemma_1": "eva 2",
+      "pos": "ind",
+      "meaning_1": "still",
+      "meaning_2": "so",
+      "meaning_lit": ""
+    },
+    {
+      "id": 18053,
+      "lemma_1": "eva 3",
+      "pos": "ind",
+      "meaning_1": "even; too; as well",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 18054,
+      "lemma_1": "eva 4",
+      "pos": "ind",
+      "meaning_1": "indeed; really; certainly; absolutely",
+      "meaning_2": "indeed, really, certainly, absolutely",
+      "meaning_lit": ""
+    },
+    {
+      "id": 18055,
+      "lemma_1": "eva 5",
+      "pos": "ind",
+      "meaning_1": "as soon as",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 19158,
+      "lemma_1": "ka 1.1",
+      "pos": "pron",
+      "meaning_1": "who?; what?; which?",
+      "meaning_2": "who, what, which",
+      "meaning_lit": ""
+    },
+    {
+      "id": 19159,
+      "lemma_1": "ka 1.2",
+      "pos": "pron",
+      "meaning_1": "where?",
+      "meaning_2": "where?",
+      "meaning_lit": ""
+    },
+    {
+      "id": 19162,
+      "lemma_1": "ka 3.1",
+      "pos": "nt",
+      "meaning_1": "water",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 20877,
+      "lemma_1": "kā 1.1",
+      "pos": "prefix",
+      "meaning_1": "small; mean; bad",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 20878,
+      "lemma_1": "kā 2.1",
+      "pos": "pron",
+      "meaning_1": "what?; which?; which woman?",
+      "meaning_2": "which woman?",
+      "meaning_lit": ""
+    },
+    {
+      "id": 21591,
+      "lemma_1": "ki",
+      "pos": "pron",
+      "meaning_1": "who?; what?; which?",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 29188,
+      "lemma_1": "ta 1.1",
+      "pos": "pron",
+      "meaning_1": "that",
+      "meaning_2": "that",
+      "meaning_lit": ""
+    },
+    {
+      "id": 29189,
+      "lemma_1": "ta 2.1",
+      "pos": "letter",
+      "meaning_1": "(gram) letter t; 24th letter of the alphabet; dental sibilant",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 30163,
+      "lemma_1": "tassa 1",
+      "pos": "pron",
+      "meaning_1": "to him; for him; to that; for that",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 30164,
+      "lemma_1": "tassa 2",
+      "pos": "pron",
+      "meaning_1": "of that; his; its",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 30165,
+      "lemma_1": "tassa 3",
+      "pos": "pron",
+      "meaning_1": "when he; when it",
+      "meaning_2": "",
+      "meaning_lit": "of that"
+    },
+    {
+      "id": 30166,
+      "lemma_1": "tassa 4",
+      "pos": "ind",
+      "meaning_1": "therefore; thus; so; because of that; regarding that",
+      "meaning_2": "",
+      "meaning_lit": "of that"
+    },
+    {
+      "id": 30195,
+      "lemma_1": "tasseva 1",
+      "pos": "sandhi",
+      "meaning_1": "just for him; even for him; just that alone",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 30196,
+      "lemma_1": "tasseva 2",
+      "pos": "sandhi",
+      "meaning_1": "of that very; of that exact; of the same",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34626,
+      "lemma_1": "dhamma 1.01",
+      "pos": "masc",
+      "meaning_1": "nature; character",
+      "meaning_2": "nature",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34627,
+      "lemma_1": "dhamma 1.02",
+      "pos": "masc",
+      "meaning_1": "quality; characteristic; trait; inherent quality",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34628,
+      "lemma_1": "dhamma 1.03",
+      "pos": "masc",
+      "meaning_1": "teaching; discourse; doctrine",
+      "meaning_2": "doctrine",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34629,
+      "lemma_1": "dhamma 1.04",
+      "pos": "masc",
+      "meaning_1": "mental phenomena; thoughts",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34630,
+      "lemma_1": "dhamma 1.05",
+      "pos": "masc",
+      "meaning_1": "mental states",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34631,
+      "lemma_1": "dhamma 1.06",
+      "pos": "masc",
+      "meaning_1": "matter; thing; phenomenon",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34632,
+      "lemma_1": "dhamma 1.07",
+      "pos": "masc",
+      "meaning_1": "truth; reality; principle; truth behind the teaching",
+      "meaning_2": "truth, Dhamma",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34633,
+      "lemma_1": "dhamma 1.08",
+      "pos": "masc",
+      "meaning_1": "virtue; moral behaviour",
+      "meaning_2": "morality, good conduct",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34634,
+      "lemma_1": "dhamma 1.09",
+      "pos": "masc",
+      "meaning_1": "law; case; rule; legal process",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34635,
+      "lemma_1": "dhamma 1.10",
+      "pos": "adj",
+      "meaning_1": "of such nature; liable (to); prone (to); destined (for)",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34636,
+      "lemma_1": "dhamma 1.11",
+      "pos": "masc",
+      "meaning_1": "name of king Mahāsudassana's palace",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34637,
+      "lemma_1": "dhamma 1.12",
+      "pos": "nt",
+      "meaning_1": "teaching; discourse; doctrine",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34638,
+      "lemma_1": "dhamma 1.13",
+      "pos": "masc",
+      "meaning_1": "religion",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34639,
+      "lemma_1": "dhamma 1.14",
+      "pos": "masc",
+      "meaning_1": "act; practice",
+      "meaning_2": "act; practice",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34640,
+      "lemma_1": "dhamma 1.15",
+      "pos": "masc",
+      "meaning_1": "duty; obligation",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 34641,
+      "lemma_1": "dhamma 2.1",
+      "pos": "adj",
+      "meaning_1": "having a bow",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 48511,
+      "lemma_1": "buddha 1",
+      "pos": "masc",
+      "meaning_1": "Buddha; Awakened One",
+      "meaning_2": "who has attained enlightenment, Enlightened One",
+      "meaning_lit": ""
+    },
+    {
+      "id": 48512,
+      "lemma_1": "buddha 2",
+      "pos": "pp",
+      "meaning_1": "awakened; woke up; understood",
+      "meaning_2": "known, understood, perceived",
+      "meaning_lit": ""
+    },
+    {
+      "id": 49868,
+      "lemma_1": "bhikkhave",
+      "pos": "masc",
+      "meaning_1": "monks",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 49885,
+      "lemma_1": "bhikkhu",
+      "pos": "masc",
+      "meaning_1": "monk; monastic; mendicant; fully ordained monk",
+      "meaning_2": "Buddhist monk",
+      "meaning_lit": "beggar"
+    },
+    {
+      "id": 53444,
+      "lemma_1": "ya 2.1",
+      "pos": "pron",
+      "meaning_1": "whoever; whatever; whichever",
+      "meaning_2": "which, what, whatever",
+      "meaning_lit": ""
+    },
+    {
+      "id": 53445,
+      "lemma_1": "ya 1.1",
+      "pos": "letter",
+      "meaning_1": "(gram) letter y; 34th letter of the alphabet; palatal semi-vowel",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 53446,
+      "lemma_1": "ya 3.1",
+      "pos": "cs",
+      "meaning_1": "(gram) ya; suffix used to form impersonal and passive verbs",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 53447,
+      "lemma_1": "ya 3.2",
+      "pos": "cs",
+      "meaning_1": "(gram) ya; conjugational sign of group 3 divādigaṇa verbs",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 54208,
+      "lemma_1": "yo",
+      "pos": "pron",
+      "meaning_1": "whoever; whatever; whichever",
+      "meaning_2": "any person, whoever",
+      "meaning_lit": ""
+    },
+    {
+      "id": 54290,
+      "lemma_1": "yodha 1.1",
+      "pos": "masc",
+      "meaning_1": "soldier; warrior; mercenary",
+      "meaning_2": "soldier",
+      "meaning_lit": ""
+    },
+    {
+      "id": 54291,
+      "lemma_1": "yodha 2.1",
+      "pos": "sandhi",
+      "meaning_1": "whoever here; whoever in this regard",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 56233,
+      "lemma_1": "sa 3.1",
+      "pos": "pron",
+      "meaning_1": "own; one's own; one's own possession",
+      "meaning_2": "one's own",
+      "meaning_lit": ""
+    },
+    {
+      "id": 56234,
+      "lemma_1": "sa 3.2",
+      "pos": "adj",
+      "meaning_1": "self-; personal-",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 56236,
+      "lemma_1": "sa 1.1",
+      "pos": "letter",
+      "meaning_1": "(gram) letter s; 36th letter of the alphabet; dental consonant",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 56237,
+      "lemma_1": "sa 6.1",
+      "pos": "masc",
+      "meaning_1": "dog",
+      "meaning_2": "dog",
+      "meaning_lit": ""
+    },
+    {
+      "id": 57227,
+      "lemma_1": "sajjeti 1",
+      "pos": "pr",
+      "meaning_1": "prepares; readies; equips; sets up",
+      "meaning_2": "prepares",
+      "meaning_lit": ""
+    },
+    {
+      "id": 57228,
+      "lemma_1": "sajjeti 2",
+      "pos": "pr",
+      "meaning_1": "adorns; decorates",
+      "meaning_2": "fits up, decorates",
+      "meaning_lit": ""
+    },
+    {
+      "id": 57232,
+      "lemma_1": "sajjesi",
+      "pos": "aor",
+      "meaning_1": "",
+      "meaning_2": "prepared, fit up, decorated",
+      "meaning_lit": ""
+    },
+    {
+      "id": 58152,
+      "lemma_1": "santa 1.1",
+      "pos": "prp",
+      "meaning_1": "existing; being; there is",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 58153,
+      "lemma_1": "santa 1.2",
+      "pos": "prp",
+      "meaning_1": "being present; attending",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 58154,
+      "lemma_1": "santa 1.3",
+      "pos": "masc",
+      "meaning_1": "virtuous man; good person; wise person; sage",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 60749,
+      "lemma_1": "sammantayitvā",
+      "pos": "abs",
+      "meaning_1": "",
+      "meaning_2": "having consulted; having discussed together",
+      "meaning_lit": ""
+    },
+    {
+      "id": 61525,
+      "lemma_1": "saṃ 1.1",
+      "pos": "prefix",
+      "meaning_1": "together; with",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 61527,
+      "lemma_1": "saṃ 2.1",
+      "pos": "ind",
+      "meaning_1": "own; personal; self-",
+      "meaning_2": "own",
+      "meaning_lit": ""
+    },
+    {
+      "id": 61528,
+      "lemma_1": "saṃ 3.1",
+      "pos": "opt",
+      "meaning_1": "I could be",
+      "meaning_2": "I could be",
+      "meaning_lit": ""
+    },
+    {
+      "id": 62984,
+      "lemma_1": "siyā 1",
+      "pos": "opt",
+      "meaning_1": "could be; may be; might be; should be",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 62985,
+      "lemma_1": "siyā 2",
+      "pos": "opt",
+      "meaning_1": "there could be",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 63156,
+      "lemma_1": "sīlakkhandhavaggapāḷi",
+      "pos": "fem",
+      "meaning_1": "Part 1 of the Dīgha Nikāya (DN1-13)",
+      "meaning_2": "",
+      "meaning_lit": "canonical text of the section on virtuous conduct"
+    },
+    {
+      "id": 71483,
+      "lemma_1": "hoti 1",
+      "pos": "pr",
+      "meaning_1": "is; becomes",
+      "meaning_2": "is",
+      "meaning_lit": ""
+    },
+    {
+      "id": 71484,
+      "lemma_1": "hoti 2",
+      "pos": "pr",
+      "meaning_1": "exists (for)",
+      "meaning_2": "exists",
+      "meaning_lit": ""
+    },
+    {
+      "id": 71485,
+      "lemma_1": "hoti 3",
+      "pos": "pr",
+      "meaning_1": "stays; remains; continues to be",
+      "meaning_2": "",
+      "meaning_lit": "is"
+    },
+    {
+      "id": 77248,
+      "lemma_1": "dhammā",
+      "pos": "fem",
+      "meaning_1": "name of an arahant nun",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 86882,
+      "lemma_1": "kā 3.1",
+      "pos": "fem",
+      "meaning_1": "doing; performing; making",
+      "meaning_2": "",
+      "meaning_lit": ""
+    },
+    {
+      "id": 66262,
+      "lemma_1": "vanditvā",
+      "pos": "abs",
+      "meaning_1": "having bowed; having paid respect; having honoured",
+      "meaning_2": "having saluted, paid homage, having honoured, having adored",
+      "meaning_lit": ""
+    }
+  ],
+  "roots": [
+    {
+      "root": "√akkh",
+      "root_meaning": "see",
+      "root_group": 1,
+      "root_sign": "a",
+      "root_example": "akkhi",
+      "sanskrit_root": "√akṣ",
+      "sanskrit_root_meaning": "attain",
+      "note": ""
+    },
+    {
+      "root": "√dī",
+      "root_meaning": "be afflicted",
+      "root_group": 3,
+      "root_sign": "ya",
+      "root_example": "dīna, ādīnava",
+      "sanskrit_root": "√dī",
+      "sanskrit_root_meaning": "decay",
+      "note": ""
+    },
+    {
+      "root": "√har 1",
+      "root_meaning": "carry",
+      "root_group": 1,
+      "root_sign": "a",
+      "root_example": "nīharati, āharati, uddharati, pāṭihāriya",
+      "sanskrit_root": "√hṛ",
+      "sanskrit_root_meaning": "take",
+      "note": ""
+    },
+    {
+      "root": "√har 2",
+      "root_meaning": "take, seize",
+      "root_group": 1,
+      "root_sign": "a",
+      "root_example": "paharati, hara, uddhata",
+      "sanskrit_root": "√hṛ",
+      "sanskrit_root_meaning": "take",
+      "note": ""
+    },
+    {
+      "root": "√har 3",
+      "root_meaning": "live",
+      "root_group": 1,
+      "root_sign": "a",
+      "root_example": "viharati, vihāra, pariharati",
+      "sanskrit_root": "√hṛ",
+      "sanskrit_root_meaning": "take",
+      "note": ""
+    },
+    {
+      "root": "√har 4",
+      "root_meaning": "be ashamed",
+      "root_group": 3,
+      "root_sign": "ya",
+      "root_example": "harāyati",
+      "sanskrit_root": "√hrī",
+      "sanskrit_root_meaning": "be ashamed",
+      "note": "related to √hir"
+    },
+    {
+      "root": "√kā",
+      "root_meaning": "makes sound",
+      "root_group": 3,
+      "root_sign": "ya",
+      "root_example": "kāyati",
+      "sanskrit_root": "√gā",
+      "sanskrit_root_meaning": "sing",
+      "note": ""
+    },
+    {
+      "root": "√loc",
+      "root_meaning": "see, illuminate",
+      "root_group": 8,
+      "root_sign": "e, aya",
+      "root_example": "locita",
+      "sanskrit_root": "√loc",
+      "sanskrit_root_meaning": "see, consider",
+      "note": "related to √lok"
+    }
+  ]
+}

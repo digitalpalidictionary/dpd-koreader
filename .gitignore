@@ -1,0 +1,16 @@
+/dist/
+__pycache__/
+*.pyc
+*.db
+*.db-shm
+*.db-wal
+.DS_Store
+/test-artifacts/
+dpd-mobile-db*.zip
+/private/
+*.sdr/
+/audit-output/
+/audit/
+/audit-output-*/
+/add_your_app*
+.claude/

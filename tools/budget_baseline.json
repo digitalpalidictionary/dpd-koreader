@@ -1,0 +1,468 @@
+{
+  "case_signature": "e1ad3338867d8e26df6de37359cac76005af6c2361df1a09b187bdfc7f3abe90",
+  "cases": [
+    {
+      "cached": {
+        "html_bytes": 1463,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "24618c0fa4d08c7a4cff00a835e78a7319774c9599ef07c5306b364ab049c8e1",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 1463,
+        "payload_bytes": 604,
+        "queries": 3,
+        "result_signature": "24618c0fa4d08c7a4cff00a835e78a7319774c9599ef07c5306b364ab049c8e1",
+        "rows": 10
+      },
+      "mode": "selection",
+      "name": "selection:pacchima",
+      "word": "pacchima"
+    },
+    {
+      "cached": {
+        "html_bytes": 2847,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "1f3fbee28fef6eabb2e8efef644da906b89373984e4edbe7de34062f46691f74",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 2847,
+        "payload_bytes": 1320,
+        "queries": 3,
+        "result_signature": "1f3fbee28fef6eabb2e8efef644da906b89373984e4edbe7de34062f46691f74",
+        "rows": 18
+      },
+      "mode": "selection",
+      "name": "selection:dhammassa",
+      "word": "dhammassa"
+    },
+    {
+      "cached": {
+        "html_bytes": 2712,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "82fb9b36257fc37b0c1356a989a5a97c5452fb5297418d439cb5a40d1a3c9357",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 2712,
+        "payload_bytes": 5920,
+        "queries": 4,
+        "result_signature": "82fb9b36257fc37b0c1356a989a5a97c5452fb5297418d439cb5a40d1a3c9357",
+        "rows": 34
+      },
+      "mode": "selection",
+      "name": "selection:vajjakammappabhedanti",
+      "word": "vajjakammappabhedanti"
+    },
+    {
+      "cached": {
+        "html_bytes": 947,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "cb6a3e6288211dfd064da2e89ee1969e83b4d77a5070a269f7bdb3b48786fdb9",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 947,
+        "payload_bytes": 979,
+        "queries": 4,
+        "result_signature": "cb6a3e6288211dfd064da2e89ee1969e83b4d77a5070a269f7bdb3b48786fdb9",
+        "rows": 13
+      },
+      "mode": "selection",
+      "name": "selection:pacchimakattikapuṇṇamā",
+      "word": "pacchimakattikapuṇṇamā"
+    },
+    {
+      "cached": {
+        "html_bytes": 5058,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "c5dfd5ed192facdf514965faafb435ed40451a150e686269cd63097610970b8e",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 5058,
+        "payload_bytes": 2698,
+        "queries": 8,
+        "result_signature": "c5dfd5ed192facdf514965faafb435ed40451a150e686269cd63097610970b8e",
+        "rows": 63
+      },
+      "mode": "selection",
+      "name": "selection:√har",
+      "word": "√har"
+    },
+    {
+      "cached": {
+        "html_bytes": 3145,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "9a0fd054b28b23fe91fc27803d21d3584d8cb96503e45e4e750544eea0371ac0",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 3145,
+        "payload_bytes": 1860,
+        "queries": 5,
+        "result_signature": "9a0fd054b28b23fe91fc27803d21d3584d8cb96503e45e4e750544eea0371ac0",
+        "rows": 48
+      },
+      "mode": "selection",
+      "name": "selection:√gam",
+      "word": "√gam"
+    },
+    {
+      "cached": {
+        "html_bytes": 1435,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "d07941d48e317cb697ae7174596d2f100b28d2d3b64615a876c45b40df2ec920",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 1435,
+        "payload_bytes": 32823,
+        "queries": 5,
+        "result_signature": "d07941d48e317cb697ae7174596d2f100b28d2d3b64615a876c45b40df2ec920",
+        "rows": 9
+      },
+      "mode": "selection",
+      "name": "selection:hotī",
+      "word": "hotī"
+    },
+    {
+      "cached": {
+        "html_bytes": 1307,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "95cf5692deb0c8156b5b795ba790d09643975e83b6c89400d62569511f96c296",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 1307,
+        "payload_bytes": 3768,
+        "queries": 5,
+        "result_signature": "95cf5692deb0c8156b5b795ba790d09643975e83b6c89400d62569511f96c296",
+        "rows": 9
+      },
+      "mode": "selection",
+      "name": "selection:sajjasīti",
+      "word": "sajjasīti"
+    },
+    {
+      "cached": {
+        "html_bytes": 0,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "54733e97814979b44b169757ff20cd651af02bc3b244a9c9ecd2ed5fa1648244",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 0,
+        "payload_bytes": 330,
+        "queries": 5,
+        "result_signature": "54733e97814979b44b169757ff20cd651af02bc3b244a9c9ecd2ed5fa1648244",
+        "rows": 3
+      },
+      "mode": "selection",
+      "name": "selection:uyyokhajja",
+      "word": "uyyokhajja"
+    },
+    {
+      "cached": {
+        "html_bytes": 1712,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "fcd354efcefeb0dc1d2191b795bfa145901c49502c767b7a79243e27f6495234",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 1712,
+        "payload_bytes": 1374,
+        "queries": 6,
+        "result_signature": "fcd354efcefeb0dc1d2191b795bfa145901c49502c767b7a79243e27f6495234",
+        "rows": 18
+      },
+      "mode": "selection",
+      "name": "selection:kā",
+      "word": "kā"
+    },
+    {
+      "cached": {
+        "html_bytes": 573,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "1d1c4b85a4b97b141c227cfff73e67e8a7accaef40d46fd5983105ffd9c2d1ec",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 573,
+        "payload_bytes": 351,
+        "queries": 4,
+        "result_signature": "1d1c4b85a4b97b141c227cfff73e67e8a7accaef40d46fd5983105ffd9c2d1ec",
+        "rows": 5
+      },
+      "mode": "selection",
+      "name": "selection:Buddha",
+      "word": "Buddha"
+    },
+    {
+      "cached": {
+        "html_bytes": 2181,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "336da7d3bbbbc1b625d7ec251b1d8708f1df4b38083a2b031423f261fb248b43",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 2181,
+        "payload_bytes": 1516,
+        "queries": 3,
+        "result_signature": "336da7d3bbbbc1b625d7ec251b1d8708f1df4b38083a2b031423f261fb248b43",
+        "rows": 14
+      },
+      "mode": "selection",
+      "name": "selection:saṁ",
+      "word": "saṁ"
+    },
+    {
+      "cached": {
+        "html_bytes": 3042,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "8280f26f36349b8fd13092fe57f7c678be452b22184caf0457e3fdc5ed566856",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 3042,
+        "payload_bytes": 6209,
+        "queries": 3,
+        "result_signature": "8280f26f36349b8fd13092fe57f7c678be452b22184caf0457e3fdc5ed566856",
+        "rows": 19
+      },
+      "mode": "selection",
+      "name": "selection:dhammā",
+      "word": "dhammā"
+    },
+    {
+      "cached": {
+        "html_bytes": 987,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "8971bfefeb87c82f7df0aa5a5ac36508a12088136628367963643877ac8be8c5",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 987,
+        "payload_bytes": 13015,
+        "queries": 4,
+        "result_signature": "8971bfefeb87c82f7df0aa5a5ac36508a12088136628367963643877ac8be8c5",
+        "rows": 7
+      },
+      "mode": "selection",
+      "name": "selection:bhikkhave’ti",
+      "word": "bhikkhave’ti"
+    },
+    {
+      "cached": {
+        "html_bytes": 1191,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "19e2e106c7abcf4107a2098c6c18d8fe1e44a73e360decac1dd7eee14aab4ab8",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 1191,
+        "payload_bytes": 540,
+        "queries": 6,
+        "result_signature": "19e2e106c7abcf4107a2098c6c18d8fe1e44a73e360decac1dd7eee14aab4ab8",
+        "rows": 9
+      },
+      "mode": "selection",
+      "name": "selection:akaṭa-anudhammena",
+      "word": "akaṭa-anudhammena"
+    },
+    {
+      "cached": {
+        "html_bytes": 823,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "7563ab181a8e974dac78bb0ad00d61031b5a9d3255dc4729708a7ed4eb86f3e1",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 823,
+        "payload_bytes": 429,
+        "queries": 6,
+        "result_signature": "7563ab181a8e974dac78bb0ad00d61031b5a9d3255dc4729708a7ed4eb86f3e1",
+        "rows": 5
+      },
+      "mode": "selection",
+      "name": "selection:indakhile",
+      "word": "indakhile"
+    },
+    {
+      "cached": {
+        "html_bytes": 1839,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "152cd2c5bc1b398a12213ec76c8d5c3d130a28424a37983273bdafcaf229a3e6",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 1839,
+        "payload_bytes": 2975,
+        "queries": 7,
+        "result_signature": "152cd2c5bc1b398a12213ec76c8d5c3d130a28424a37983273bdafcaf229a3e6",
+        "rows": 16
+      },
+      "mode": "selection",
+      "name": "selection:saṃmantayitvā",
+      "word": "saṃmantayitvā"
+    },
+    {
+      "cached": {
+        "html_bytes": 5078,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "9d179728e70ff2619a3a22b7241e35f9c9644f834328ab17cdadbc407e123584",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 5078,
+        "payload_bytes": 12406,
+        "queries": 8,
+        "result_signature": "9d179728e70ff2619a3a22b7241e35f9c9644f834328ab17cdadbc407e123584",
+        "rows": 69
+      },
+      "mode": "selection",
+      "name": "selection:nnāṭṭā",
+      "word": "nnāṭṭā"
+    },
+    {
+      "cached": {
+        "html_bytes": 0,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "8b5c5e9b0926115d1cf3b39fade7216cb6839bbb02808e6d35fc4c6f77070f46",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 0,
+        "payload_bytes": 8,
+        "queries": 4,
+        "result_signature": "8b5c5e9b0926115d1cf3b39fade7216cb6839bbb02808e6d35fc4c6f77070f46",
+        "rows": 1
+      },
+      "mode": "selection",
+      "name": "selection:dpdtestnomatch",
+      "word": "dpdtestnomatch"
+    },
+    {
+      "cached": {
+        "html_bytes": 0,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "3c4faab2760abd0e2bc991e6324328a80a984a3c3da2a890701b6792671c2825",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 0,
+        "payload_bytes": 8,
+        "queries": 4,
+        "result_signature": "3c4faab2760abd0e2bc991e6324328a80a984a3c3da2a890701b6792671c2825",
+        "rows": 1
+      },
+      "mode": "selection",
+      "name": "selection:timing",
+      "word": "timing"
+    },
+    {
+      "cached": {
+        "html_bytes": 185,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "3de93fb7edb9b36f6001e773ac71b5d446cf7fcbfbdb01cf73ed6b725b2580f5",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 185,
+        "payload_bytes": 8,
+        "queries": 3,
+        "result_signature": "3de93fb7edb9b36f6001e773ac71b5d446cf7fcbfbdb01cf73ed6b725b2580f5",
+        "rows": 1
+      },
+      "mode": "english",
+      "name": "english:timing",
+      "word": "timing"
+    },
+    {
+      "cached": {
+        "html_bytes": 1135,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "b05c1a81d2ae214a64e10bbddb2156fd394b26e99106a34ffbc84510d9ecbd97",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 1135,
+        "payload_bytes": 642,
+        "queries": 2,
+        "result_signature": "b05c1a81d2ae214a64e10bbddb2156fd394b26e99106a34ffbc84510d9ecbd97",
+        "rows": 2
+      },
+      "mode": "english",
+      "name": "english:mind",
+      "word": "mind"
+    },
+    {
+      "cached": {
+        "html_bytes": 187,
+        "payload_bytes": 0,
+        "queries": 0,
+        "result_signature": "e252ee4ff637119be6ea02f68c5503ca4746d8f7440d2639b96e5c366cda72ad",
+        "rows": 0
+      },
+      "fresh": {
+        "html_bytes": 187,
+        "payload_bytes": 51,
+        "queries": 3,
+        "result_signature": "e252ee4ff637119be6ea02f68c5503ca4746d8f7440d2639b96e5c366cda72ad",
+        "rows": 2
+      },
+      "mode": "english",
+      "name": "english:sanskrit",
+      "word": "sanskrit"
+    }
+  ],
+  "database": {
+    "release": "v0.4.20260926",
+    "schema": "7"
+  },
+  "format_version": 1,
+  "opening": {
+    "payload_bytes": 90953,
+    "queries": 5,
+    "rows": 109
+  },
+  "settings": {
+    "content_em": 30,
+    "dictionaries": [
+      "dppn",
+      "cpd",
+      "pts",
+      "nyanatiloka"
+    ],
+    "english_edit_search": true,
+    "niggahita": "ṃ",
+    "paradigm_columns": 1,
+    "selection_approximate": true,
+    "selection_options": {
+      "prefix": false
+    }
+  }
+}
