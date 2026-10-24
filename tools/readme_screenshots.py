@@ -360,7 +360,7 @@ def find(shots, fonts, out, theme):
             raise ValueError(f"Missing {name}; recapture with --keep before using --shots")
     c = Canvas(fonts, 1280, "", "", theme)
     c.heading((54, 44), "Find any word.", 86)
-    c.text((58, 148), "In Pāḷi or English, with or without diacritics.", 30, theme.muted)
+    c.text((58, 148), "Pāḷi and English search, with suggestions as you type.", 30, theme.muted)
     english = (44, 210, 920, 746)
     spelling = (944, 210, 1716, 746)
     suggestions = (44, 770, 800, 1236)

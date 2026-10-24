@@ -151,7 +151,7 @@ describe("compound rendering and navigation", function()
         frame.analyses[3] = true
         local html = Render.render(forms, frame)
         assert.is_falsy(html:find('dpd:analysis/3',1,true))
-        assert.is_truthy(html:find('<p class="row still">3 · ',1,true))
+        assert.is_truthy(html:find('<p class="row still"><a href="dpd:component/3/',1,true))
         assert.is_falsy(html:find('dpd:component-sense/3/',1,true))
         assert.is_falsy(html:find('<div class="component"><p><a href="dpd:component/3/',1,true))
     end)

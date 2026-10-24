@@ -370,9 +370,8 @@ print("PASS: typing sam(e) through the English dialog renders same (and sameness
 -- and popup: no suggestion queries, Sanskrit Velthuis, exact Sanskrit and
 -- proper-name headwords, typed punctuation kept, DPD over the search and
 -- Back, the pencil, a miss.
-local all = { "dppn", "cpd", "pts", "nyanatiloka", "peu", "bhs", "mw", "apte", "wordnet" }
 local search = setmetatable({ db = db, lookup = require("dpd/lookup").new(db),
-    settings = { font_size = 16, velthuis = true, lookup_mode = "english", dictionaries = all }, ui = {} },
+    settings = { font_size = 16, velthuis = true, lookup_mode = "english", dictionaries_off = {} }, ui = {} },
     { __index = DPD })
 local suggested = 0
 search.suggest = function() suggested = suggested + 1; return {} end
@@ -458,5 +457,108 @@ search:closeViewers(); flush()
 local recorded = search:getHistory():list()
 assert(recorded[1].query == "dharma" and recorded[1].mode == "dictionaries", "found searches are recent")
 assert(search.settings.lookup_mode == "english", "the remembered lookup mode is unchanged")
+
+-- Literal fallbacks are trimmed and NFC-normalized by the lookup, so those
+-- equivalent drafts must also move one Recent item instead of duplicating it.
+for _, sample in ipairs({ { " dharma ", "dharma" }, { " Śāriputra ", "Śāriputra" } }) do
+    search:inputLookup(false, nil, "dictionaries"); flush()
+    popup = searchFor(sample[1])
+    assert(popup.model.found and popup.model.query == sample[2])
+    local count = 0
+    for _, item in ipairs(search:getHistory():list()) do
+        if item.query == sample[2] and item.mode == "dictionaries" then
+            count = count + 1
+            assert(item.draft == nil, "an equivalent dictionary draft needs no fallback")
+        end
+    end
+    assert(count == 1, "whitespace/NFC variants share one Recent item")
+    search:closeViewers(); flush()
+end
+
+-- Recent repeats the prepared query and its literal fallback, even after
+-- settings are reloaded or Velthuis is changed. WordNet has vacuum, not vacūm.
+search:inputLookup(false, nil, "dictionaries"); flush()
+popup = searchFor("vacuum")
+assert(popup.model.query == "vacūm" and popup.model.found)
+local vacuum_id = exact("wordnet", "vacuum").entries[1].id
+search:closeViewers(); flush()
+search:inputLookup(false, nil, "dictionaries"); flush()
+popup = searchFor(" vacuum ")
+assert(exact("wordnet", "vacuum").entries[1].id == vacuum_id)
+recorded = search:getHistory():list()
+assert(recorded[1].query == "vacūm" and recorded[1].draft == "vacuum", "retain the literal fallback in Recent")
+local vacuum_count = 0
+for _, item in ipairs(recorded) do if item.query == "vacūm" then vacuum_count = vacuum_count + 1 end end
+assert(vacuum_count == 1, "whitespace around a distinct literal fallback does not duplicate Recent")
+search:closeViewers(); flush()
+local history_path = os.tmpname()
+os.remove(history_path)
+local stored = require("luasettings"):open(history_path)
+stored:saveSetting("dpd", search.settings); stored:flush()
+search.settings = require("luasettings"):open(history_path):readSetting("dpd")
+search.history = nil
+os.remove(history_path)
+for _, velthuis in ipairs({ false, true }) do
+    search.settings.velthuis = velthuis
+    search:inputLookup(true); flush()
+    local recent = assert(search.input_dialog)
+    recent.item_table[1].callback(); flush()
+    assert(search.viewer.model.query == "vacūm" and search.viewer.model.found)
+    assert(exact("wordnet", "vacuum").entries[1].id == vacuum_id, "Recent keeps the original WordNet result")
+    screenshot("dictionaries-vacuum-recent")
+    search:closeViewers(); flush()
+end
+
+-- This real 101-byte compound ends in a multibyte niggahita. Shortening it
+-- to 100 bytes used to turn its two exact analyses into a different lookup.
+local long = "muttakarīsacammaaṭṭhinhārukhaṇḍakheḷasiṅghāṇikālohitappabhutinānākuṇapajātaṃ"
+assert(#long == 101)
+search:lookupInput(long, "pali", long); flush()
+assert(search.viewer.model.found and #search.viewer.model.deconstructions == 2)
+assert(search:getHistory():list()[1].query == long, "Recent stores the complete long query")
+search:closeViewers(); flush()
+search:inputLookup(true); flush()
+local recent = assert(search.input_dialog)
+assert(recent.item_table[1].text == long, "the menu receives the complete label")
+screenshot("input-recent-long")
+recent.item_table[1].callback(); flush()
+assert(search.viewer.model.query == long and search.viewer.model.found
+    and #search.viewer.model.deconstructions == 2, "Recent replays the same long compound analyses")
+search:closeViewers(); flush()
+local long_headword = assert(db:senses({8324})[1]).lemma_1
+assert(#long_headword > 100)
+search:lookupInput(long_headword, "pali", long_headword); flush()
+assert(search.viewer.model.found and search.viewer.model.senses[1].id == 8324)
+assert(search:getHistory():list()[1].query == long_headword, "Recent stores the complete long headword")
+search:closeViewers(); flush()
+search:inputLookup(true); flush()
+search.input_dialog.item_table[1].callback(); flush()
+assert(search.viewer.model.query == long_headword and search.viewer.model.found
+    and search.viewer.model.senses[1].id == 8324, "Recent replays the same long headword")
+search:closeViewers(); flush()
+print("PASS: Recent deduplicates equivalent drafts, preserves dictionary literal fallbacks across settings reload/Velthuis changes and complete long compounds/headwords")
 db:close()
+
+-- An upgrade must keep saved dictionary choices before the first search.
+local Dictionaries = require("dpd/dictionaries")
+local reader_settings = G_reader_settings
+for _, case in ipairs({
+    { saved = { dictionaries = { "mw" } }, enabled = { "mw" } },
+    { saved = { dictionaries = {} }, enabled = {} },
+    { saved = { dictionaries = { "mw" }, dictionaries_off = { "pts" } },
+        enabled = { "dppn", "cpd", "nyanatiloka", "peu", "bhs", "mw", "apte", "wordnet" } },
+    { saved = { dictionaries = { "mw" }, dictionaries_off = {} }, enabled = Dictionaries.order },
+}) do
+    case.saved.db_path = path
+    G_reader_settings = require("luasettings"):wrap({ dpd = case.saved })
+    local upgraded = DPD:new{ path = root, ui = { menu = { registerToMainMenu = function() end } } }
+    assert(upgraded.settings.dictionaries == nil, "remove the old enabled list")
+    assert(table.concat(Dictionaries.enabled(Dictionaries.order, upgraded.settings.dictionaries_off), ",")
+        == table.concat(case.enabled, ","), "preserve all nine snapshot choices, including PTS")
+    local found = upgraded:ensureLookup():searchDictionaries("śāriputra", upgraded:enabledDictionaries())
+    assert(found.found == (#case.enabled > 0), "an upgrade retains the saved MW search")
+    upgraded:onCloseDocument()
+end
+G_reader_settings = reader_settings
+print("PASS: native initialization migrates saved dictionaries, retaining MW search, PTS exclusion, empty selections and existing disabled settings")
 print("PASS: empty-input retention, ID routing, draft restoration and miss editing, history confirmations, opt-in Velthuis, pasted-input suggestions (ṁ/ŋ/decomposed as ṃ), English mode and searching the other dictionaries")

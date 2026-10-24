@@ -88,7 +88,7 @@ end
 local modes = { pali = true, english = true, dictionaries = true }
 
 --- A paged list of recent lookups; choosing one runs it again.
---- @param options table { history, on_lookup = function(text, mode), on_return = function() }
+--- @param options table { history, on_lookup = function(text, mode, original_draft), on_return = function() }
 function Input.showRecent(options)
     local Menu = require("ui/widget/menu")
     local items = {}
@@ -99,7 +99,7 @@ function Input.showRecent(options)
             callback = function()
                 selected = true
                 UIManager:close(menu)
-                options.on_lookup(item.query, item.mode)
+                options.on_lookup(item.query, item.mode, item.draft)
             end }
     end
     if #items == 0 then

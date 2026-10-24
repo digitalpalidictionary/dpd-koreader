@@ -61,7 +61,12 @@ Dictionaries.bibliography = {
 Dictionaries.notes = {
     peu = "Some entries contain Burmese script, which needs a Myanmar font installed in KOReader.",
 }
-Dictionaries.defaults = { "dppn", "cpd", "pts", "nyanatiloka" }
+-- The database's dict_meta decides which dictionaries exist; the tables
+-- above only order and name the ones known here. Settings record the ones
+-- turned off, so any other, including one a newer database adds, starts on.
+-- PEU needs a Myanmar font, and the Sanskrit and English dictionaries rarely
+-- hold a Pāḷi word.
+Dictionaries.default_off = { "peu", "bhs", "mw", "apte", "wordnet" }
 Dictionaries.article_page = 16000 -- bytes of source HTML per page
 Dictionaries.max_keys = 5
 Dictionaries.max_entries = 20 -- entries read at a time, per dictionary
@@ -74,6 +79,23 @@ Dictionaries.sanskrit = { mw = "before", apte = "before", bhs = "empty" }
 Dictionaries.sanskrit_endings = { apte = { "", "ḥ", "ṃ" } }
 
 function Dictionaries.new(db) return setmetatable({ db = db }, Dictionaries) end
+
+--- The ids that `off` (default_off when nil) leaves on, in the order given.
+function Dictionaries.enabled(ids, off)
+    local skip, out = {}, {}
+    for _, id in ipairs(off or Dictionaries.default_off) do skip[id] = true end
+    for _, id in ipairs(ids) do if not skip[id] then out[#out + 1] = id end end
+    return out
+end
+
+-- The public 0.3.0 snapshot saved enabled IDs, including the choice for PTS.
+function Dictionaries.convertSettings(settings)
+    if settings.dictionaries == nil then return end
+    if settings.dictionaries_off == nil then
+        settings.dictionaries_off = Dictionaries.enabled(Dictionaries.order, settings.dictionaries)
+    end
+    settings.dictionaries = nil
+end
 
 --- Whether this database has any other dictionary (older releases have the
 --- tables but leave them empty).
@@ -90,12 +112,13 @@ function Dictionaries:available()
     return self.ready
 end
 
---- Dictionaries present in this database, in display order.
+--- Dictionaries present in this database, in display order; read once.
 --- @return table { { id, name, author, count } }
 function Dictionaries:list()
+    if self.listed then return self.listed end
     local ready, err = self:available()
     if err then error(err) end
-    if not ready then return {} end
+    if not ready then self.listed = {}; return self.listed end
     local by_id = {}
     for _, row in ipairs(self.db:query("SELECT dict_id, name, author, entry_count FROM dict_meta")) do
         by_id[row.dict_id] = { id = row.dict_id, name = row.name, author = row.author, count = tonumber(row.entry_count) }
@@ -104,7 +127,12 @@ function Dictionaries:list()
     for _, id in ipairs(Dictionaries.order) do
         if by_id[id] then out[#out + 1] = by_id[id]; by_id[id] = nil end
     end
-    for _, item in pairs(by_id) do out[#out + 1] = item end
+    -- Dictionaries this plugin does not know follow, by name.
+    local rest = {}
+    for _, item in pairs(by_id) do rest[#rest + 1] = item end
+    table.sort(rest, function(a, b) return (a.name or a.id) < (b.name or b.id) end)
+    for _, item in ipairs(rest) do out[#out + 1] = item end
+    self.listed = out
     return out
 end
 
@@ -307,15 +335,20 @@ end
 --- `typed`, keys tried only in a dictionary where `keys` found nothing.
 --- @return table { { id, name, author, heading, total, words, via, entries = { { id, word, preview, homonym, approximate } } } }
 function Dictionaries:lookup(keys, enabled, sanskrit, typed)
-    local wanted = {}
-    for _, id in ipairs(enabled or Dictionaries.defaults) do wanted[id] = true end
+    local wanted, listed = {}, self:list()
+    if not enabled then
+        enabled = {}
+        for _, dictionary in ipairs(listed) do enabled[#enabled + 1] = dictionary.id end
+        enabled = Dictionaries.enabled(enabled)
+    end
+    for _, id in ipairs(enabled) do wanted[id] = true end
     local unique, seen = {}, {}
     for _, key in ipairs(keys) do
         key = tostring(key or ""):gsub("^%s+", ""):gsub("%s+$", "")
         if key ~= "" and not seen[key] and #unique < Dictionaries.max_keys then seen[key] = true; unique[#unique + 1] = key end
     end
     local groups = {}
-    for _, dictionary in ipairs(self:list()) do
+    for _, dictionary in ipairs(listed) do
         if wanted[dictionary.id] then
             local group = { id = dictionary.id, name = dictionary.name, author = dictionary.author,
                 heading = Dictionaries.headings[dictionary.id],

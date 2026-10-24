@@ -9,7 +9,9 @@ local Device = require("device")
 require("document/canvascontext"):init(Device)
 require("ui/bidi").setup()
 local UIManager = require("ui/uimanager")
+local Event = require("ui/event")
 local Geom = require("ui/geometry")
+local time = require("ui/time")
 local DB = require("dpd/db")
 local Lookup = require("dpd/lookup")
 local Viewer = require("ui/dpd_viewer")
@@ -135,20 +137,157 @@ viewer.scroll:scrollToRatio((number-.9)/viewer.scroll.htmlbox_widget.page_count)
 shot("definition-long-label")
 viewer:close(); flush()
 
-viewer = show(lookup:otherDictionaries({query="kamma"},{"cpd"}))
-frame = viewer.navigation:current()
-local selected
-for i, entry in ipairs(frame.model.dictionaries.groups[1].entries) do
-    if lookup:dictionaryPage(entry.id,0).has_more then selected = i; break end
+local function tapFooter(viewer, uri)
+    local d = assert(viewer.action_buttons[uri], uri).dimen
+    assert(viewer:handleEvent(Event:new("Gesture", {ges="tap",
+        pos=Geom:new{x=d.x+d.w/2,y=d.y+d.h/2},time=time.now()})), uri)
+    flush()
 end
-local key = "1/" .. assert(selected)
-viewer:onLink("dpd:dict-entry/" .. key); flush()
-assert(not viewer.scroll.html_body:find("dpd:dict-prev/",1,true))
-checkCells(viewer, "dpd:dict-")
-viewer:onLink("dpd:dict-next/" .. key); flush()
-viewer.scroll:scrollToRatio(0); flush(); shot("article-buttons")
-cells = checkCells(viewer, "dpd:dict-")
-assert(cells["dpd:dict-prev/" .. key] and cells["dpd:dict-next/" .. key])
-viewer:close(); flush()
+local function tapArticle(viewer, uri)
+    local box = viewer.scroll.htmlbox_widget
+    for number = 1, box.page_count do
+        local page = box.document:openPage(number)
+        local links = page:getPageLinks(); page:close()
+        for _, link in ipairs(links) do
+            if link.uri == uri then
+                viewer.scroll:scrollToRatio((number-.9)/box.page_count); flush()
+                assert(box:onTapText(nil, {pos=Geom:new{
+                    x=box.dimen.x+(link.x0+link.x1)/2,y=box.dimen.y+(link.y0+link.y1)/2}}))
+                flush(); return
+            end
+        end
+    end
+    error("missing article control: " .. uri)
+end
+local function atHeading(viewer, uri)
+    local box = viewer.scroll.htmlbox_widget
+    assert(box.page_number == viewer:sectionPage(uri), "article action returns to its heading")
+end
+local function atReadingPage(viewer, key)
+    local box, part = viewer.scroll.htmlbox_widget, viewer.navigation:current().dictionary_pages[key]
+    local last_uri = part.has_more and ("dpd:dict-next/" .. key) or ("dpd:dict-prev/" .. key)
+    local last = viewer:findAnchor(box,{uri=last_uri,direction=-1,pages=math.huge},box.page_count) or box.page_count
+    local wanted = viewer:sectionPage("dpd:dict-entry/" .. key) + (part.reading_pages[part.offset] or 0)
+    assert(box.page_number == math.min(wanted,last), "article resumes its saved reading page")
+end
+local function midPart(viewer)
+    local box = viewer.scroll.htmlbox_widget
+    assert(box.page_count > 2, "long article spans several screens")
+    viewer.scroll:scrollToRatio((math.ceil(box.page_count/2)-.9)/box.page_count); flush()
+end
+local function checkFooter(viewer, expected)
+    local buttons = viewer.window[1][3][2]
+    assert(#buttons.buttons == 1 and #buttons.buttons[1] == #expected, "one footer row")
+    local positions, right, top = {}, nil, nil
+    for i, entry in ipairs(buttons.buttons[1]) do
+        local button = assert(viewer.action_buttons[entry.uri])
+        assert(button.text == expected[i][1] and button.enabled == expected[i][2], "footer state: " .. entry.uri)
+        local d, label = button.dimen, button.label_widget
+        local minimum = Device.screen:getDPI()*7/25.4
+        assert(d.w >= minimum and d.h >= minimum, "footer target smaller than 7mm")
+        assert(not label.isTruncated or not label:isTruncated(), "truncated footer label")
+        assert(not label.line_with_ellipsis and not label.has_split_inside_word, "clipped or split footer label")
+        local ld = label:getSize()
+        assert(ld.w <= d.w-2*button.padding_h and ld.h <= d.h,
+            string.format("footer label outside its button: %s %dx%d in %dx%d",entry.uri,ld.w,ld.h,d.w,d.h))
+        assert(not right or d.x > right, "overlapping footer targets")
+        assert(not top or d.y == top, "footer buttons must stay in one row")
+        positions[entry.uri], right, top = {d.x,d.y,d.w,d.h}, d.x+d.w, d.y
+        print(string.format("FOOTER %s font=%d target=%dx%d label=%dx%d",entry.uri,font,d.w,d.h,ld.w,ld.h))
+    end
+    return positions
+end
+
+for _, direct in ipairs({false,true}) do
+    local value = direct and lookup:searchDictionaries("kamma",{"cpd"})
+        or lookup:otherDictionaries({query="kamma"},{"cpd"})
+    viewer = Viewer:new{model=value,lookup=lookup,font_size=font,dictionaries={"cpd"},normal_callback=function() end}
+    UIManager:show(viewer); flush()
+    frame = viewer.navigation:current()
+    local function expected(article)
+        if direct then article[#article+1] = {"DPD",true}
+        elseif #article == 0 then article[1] = {"Other dictionaries",false} end
+        article[#article+1] = {"KOReader dictionary",true}
+        return article
+    end
+    checkFooter(viewer,expected({}))
+    local selected, single
+    for i, entry in ipairs(frame.model.dictionaries.groups[1].entries) do
+        if lookup:dictionaryPage(entry.id,0).has_more then selected = i else single = i end
+    end
+    local key = "1/" .. assert(selected)
+    local toggle, prev, next_part = "dpd:dict-entry/" .. key, "dpd:dict-prev/" .. key, "dpd:dict-next/" .. key
+    tapArticle(viewer,toggle)
+    assert(not viewer.scroll.html_body:find("dpd:dict-prev/",1,true))
+    local positions = checkFooter(viewer,expected({{"◂ Part",false},{"Part ▸",true},{"Entries",true}}))
+    tapFooter(viewer,prev)
+    assert(frame.dictionary_pages[key].part == 1, "disabled Previous does nothing")
+    checkCells(viewer,"dpd:dict-")
+    tapArticle(viewer,next_part)
+    local second_offset = frame.dictionary_pages[key].offset
+    tapArticle(viewer,prev)
+    midPart(viewer); tapFooter(viewer,next_part)
+    assert(frame.dictionary_pages[key].part == 2 and frame.dictionary_pages[key].offset == second_offset,
+        "footer Next matches article Next")
+    atReadingPage(viewer,key)
+    local middle = checkFooter(viewer,expected({{"◂ Part",true},{"Part ▸",true},{"Entries",true}}))
+    for uri, pos in pairs(positions) do
+        for i, n in ipairs(pos) do assert(middle[uri][i] == n, "part buttons keep their positions") end
+    end
+    midPart(viewer); shot(direct and "article-footer-direct-mid-part" or "article-footer-mid-part")
+    cells = checkCells(viewer,"dpd:dict-")
+    assert(cells[prev] and cells[next_part])
+    midPart(viewer); tapFooter(viewer,prev)
+    assert(frame.dictionary_pages[key].part == 1 and frame.dictionary_pages[key].offset == 0,
+        "footer Previous matches article Previous")
+    atReadingPage(viewer,key)
+    tapFooter(viewer,next_part)
+    midPart(viewer)
+    local reading_page = viewer.scroll.htmlbox_widget.page_number
+    tapFooter(viewer,toggle)
+    assert(not frame.dictionary_pages[key].open and not frame.dictionary_pages[key].html)
+    atHeading(viewer,toggle); checkFooter(viewer,expected({}))
+    tapArticle(viewer,toggle)
+    assert(frame.dictionary_pages[key].part == 2, "resume remembered part")
+    assert(viewer.scroll.htmlbox_widget.page_number == reading_page, "reopening retains the middle reading page")
+    shot(direct and "article-footer-direct-resumed" or "article-footer-resumed")
+    midPart(viewer)
+    -- The same chevron URI must also restore the heading after a deep scroll.
+    viewer:onLink(toggle); flush()
+    atHeading(viewer,toggle); checkFooter(viewer,expected({}))
+    tapArticle(viewer,toggle)
+    while frame.dictionary_pages[key].has_more do tapFooter(viewer,next_part) end
+    local last = frame.dictionary_pages[key].part
+    local ending = checkFooter(viewer,expected({{"◂ Part",true},{"Part ▸",false},{"Entries",true}}))
+    for uri, pos in pairs(positions) do
+        for i, n in ipairs(pos) do assert(ending[uri][i] == n, "last part keeps button positions") end
+    end
+    tapFooter(viewer,next_part)
+    assert(frame.dictionary_pages[key].part == last, "disabled Next does nothing")
+    tapFooter(viewer,toggle); atHeading(viewer,toggle)
+    checkFooter(viewer,expected({}))
+    local single_toggle = "dpd:dict-entry/1/" .. assert(single, "single-part CPD fixture")
+    tapArticle(viewer,single_toggle)
+    checkFooter(viewer,expected({{"Entries",true}}))
+    tapFooter(viewer,single_toggle); atHeading(viewer,single_toggle)
+    checkFooter(viewer,expected({}))
+    viewer:close(); flush()
+end
+
+-- A construction link changes the displayed entry, while the owning popup
+-- still hands its original word to KOReader's dictionary.
+local transferred
+local value = lookup:get("dhamma")
+value.deconstructions = {{parts={"ma"},unique={}}}
+viewer = Viewer:new{model=value,lookup=lookup,font_size=font,dictionaries={"cpd"},
+    normal_callback=function(word) transferred=word end}
+UIManager:show(viewer); flush()
+assert(viewer.action_buttons["dpd:normal"].text == "KOReader dictionary")
+viewer:onLink("dpd:component/1/1"); flush()
+assert(viewer.navigation:current().model.query == "ma")
+checkFooter(viewer,{{"Other dictionaries",true},{"KOReader: dhamma",true}})
+shot("handoff-original-word")
+tapFooter(viewer,"dpd:normal")
+assert(transferred == "dhamma" and viewer.closed, "explicit handoff retains the owning word")
 db:close()
-print("PASS: native responsive definition and article buttons, unclipped labels, compact 5.5mm definitions and 7mm pagers, full-cell taps and separated adjacent targets")
+print("PASS: native definition and article buttons, footer states and fixed positions on both search routes, unclipped labels, 5.5mm definitions and 7mm pagers/footer targets, real taps, reading-page resume, collapse anchors and explicit original-word handoff")

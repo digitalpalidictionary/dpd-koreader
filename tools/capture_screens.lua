@@ -1,7 +1,7 @@
 -- Screenshots of the screens the checks do not capture, for a design review:
--- reader popups, all eight other dictionaries, the DPD menu and its submenus,
--- dictionary details, status, About, Help, confirmations, diagnostics and the
--- input dialog. Asserts nothing beyond reaching each screen; a step that
+-- reader popups, every other dictionary, a long article mid-part, the DPD menu
+-- and its submenus, Gesture manager's DPD actions, dictionary details, status,
+-- About, Help, confirmations, diagnostics and the input dialog. Asserts nothing beyond reaching each screen; a step that
 -- cannot is reported as STEPFAIL and the rest still run. The book is the
 -- README passage (tools/readme_screenshots.py write_book). From a desktop
 -- KOReader directory, with a disposable KO_MULTIUSER=1/XDG_CONFIG_HOME:
@@ -16,9 +16,10 @@ G_defaults = require("luadefaults"):open()
 local DataStorage = require("datastorage")
 G_reader_settings = require("luasettings"):open(DataStorage:getDataDir() .. "/settings.reader.lua")
 local lfs = require("libs/libkoreader-lfs")
+-- Gestures stays on: its Gesture manager lists DPD's actions.
 local disabled = {}
 for entry in lfs.dir("plugins") do
-    if entry:sub(-9) == ".koplugin" then disabled[entry:sub(1,-10)] = true end
+    if entry:sub(-9) == ".koplugin" and entry ~= "gestures.koplugin" then disabled[entry:sub(1,-10)] = true end
 end
 G_reader_settings:saveSetting("plugins_disabled", disabled)
 G_reader_settings:saveSetting("extra_plugin_paths", {assert(root:match("^(.+)/[^/]+$"))})
@@ -72,7 +73,7 @@ end
 step("reader-popup", function() hold("dhammaṃ"); shot("reader-dhammam") end)
 step("reader-compound", function() hold("vissajjiyavebhaṅgiyaṃ"); shot("reader-compound") end)
 step("dict-all", function()
-    plugin.settings.dictionaries = {"dppn", "cpd", "pts", "nyanatiloka", "peu", "bhs", "mw", "apte", "wordnet"}
+    plugin.settings.dictionaries_off = {}
     hold("dhammaṃ"); tap("dpd:dictionaries"); shot("dict-all-1")
     local scroll = plugin.viewer.scroll
     for page = 2, 4 do
@@ -88,10 +89,29 @@ step("dict-bhikkhu-open", function()
     tap("dpd:dict-entry/1/1"); shot("dict-bhikkhu-open")
 end)
 step("dict-none", function()
-    plugin.settings.dictionaries = {"apte"}
+    plugin.settings.dictionaries_off = {"dppn", "cpd", "pts", "nyanatiloka", "peu", "bhs", "mw", "wordnet"}
     hold("saṃmantayitvā"); tap("dpd:dictionaries"); shot("dict-none")
 end)
-plugin.settings.dictionaries = nil
+-- The first article with more than one part, part 2, half-way down: the
+-- footer's part buttons in the middle of a long article.
+step("dict-article-mid", function()
+    plugin.settings.dictionaries_off = {}
+    hold("dhammaṃ"); tap("dpd:dictionaries")
+    local frame = plugin.viewer.navigation:current()
+    for key in plugin.viewer.scroll.html_body:gmatch("dpd:dict%-entry/(%d+/%d+)") do
+        tap("dpd:dict-entry/" .. key)
+        if frame.dictionary_pages[key].has_more then
+            tap("dpd:dict-next/" .. key)
+            local scroll = plugin.viewer.scroll
+            local count = scroll.htmlbox_widget.page_count
+            scroll:scrollToRatio((math.floor(count / 2) + .1) / count); flush(); shot("dict-article-mid")
+            return
+        end
+        tap("dpd:dict-entry/" .. key)
+    end
+    error("no article with more than one part")
+end)
+plugin.settings.dictionaries_off = nil
 step("family", function() hold("dhammaṃ"); tap("dpd:sense/34628"); shot("sense-open")
     tap("dpd:detail-family/34628/3"); shot("family-idioms") end)
 step("root", function() hold("gacchati"); shot("reader-gacchati") end)
@@ -120,11 +140,37 @@ step("menu-search", function()
     menu:onBack(); flush()
     menu:onMenuSelect(findItem(menu, "Recent lookups")); shot("menu-recent")
     menu:onBack(); flush()
+    menu:onMenuSelect(findItem(menu, "Database: ready")); shot("menu-database")
+    menu:onBack(); flush()
     menu:onMenuSelect(findItem(menu, "Help")); shot("menu-help")
     menu:onMenuSelect(findItem(menu, "Diagnostics")); shot("menu-diagnostics")
     menu:onBack(); flush(); menu:onBack(); flush()
     menu:onMenuSelect(findItem(menu, "Display and input")); shot("menu-display")
     menu:onMenuSelect(findItem(menu, "Popup font size: " .. plugin.settings.font_size)); shot("font-size-spin")
+end)
+-- Gesture manager's action lists for one gesture, on the page with DPD's
+-- actions, and the notice the per-book long-press toggle shows.
+local function showPage(menu, text)
+    for i, item in ipairs(menu.item_table) do
+        if (item.text or (item.text_func and item.text_func())) == text then
+            menu:updateItems(math.ceil(i / menu.perpage)); flush(); return
+        end
+    end
+    error("no menu item " .. text)
+end
+step("gestures", function()
+    clear(); reader.menu:onShowMenu(); flush()
+    local menu = reader.menu.menu_container[1]
+    for i, tab in ipairs(menu.tab_item_table) do
+        if tab.icon == "appbar.settings" then menu:switchMenuTab(i); flush() end
+    end
+    menu:onMenuSelect({ text = "Bottom left", sub_item_table = assert(reader.gestures):genMenu("tap_left_bottom_corner") })
+    menu:onMenuSelect(findItem(menu, "General")); showPage(menu, "DPD: Look up a word"); shot("gesture-general")
+    menu:onBack(); flush()
+    menu:onMenuSelect(findItem(menu, "Reader")); showPage(menu, "DPD: Toggle long-press in this book")
+    shot("gesture-reader")
+    clear(); plugin:onDPDToggleBookLongPress(); shot("gesture-toggle-notice")
+    plugin:onDPDToggleBookLongPress(); clear()
 end)
 step("dict-hold", function() clear(); plugin:ensureLookup()
     UIManager:show(require("ui/widget/infomessage"):new{text=plugin:dictionaryDetails("peu")}); shot("dict-details-peu") end)

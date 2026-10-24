@@ -13,7 +13,8 @@ local sha256 = require("ffi/sha2").sha256
 local time = require("ui/time")
 local util = require("util")
 local repeats = 20
-local settings = { dictionaries = require("dpd/dictionaries").defaults, niggahita = "ṃ",
+local Dictionaries = require("dpd/dictionaries")
+local settings = { dictionaries = Dictionaries.enabled(Dictionaries.order), niggahita = "ṃ",
     paradigm_columns = 1, content_em = 30,
     english_edit_search = true, selection_options = Popup.selection_options,
     selection_approximate = Popup.selection_options.approximate ~= false }
@@ -181,7 +182,7 @@ local function expected(case, model, route, html)
                         "missing compound component link")
                 end
             else
-                assert(revealed_html:find(index .. ' · ' .. Render.escape(analysis.raw) .. '</p>', 1, true),
+                assert(revealed_html:find('<p class="row still">' .. Render.escape(analysis.raw) .. '</p>', 1, true),
                     "missing raw compound analysis")
             end
         end

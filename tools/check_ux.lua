@@ -47,9 +47,26 @@ FileManager:showFiles(assert(path:match("^(.*)/[^/]+$"))); flush()
 while #UIManager._window_stack > 1 do UIManager:close(top()); flush() end
 local plugin = setmetatable({settings={db_path=path .. ".missing",font_size=font_size},
     ui=assert(FileManager.instance)}, {__index=DPD})
+local missing_reason = "DPD database not found or unreadable: " .. path .. ".missing"
+local dictionary_button, selection_button
+local buttons_plugin = setmetatable({settings=plugin.settings,ui={
+    dictionary={addToDictButtons=function(_, item) dictionary_button=item end},
+    highlight={addToHighlightDialog=function(_, _, item) selection_button=item end},
+}}, {__index=DPD})
+buttons_plugin:registerEntryPoints()
+local highlight={selected_text={text="dhamma"},onClose=function() end,
+    getClearId=function() return 1 end,clear=function() end}
+for i, invoke in ipairs({function() dictionary_button.callback({word="dhamma"}) end,
+        function() selection_button(highlight).callback() end}) do
+    invoke(); flush()
+    assert(top().text == missing_reason .. "\n\nChoose it under Search → Digital Pāḷi Dictionary → Database → Choose database file.",
+        top().text)
+    screenshot(i == 1 and "dictionary-missing-database" or "selection-missing-database")
+    UIManager:close(top()); flush()
+end
+print("PASS dictionary and selection DPD buttons name the missing database repair step")
 plugin:inputLookup(false, "  ~naa.na  ", "english"); flush()
 -- The recovery title names DB.new's reason, which the reader can act on.
-local missing_reason = "DPD database not found or unreadable: " .. path .. ".missing"
 local recovery = top()
 assert(recovery.title == missing_reason and not plugin.input_dialog, recovery.title)
 screenshot("database-recovery")
@@ -102,7 +119,8 @@ assert(dialog.suggestion_area[1].text == nil)
 press(dialog, "Cancel")
 
 local lookup = plugin:ensureLookup()
-local viewer = Viewer:new{model=lookup:otherDictionaries({query="kamma"},{"cpd"}),lookup=lookup,font_size=font_size}
+local viewer = Viewer:new{model=lookup:otherDictionaries(lookup:get("kamma"),
+    {"cpd","dppn","bhs","mw","apte","wordnet"}),lookup=lookup,font_size=font_size}
 UIManager:show(viewer); flush()
 local function tap(uri, padding)
     local box = viewer.scroll.htmlbox_widget
@@ -124,14 +142,29 @@ local function tap(uri, padding)
     end
     error("missing rendered link " .. uri)
 end
+local function visible(uri)
+    local box = viewer.scroll.htmlbox_widget
+    local page = box.document:openPage(box.page_number)
+    local links = page:getPageLinks(); page:close()
+    for _, link in ipairs(links) do if link.uri == uri then return true end end
+    return false
+end
 local frame = viewer.navigation:current()
 local group = frame.model.dictionaries.groups[1]
+assert(group.id == "cpd", "CPD precedes the other kamma dictionary matches")
 local selected
 for index,entry in ipairs(group.entries) do
     local loaded = lookup:dictionaryPage(entry.id,0)
     if loaded.has_more then selected=index;break end
 end
 local key = "1/" .. assert(selected)
+local function atSavedPage()
+    local box, current = viewer.scroll.htmlbox_widget, frame.dictionary_pages[key]
+    local last_uri = current.has_more and ("dpd:dict-next/" .. key) or ("dpd:dict-prev/" .. key)
+    local last = viewer:findAnchor(box,{uri=last_uri,direction=-1,pages=math.huge},box.page_count) or box.page_count
+    local wanted = viewer:sectionPage("dpd:dict-entry/" .. key) + (current.reading_pages[current.offset] or 0)
+    assert(box.page_number == math.min(wanted,last), "article restores reading page within its part")
+end
 tap("dpd:dict-entry/" .. key)
 assert(viewer.scroll.html_body:find("Part 1",1,true))
 print("LAYOUT dictionary part 1: " .. viewer.scroll.htmlbox_widget.page_count .. " pages")
@@ -140,9 +173,38 @@ local old_html = part.html
 screenshot("dictionary-part-1")
 tap("dpd:dict-next/" .. key,true)
 assert(frame.dictionary_pages[key].part == 2)
+assert(visible("dpd:dict-entry/" .. key), "Next part keeps the article title visible")
 screenshot("dictionary-part-2")
 tap("dpd:dict-prev/" .. key,true)
 assert(frame.dictionary_pages[key].part == 1 and frame.dictionary_pages[key].html == old_html)
+atSavedPage()
+-- Switching away from a long article removes pages above the next entry.
+-- Keep that selected entry visible. Other groups leave enough following
+-- content that clamping the old page cannot accidentally show the title.
+assert(group.entries[selected + 1], "the long CPD article has a following entry")
+local following = "1/" .. (selected + 1)
+local before_switch = viewer:sectionPage("dpd:dict-entry/" .. following)
+assert(before_switch and before_switch > 1, "switch from below a multi-page article")
+tap("dpd:dict-entry/" .. following)
+assert(frame.dictionary_pages[following].open and not frame.dictionary_pages[key].open)
+assert(visible("dpd:dict-entry/" .. following), "switching articles keeps the selected title visible")
+screenshot("dictionary-article-switched")
+tap("dpd:dict-entry/" .. key)
+assert(frame.dictionary_pages[key].part == 1 and frame.dictionary_pages[key].html == old_html)
+atSavedPage()
+tap("dpd:dict-next/" .. key,true)
+local resumed_html = frame.dictionary_pages[key].html
+tap("dpd:dict-entry/" .. following)
+tap("dpd:dict-entry/" .. key)
+assert(frame.dictionary_pages[key].part == 2 and frame.dictionary_pages[key].html == resumed_html)
+atSavedPage()
+screenshot("dictionary-article-resumed")
+tap("dpd:dict-entry/" .. key)
+assert(not frame.dictionary_pages[key].open and not frame.dictionary_pages[key].html)
+assert(visible("dpd:dict-entry/" .. key), "collapsing an article keeps its title visible")
+tap("dpd:dict-entry/" .. key)
+assert(frame.dictionary_pages[key].part == 2 and frame.dictionary_pages[key].html == resumed_html)
+assert(visible("dpd:dict-entry/" .. key), "reopening a collapsed article keeps its title visible")
 viewer:close();flush()
 
 viewer = Viewer:new{model=lookup:get("saṃmantayitvā"),lookup=lookup,font_size=font_size}
@@ -170,4 +232,4 @@ print("LAYOUT matrix row: " .. viewer.scroll.htmlbox_widget.page_count .. " page
 screenshot("matrix-spacing")
 viewer:close();flush()
 plugin:closeDatabase()
-print("PASS: native recovery/retry, help, fixed-height suggestion states, pager padding/part replacement, candidate disclosure and dense-link renders at font " .. font_size)
+print("PASS: native recovery/retry, help, fixed-height suggestion states, pager padding/part replacement, article switching/resuming, candidate disclosure and dense-link renders at font " .. font_size)

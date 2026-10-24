@@ -81,18 +81,26 @@ local function count(word)
 end
 
 open()
--- The book's checkbox sits right below the global one.
-if not reader.menu.tab_item_table then reader.menu:setUpdateItemTable() end
-local entries
-for _, tab in ipairs(reader.menu.tab_item_table) do
-    for _, item in ipairs(tab) do if item.id == "dpd" then entries = item.sub_item_table end end
+-- The book's checkbox sits right below the default one, in the open reader's menu.
+local function bookItem()
+    if not reader.menu.tab_item_table then reader.menu:setUpdateItemTable() end
+    for _, tab in ipairs(reader.menu.tab_item_table) do
+        for _, item in ipairs(tab) do
+            if item.id == "dpd" then
+                for i, entry in ipairs(item.sub_item_table) do
+                    if entry.text == "Open DPD on long-press in this book" then
+                        assert(item.sub_item_table[i - 1].text == "Open DPD on long-press by default")
+                        return entry
+                    end
+                end
+            end
+        end
+    end
+    error("DPD's long-press checkbox for this book is missing from the reader menu")
 end
-assert(entries, "DPD missing from the reader menu")
-local global_row
-for i, item in ipairs(entries) do if item.text == "DPD on word long-press" then global_row = i end end
-assert(global_row and entries[global_row + 1].text == "DPD on long-press in this book",
-    "The book's long-press checkbox must follow the global one")
-assert(entries[global_row + 1].checked_func() == true)
+local book_item = bookItem()
+assert(book_item.checked_func() == true and book_item.help_text_func():find("follows the default", 1, true),
+    "A new book follows the default, which opens DPD")
 
 -- A DPD hit reaches the Vocabulary builder once, with its sentence context.
 hold("pacchima")
@@ -158,7 +166,8 @@ end
 review("pacchima")
 
 -- Off for this book: long-press uses KOReader's dictionary, and stays off after reopening.
-entries[global_row + 1].callback(); flush()
+book_item.callback(); flush()
+assert(not book_item.checked_func())
 assert(reader.doc_settings:readSetting("dpd_direct_lookup") == false)
 hold("pacchima")
 assert(not plugin.viewer and reader.dictionary.dict_window, "The book's setting must turn DPD off")
@@ -173,7 +182,9 @@ clear()
 -- Reviews follow the global setting, not the book that happens to be open.
 review("pacchima")
 -- Back on matches the global setting, so the book follows it again.
-plugin:toggleBookDirect()
+book_item = bookItem()
+assert(not book_item.checked_func() and book_item.help_text_func():find("its own setting", 1, true))
+book_item.callback(); flush()
 assert(reader.doc_settings:readSetting("dpd_direct_lookup") == nil)
 hold("pacchima")
 assert(plugin.viewer, "Following the global setting must turn DPD back on")

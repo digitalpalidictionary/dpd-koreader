@@ -3,14 +3,14 @@
   "cases": [
     {
       "cached": {
-        "html_bytes": 1463,
+        "html_bytes": 1464,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "24618c0fa4d08c7a4cff00a835e78a7319774c9599ef07c5306b364ab049c8e1",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 1463,
+        "html_bytes": 1464,
         "payload_bytes": 604,
         "queries": 3,
         "result_signature": "24618c0fa4d08c7a4cff00a835e78a7319774c9599ef07c5306b364ab049c8e1",
@@ -22,14 +22,14 @@
     },
     {
       "cached": {
-        "html_bytes": 2847,
+        "html_bytes": 2848,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "1f3fbee28fef6eabb2e8efef644da906b89373984e4edbe7de34062f46691f74",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 2847,
+        "html_bytes": 2848,
         "payload_bytes": 1320,
         "queries": 3,
         "result_signature": "1f3fbee28fef6eabb2e8efef644da906b89373984e4edbe7de34062f46691f74",
@@ -41,14 +41,14 @@
     },
     {
       "cached": {
-        "html_bytes": 2712,
+        "html_bytes": 2731,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "82fb9b36257fc37b0c1356a989a5a97c5452fb5297418d439cb5a40d1a3c9357",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 2712,
+        "html_bytes": 2731,
         "payload_bytes": 5920,
         "queries": 4,
         "result_signature": "82fb9b36257fc37b0c1356a989a5a97c5452fb5297418d439cb5a40d1a3c9357",
@@ -60,14 +60,14 @@
     },
     {
       "cached": {
-        "html_bytes": 947,
+        "html_bytes": 925,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "cb6a3e6288211dfd064da2e89ee1969e83b4d77a5070a269f7bdb3b48786fdb9",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 947,
+        "html_bytes": 925,
         "payload_bytes": 979,
         "queries": 4,
         "result_signature": "cb6a3e6288211dfd064da2e89ee1969e83b4d77a5070a269f7bdb3b48786fdb9",
@@ -117,14 +117,14 @@
     },
     {
       "cached": {
-        "html_bytes": 1435,
+        "html_bytes": 1417,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "d07941d48e317cb697ae7174596d2f100b28d2d3b64615a876c45b40df2ec920",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 1435,
+        "html_bytes": 1417,
         "payload_bytes": 32823,
         "queries": 5,
         "result_signature": "d07941d48e317cb697ae7174596d2f100b28d2d3b64615a876c45b40df2ec920",
@@ -136,14 +136,14 @@
     },
     {
       "cached": {
-        "html_bytes": 1307,
+        "html_bytes": 1289,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "95cf5692deb0c8156b5b795ba790d09643975e83b6c89400d62569511f96c296",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 1307,
+        "html_bytes": 1289,
         "payload_bytes": 3768,
         "queries": 5,
         "result_signature": "95cf5692deb0c8156b5b795ba790d09643975e83b6c89400d62569511f96c296",
@@ -193,14 +193,14 @@
     },
     {
       "cached": {
-        "html_bytes": 573,
+        "html_bytes": 574,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "1d1c4b85a4b97b141c227cfff73e67e8a7accaef40d46fd5983105ffd9c2d1ec",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 573,
+        "html_bytes": 574,
         "payload_bytes": 351,
         "queries": 4,
         "result_signature": "1d1c4b85a4b97b141c227cfff73e67e8a7accaef40d46fd5983105ffd9c2d1ec",
@@ -212,14 +212,14 @@
     },
     {
       "cached": {
-        "html_bytes": 2181,
+        "html_bytes": 2182,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "336da7d3bbbbc1b625d7ec251b1d8708f1df4b38083a2b031423f261fb248b43",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 2181,
+        "html_bytes": 2182,
         "payload_bytes": 1516,
         "queries": 3,
         "result_signature": "336da7d3bbbbc1b625d7ec251b1d8708f1df4b38083a2b031423f261fb248b43",
@@ -250,14 +250,14 @@
     },
     {
       "cached": {
-        "html_bytes": 987,
+        "html_bytes": 981,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "8971bfefeb87c82f7df0aa5a5ac36508a12088136628367963643877ac8be8c5",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 987,
+        "html_bytes": 981,
         "payload_bytes": 13015,
         "queries": 4,
         "result_signature": "8971bfefeb87c82f7df0aa5a5ac36508a12088136628367963643877ac8be8c5",
@@ -269,14 +269,14 @@
     },
     {
       "cached": {
-        "html_bytes": 1191,
+        "html_bytes": 1229,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "19e2e106c7abcf4107a2098c6c18d8fe1e44a73e360decac1dd7eee14aab4ab8",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 1191,
+        "html_bytes": 1229,
         "payload_bytes": 540,
         "queries": 6,
         "result_signature": "19e2e106c7abcf4107a2098c6c18d8fe1e44a73e360decac1dd7eee14aab4ab8",
@@ -307,14 +307,14 @@
     },
     {
       "cached": {
-        "html_bytes": 1839,
+        "html_bytes": 1815,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "152cd2c5bc1b398a12213ec76c8d5c3d130a28424a37983273bdafcaf229a3e6",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 1839,
+        "html_bytes": 1815,
         "payload_bytes": 2975,
         "queries": 7,
         "result_signature": "152cd2c5bc1b398a12213ec76c8d5c3d130a28424a37983273bdafcaf229a3e6",
@@ -326,14 +326,14 @@
     },
     {
       "cached": {
-        "html_bytes": 5078,
+        "html_bytes": 5063,
         "payload_bytes": 0,
         "queries": 0,
         "result_signature": "9d179728e70ff2619a3a22b7241e35f9c9644f834328ab17cdadbc407e123584",
         "rows": 0
       },
       "fresh": {
-        "html_bytes": 5078,
+        "html_bytes": 5063,
         "payload_bytes": 12406,
         "queries": 8,
         "result_signature": "9d179728e70ff2619a3a22b7241e35f9c9644f834328ab17cdadbc407e123584",
@@ -430,7 +430,7 @@
       "fresh": {
         "html_bytes": 187,
         "payload_bytes": 51,
-        "queries": 3,
+        "queries": 2,
         "result_signature": "e252ee4ff637119be6ea02f68c5503ca4746d8f7440d2639b96e5c366cda72ad",
         "rows": 2
       },

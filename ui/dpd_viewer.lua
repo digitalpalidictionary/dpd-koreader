@@ -62,7 +62,14 @@ function Viewer:init()
             },
         }
     end
-    if Device:hasKeys() then self.key_events = { Back = { { "Back" }, { "Esc" } } } end
+    if Device:hasKeys() then
+        self.key_events = {
+            Back = { { "Back" }, { "Esc" } },
+            NextLink = { { "Tab" }, { "Down" }, { "Right" }, event = "FocusLink", args = 1 },
+            PreviousLink = { { "Shift", "Tab" }, { "Up" }, { "Left" }, event = "FocusLink", args = -1 },
+            ActivateLink = { { "Press" }, { "Return" } },
+        }
+    end
     self:build()
 end
 
@@ -76,7 +83,7 @@ function Viewer:build()
     local border, padding = Screen:scaleBySize(2), Screen:scaleBySize(10)
     local inner = width - 2 * border
     local title = TitleBar:new{
-        width = inner, title = Render.niggahita(frame.model.query, self.niggahita), align = "left",
+        width = inner, title = Render.niggahita(Render.title(frame.model), self.niggahita), align = "left",
         with_bottom_line = true, show_parent = self,
         close_callback = function() self:close() end,
         -- Back returns to this popup's previous entry, or closes a child popup
@@ -115,16 +122,39 @@ function Viewer:build()
     })
     local actions = self:actionRow(frame, inner)
     local actions_h = actions and actions:getSize().h or 0
-    local scroll = ScrollHtmlWidget:new{
-        width = inner - 2 * padding, height = height - title:getSize().h - actions_h - 2 * padding - 2 * border,
-        html_body = html, css = Render.cssFor(self.font_size),
-        default_font_size = font_px,
-        dialog = self, highlight_text_selection = true,
-    }
+    local function layout()
+        return ScrollHtmlWidget:new{
+            width = inner - 2 * padding, height = height - title:getSize().h - actions_h - 2 * padding - 2 * border,
+            html_body = html, css = Render.cssFor(self.font_size),
+            default_font_size = font_px,
+            dialog = self, highlight_text_selection = true,
+        }
+    end
+    local scroll = layout()
+    -- shortcut: move at most three split rows; revisit only if device tests justify more layouts.
+    for _ = 1, Viewer.split_passes do
+        local moved = self:moveSplitRow(scroll.htmlbox_widget, html)
+        if not moved then break end
+        scroll:free()
+        html = moved
+        scroll = layout()
+    end
     -- These are popup controls, so they must work even when book-link tapping
     -- is disabled in KOReader. Override only this HTML widget instance.
     scroll.htmlbox_widget.onTapText = function(widget, _, ges)
         return self:onTapText(widget, ges)
+    end
+    -- A field row's label and value are separate text lines that share a top
+    -- but not always a bottom (a link is taller). KOReader merges only lines
+    -- with the same top and bottom, so a hold on the value selected the label.
+    local update = scroll.htmlbox_widget.updateHighlight
+    scroll.htmlbox_widget.updateHighlight = function(widget)
+        if widget.page_boxes == nil and widget.hold_start_pos and widget.hold_end_pos then
+            local page = widget.document:openPage(widget.page_number)
+            widget.page_boxes = Viewer.mergeRowLines(page:getPageText())
+            page:close()
+        end
+        return update(widget)
     end
     local body = FrameContainer:new{ bordersize = 0, padding = padding, scroll }
     local window = FrameContainer:new{
@@ -140,6 +170,12 @@ function Viewer:build()
             local page = math.min(frame.restore_page, box.page_count)
             if frame.restore_anchor then
                 page = self:findAnchor(box, frame.restore_anchor, page) or page
+                page = math.min(page + (frame.restore_anchor.offset or 0), box.page_count)
+                if frame.restore_anchor.last_uri then
+                    local last = self:findAnchor(box, { uri = frame.restore_anchor.last_uri,
+                        direction = -1, pages = math.huge }, box.page_count)
+                    if last then page = math.min(page, last) end
+                end
             end
             scroll:scrollToRatio((page - 1 + .1) / box.page_count)
         else
@@ -151,6 +187,7 @@ function Viewer:build()
     -- keep the old view and release the replacement's native HTML resources.
     if self[1] then self[1]:free() end
     self[1], self.window, self.scroll, self._displayed_frame = center, window, scroll, frame
+    self:setupKeyboardLinks(scroll, actions)
     if frame.restore_page then
         frame.restore_page, frame.restore_anchor = nil, nil
         frame.ratio = scroll:getCurrentRatio()
@@ -168,6 +205,171 @@ function Viewer:build()
             Diag.log("Popup ready:", self.model and self.model.query, "lookup ms:", lookup_ms or "?",
                 "build ms:", build_ms, "total ms:", lookup_ms and (lookup_ms + build_ms) or "?")
         end
+    end
+end
+
+function Viewer:setupKeyboardLinks(scroll, actions)
+    self.keyboard_focus, self.keyboard_buttons = nil, nil
+    if not Device:hasKeys() then return end
+    if actions then
+        local buttons = actions[2]
+        self.keyboard_buttons = {}
+        for _, entry in ipairs(buttons.buttons[1]) do
+            self.keyboard_buttons[#self.keyboard_buttons + 1] = {
+                uri = entry.uri, button = buttons:getButtonById(entry.id),
+            }
+        end
+        if buttons.layout then buttons:disableFocusManagement(self) end
+        buttons.key_events_enabled = false
+    end
+    -- The host HTML widget has tap links but no focusable link widgets.
+    local box, paint = scroll.htmlbox_widget, scroll.htmlbox_widget.paintTo
+    box.paintTo = function(widget, bb, x, y)
+        paint(widget, bb, x, y)
+        local focus = self.keyboard_focus
+        if not focus or focus.box ~= widget or focus.page ~= widget.page_number then return end
+        for _, rect in ipairs(focus.target.rects or {}) do
+            local left, top = math.max(0, rect.x0 - 2), math.max(0, rect.y0 - 2)
+            local right, bottom = math.min(widget.dimen.w, rect.x1 + 2), math.min(widget.dimen.h, rect.y1 + 2)
+            bb:paintBorder(x + left, y + top, right - left, bottom - top,
+                Screen:scaleBySize(2), Blitbuffer.COLOR_BLACK)
+        end
+    end
+    scroll.scroll_callback = function() self:clearKeyboardFocus() end
+end
+
+function Viewer:clearKeyboardFocus()
+    local focus = self.keyboard_focus
+    if not focus then return end
+    if focus.target.button then focus.target.button:onUnfocus() end
+    self.keyboard_focus = nil
+    UIManager:setDirty(self, "fast")
+end
+
+function Viewer:keyboardTargets()
+    local box = self.scroll.htmlbox_widget
+    local page = box.document:openPage(box.page_number)
+    local links = page:getPageLinks() or {}
+    page:close()
+    table.sort(links, function(a, b)
+        if a.y0 ~= b.y0 then return a.y0 < b.y0 end
+        return a.x0 < b.x0
+    end)
+    local targets = {}
+    for _, link in ipairs(links) do
+        if link.uri and link.x1 > 0 and link.x0 < box.dimen.w
+            and link.y1 > 0 and link.y0 < box.dimen.h then
+            local last = targets[#targets]
+            if last and last.uri == link.uri then
+                last.rects[#last.rects + 1] = link
+            else
+                targets[#targets + 1] = { uri = link.uri, rects = { link } }
+            end
+        end
+    end
+    for _, target in ipairs(self.keyboard_buttons or {}) do
+        if target.button.enabled then targets[#targets + 1] = target end
+    end
+    return targets
+end
+
+function Viewer:onFocusLink(direction)
+    return self:guard("popup keyboard focus", self.focusLink, self, direction)
+end
+
+function Viewer:focusLink(direction)
+    if self.closed or self._pending_update then return true end
+    local box, focus = self.scroll.htmlbox_widget, self.keyboard_focus
+    local targets = self:keyboardTargets()
+    local index = focus and focus.box == box and focus.page == box.page_number and focus.index + direction
+        or (direction > 0 and 1 or #targets)
+    self:clearKeyboardFocus()
+    for attempt = 0, box.page_count do
+        if targets[index] then
+            local target = targets[index]
+            self.keyboard_focus = { box = box, page = box.page_number, index = index, target = target }
+            if target.button then target.button:onFocus() end
+            UIManager:setDirty(self, "fast")
+            return true
+        end
+        if attempt == box.page_count then break end
+        if direction > 0 and box.page_number == box.page_count then self.scroll:scrollToRatio(0)
+        elseif direction < 0 and box.page_number == 1 then self.scroll:scrollToRatio(1)
+        else self.scroll:scrollText(direction) end
+        targets = self:keyboardTargets()
+        index = direction > 0 and 1 or #targets
+    end
+    return true
+end
+
+function Viewer:onActivateLink()
+    if self.closed or self._pending_update then return true end
+    local focus, box = self.keyboard_focus, self.scroll.htmlbox_widget
+    if not focus or focus.box ~= box or focus.page ~= box.page_number then return self:onFocusLink(1) end
+    self:onLink(focus.target.uri)
+    return true
+end
+
+-- At most this many extra layouts per build to move split rows.
+Viewer.split_passes = 3
+
+-- Merge text lines that start at the same top and sit side by side, as the
+-- cells of one table row do, into one line ordered left to right.
+function Viewer.mergeRowLines(lines)
+    local merged = {}
+    for _, line in ipairs(lines) do
+        local row
+        for _, other in ipairs(merged) do
+            if other.y0 == line.y0 and (line.x0 >= other.x1 or line.x1 <= other.x0) then row = other; break end
+        end
+        if row then
+            local words = {}
+            local left, right = row, line
+            if line.x1 <= row.x0 then left, right = line, row end
+            for _, word in ipairs(left) do words[#words + 1] = word end
+            for _, word in ipairs(right) do words[#words + 1] = word end
+            for i, word in ipairs(words) do row[i] = word end
+            row.x0, row.x1 = math.min(row.x0, line.x0), math.max(row.x1, line.x1)
+            row.y1 = math.max(row.y1, line.y1)
+        else
+            merged[#merged + 1] = line
+        end
+    end
+    return merged
+end
+
+-- MuPDF ignores page-break-before and break-inside here. Move one matching
+-- row with a top margin; rows filling most of a page stay split.
+function Viewer:moveSplitRow(box, html)
+    local document = box and box.document
+    if not (document and document.openPage and box.page_count and box.page_count > 1) then return end
+    local page_height = box.dimen and box.dimen.h
+    if not page_height then return end
+    local function rows(number)
+        local page = document:openPage(number)
+        local links = page:getPageLinks() or {}
+        page:close()
+        return links
+    end
+    local before = rows(1)
+    for number = 2, box.page_count do
+        local here = rows(number)
+        local first
+        for _, link in ipairs(here) do
+            if link.uri and (not first or link.y0 < first.y0) then first = link end
+        end
+        local top
+        for _, link in ipairs(first and before or {}) do
+            if link.uri == first.uri then top = math.min(top or link.y0, link.y0) end
+        end
+        if top and page_height - top < page_height / 3 then
+            local pattern = '<div class="entry">(<p class="row[^"]*"><a href="'
+                .. Render.escape(first.uri):gsub("%p", "%%%0") .. '")'
+            local moved, count = html:gsub(pattern, string.format(
+                '<div class="entry" style="margin-top:%.1fpx">%%1', page_height - top), 1)
+            if count == 1 then return moved end
+        end
+        before = here
     end
 end
 
@@ -222,9 +424,8 @@ function Viewer:editSearch(text, mode, as_child)
     end)
 end
 
--- Fixed buttons below the entry, reachable from every page of it. Which
--- buttons exist depends only on this popup, so they keep their places from
--- view to view; one that does not apply to a view is disabled.
+-- Fixed buttons below the entry, reachable from every page of it. An open
+-- article keeps its part controls here, with disabled buttons at either end.
 function Viewer:actionRow(frame, width)
     local row = {}
     self.action_buttons = {}
@@ -232,13 +433,28 @@ function Viewer:actionRow(frame, width)
         row[#row + 1] = { id = id, uri = uri, text = text, enabled = enabled,
             callback = function() self:tapButton(uri) end }
     end
+    local article_open = false
+    for key, page in pairs(frame.dictionary_pages or {}) do
+        if page.open then
+            article_open = true
+            if page.part > 1 or page.has_more then
+                add("dict-prev", "dpd:dict-prev/" .. key, "◂ Part", page.part > 1)
+                add("dict-next", "dpd:dict-next/" .. key, "Part ▸", page.has_more == true)
+            end
+            add("dict-entry", "dpd:dict-entry/" .. key, "Entries", true)
+            break
+        end
+    end
     -- A search of the other dictionaries offers DPD in that button's place.
     if self.navigation.stack[1].model.dictionary_search then
         add("dpd", "dpd:dpd-lookup", "DPD", frame.model.dictionary_search == true)
-    elseif frame.other_dictionaries then
+    elseif frame.other_dictionaries and not article_open then
         add("dictionaries", "dpd:dictionaries", "Other dictionaries", Render.isResult(frame.model))
     end
-    if self.normal_callback then add("normal", "dpd:normal", "KOReader dictionary", true) end
+    if self.normal_callback then
+        local word = self:normalWord()
+        add("normal", "dpd:normal", word and word ~= frame.model.query and ("KOReader: " .. word) or "KOReader dictionary", true)
+    end
     if #row == 0 then return end
     local buttons = ButtonTable:new{ width = width, buttons = { row }, show_parent = self }
     for _, entry in ipairs(row) do
@@ -248,6 +464,11 @@ function Viewer:actionRow(frame, width)
         LineWidget:new{ dimen = Geom:new{ w = width, h = Size.line.medium } },
         buttons,
     }
+end
+
+function Viewer:normalWord()
+    local selected = self.navigation.stack[1].model
+    return self.normal_word or selected.original_clean or selected.original or selected.query
 end
 
 -- A button tap right after a rebuild is a bounce of the tap that caused it.
@@ -662,8 +883,8 @@ function Viewer:followLink(uri)
     elseif dict_toggle_g or dict_step then
         -- One part of one article is held and laid out at a time: opening an
         -- entry closes the others, collapsing frees its part, and Previous
-        -- and Next part replace it. Each entry keeps only where it was, so
-        -- reopening it in this view resumes that part.
+        -- and Next part replace it. Keep reading pages relative to the title,
+        -- since closing another article can move that title by many pages.
         local g, e = tonumber(dict_toggle_g or dict_step_g), tonumber(dict_toggle_e or dict_step_e)
         local value = frame.model.dictionaries
         local entry = value and value.groups[g] and value.groups[g].entries[e]
@@ -671,13 +892,28 @@ function Viewer:followLink(uri)
         frame.dictionary_pages = frame.dictionary_pages or {}
         local key = g .. "/" .. e
         local page = frame.dictionary_pages[key]
+        if self.scroll then
+            for other_key, other in pairs(frame.dictionary_pages) do
+                if other.open then
+                    local heading = self:sectionPage("dpd:dict-entry/" .. other_key)
+                    if heading then
+                        other.reading_pages = other.reading_pages or {}
+                        other.reading_pages[other.offset] = math.max(0, self.scroll.htmlbox_widget.page_number - heading)
+                    end
+                end
+            end
+        end
         if dict_toggle_g and page and page.open then
             page.open, page.html = false, nil
-            if self.scroll then root_frame.restore_page = self.scroll.htmlbox_widget.page_number end
+            if self.scroll then
+                root_frame.restore_page = 1
+                root_frame.restore_anchor = { uri = "dpd:dict-entry/" .. key, direction = 1, pages = math.huge }
+            end
             return self:update()
         end
         local offset, starts = 0, {}
-        local resume = not dict_step and page and page.offset > 0
+        local resume = not dict_step and page
+        local reading_pages = page and page.reading_pages or {}
         if resume then
             offset = page.offset
             for i, start in ipairs(page.starts) do starts[i] = start end
@@ -698,7 +934,7 @@ function Viewer:followLink(uri)
         -- An article whose length changed, such as after the database was
         -- replaced, has other part boundaries: start it from the top.
         if ok and loaded and resume and (loaded.total ~= page.total or loaded.html == "") then
-            offset, starts = 0, {}
+            offset, starts, reading_pages = 0, {}, {}
             ok, loaded = pcall(self.lookup.dictionaryPage, self.lookup, entry.id, 0)
         end
         if not ok then return self:showError(loaded) end
@@ -706,15 +942,24 @@ function Viewer:followLink(uri)
         for _, other in pairs(frame.dictionary_pages) do other.open, other.html = false, nil end
         frame.dictionary_pages[key] = { open = true, html = loaded.html, offset = loaded.offset,
             next_offset = loaded.next_offset, total = loaded.total, has_more = loaded.has_more,
-            starts = starts, part = #starts + 1 }
+            starts = starts, part = #starts + 1, reading_pages = reading_pages }
         if self.scroll then
-            root_frame.restore_page = self.scroll.htmlbox_widget.page_number
-            -- A new part starts at the entry's title. Next part sits below a
-            -- part that may span many pages, so look for the title from the top.
-            if dict_step then
-                root_frame.restore_page = 1
-                root_frame.restore_anchor = { uri = "dpd:dict-entry/" .. key, direction = 1, pages = math.huge }
+            root_frame.restore_page = 1
+            -- The bottom part control bounds the article; a whole one-part
+            -- entry shares its boundary page with the following entry heading.
+            local last_uri = loaded.has_more and ("dpd:dict-next/" .. key)
+                or #starts > 0 and ("dpd:dict-prev/" .. key)
+            if not last_uri then
+                for next_g = g, #value.groups do
+                    local next_e = next_g == g and e + 1 or 1
+                    if value.groups[next_g].entries[next_e] then
+                        last_uri = "dpd:dict-entry/" .. next_g .. "/" .. next_e
+                        break
+                    end
+                end
             end
+            root_frame.restore_anchor = { uri = "dpd:dict-entry/" .. key, direction = 1, pages = math.huge,
+                offset = reading_pages[loaded.offset], last_uri = last_uri }
         end
         self:update()
     elseif spelling_item then
@@ -858,8 +1103,7 @@ function Viewer:followLink(uri)
     elseif uri == "dpd:normal" and self.normal_callback then
         -- The popup's own selection, not the title of a view opened from it
         -- (Word family: dhamma, dhamma 1.01, √dhar 1).
-        local selected = self.navigation.stack[1].model
-        local word = selected.original_clean or selected.original or selected.query
+        local word = self:normalWord()
         self:defer("dictionary handoff", function()
             self:close(true)
             self.normal_callback(word)

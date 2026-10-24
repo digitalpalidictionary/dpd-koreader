@@ -162,11 +162,11 @@ describe("plugin on an unsupported KOReader", function()
         local names = { "datastorage", "dpd/db", "ui/widget/infomessage", "ui/widget/inputdialog",
             "ui/widget/pathchooser", "ui/uimanager", "ui/dpd_viewer", "ui/widget/container/widgetcontainer",
             "libs/libkoreader-lfs", "logger", "ui/time", "util", "main", "ui/widget/scrollhtmlwidget",
-            "ui/widget/textviewer" }
+            "ui/widget/textviewer", "dispatcher" }
         local saved = {}
         for _, name in ipairs(names) do saved[name] = package.loaded[name]; package.loaded[name] = {} end
         local globals = { G_defaults = _G.G_defaults, G_reader_settings = _G.G_reader_settings }
-        local state = { messages = {}, registered = 0 }
+        local state = { messages = {}, registered = 0, actions = {} }
         _G.G_defaults = { readSetting = function() return features.delay end }
         package.loaded["ui/widget/scrollhtmlwidget"] = { getCurrentRatio = features.ratio and function() end or nil }
         _G.G_reader_settings = { readSetting = function() return { direct_lookup = true } end, saveSetting = function() end }
@@ -174,6 +174,7 @@ describe("plugin on an unsupported KOReader", function()
         package.loaded["ui/uimanager"] = { nextTick = function(_, action) action() end,
             show=function(_, widget) state.shown=widget end }
         package.loaded["ui/widget/textviewer"] = {new=function(_, value) return value end}
+        package.loaded.dispatcher = { registerAction = function(_, name) state.actions[name] = true end }
         package.loaded["libs/libkoreader-lfs"] = { attributes = function() return nil end }
         package.loaded.datastorage = { getDataDir = function() return "/nonexistent" end }
         package.loaded.main = nil
@@ -209,6 +210,8 @@ describe("plugin on an unsupported KOReader", function()
         local second = plugin()
         restore()
         assert.equal(2, state.registered)
+        -- A gesture set up earlier still answers, with the explanation.
+        assert.is_true(state.actions.dpd_look_up)
         assert.is_nil(state.dict_button)
         assert.is_nil(state.highlight_button)
         assert.is_nil(first.direct)
@@ -219,9 +222,10 @@ describe("plugin on an unsupported KOReader", function()
         second:addToMainMenu(items)
         local entries = items.dpd.sub_item_table
         assert.equal("Needs a newer KOReader", entries[1].text)
-        assert.equal("Help", entries[2].text)
+        assert.equal("Help", entries[2].text_func())
         assert.equal("DPD help", entries[2].sub_item_table[1].text)
-        assert.equal("Diagnostics", entries[2].sub_item_table[3].text)
+        assert.equal("Check for updates", entries[2].sub_item_table[3].text_func())
+        assert.equal("Diagnostics", entries[2].sub_item_table[5].text)
         assert.equal(2, #entries)
     end)
 
@@ -235,6 +239,16 @@ describe("plugin on an unsupported KOReader", function()
         instance.db = {info={dpd_release_version="test-version"}}
         instance:aboutLicenses()
         assert.matches("Database version: test-version", state.shown.text, 1, true)
+        assert.matches("Franklin Edgerton", state.shown.text, 1, true)
+        -- A database without other dictionaries credits none.
+        instance.lookup = { _dictionaries = function() return { list = function() return {} end } end }
+        instance:aboutLicenses()
+        assert.is_nil(state.shown.text:find("Additional dictionary content", 1, true))
+        instance.lookup = { _dictionaries = function() return { list = function()
+            return { { id = "new", name = "A New Dictionary", author = "" } } end } end }
+        instance:aboutLicenses()
+        assert.matches("details:\n• A New Dictionary", state.shown.text, 1, true)
+        assert.is_nil(state.shown.text:find("Franklin Edgerton", 1, true))
         restore()
         assert.truthy(instance.unsupported)
         assert.is_nil(instance.direct)
@@ -252,8 +266,16 @@ describe("plugin on an unsupported KOReader", function()
         instance:addToMainMenu(items)
         local entries = items.dpd.sub_item_table
         assert.equal("Look up a word", entries[1].text)
-        assert.equal("Help", entries[#entries].text)
-        assert.equal("Diagnostics", entries[#entries].sub_item_table[3].text)
+        assert.equal("Help", entries[#entries].text_func())
+        local help = entries[#entries].sub_item_table
+        assert.equal("Check for updates", help[3].text_func())
+        instance.settings.update_available = "99.0.0"
+        assert.equal("Help · 99.0.0 available", entries[#entries].text_func())
+        assert.equal("Check for updates (99.0.0 available)", help[3].text_func())
+        instance.settings.update_available = require("dpd/version")
+        assert.equal("Help", entries[#entries].text_func())
+        assert.equal("Check for updates automatically", help[4].text)
+        assert.equal("Diagnostics", help[5].text)
         local display, dictionaries
         for _, entry in ipairs(entries) do
             if entry.text == "Display and input" then display = entry end
@@ -263,9 +285,28 @@ describe("plugin on an unsupported KOReader", function()
         assert.equal("Popup font size: " .. instance.settings.font_size, display.sub_item_table[1].text_func())
         -- Hold shows the full title and author; Burmese needs a font.
         local details = {}
-        for _, item in ipairs(dictionaries.sub_item_table) do details[#details + 1] = item.help_text_func() end
+        for _, item in ipairs(dictionaries.sub_item_table_func()) do details[#details + 1] = item.help_text_func() end
         assert.matches("Edgerton's Buddhist Hybrid Sanskrit Dictionary 1953\nFranklin Edgerton", table.concat(details, "|"), 1, true)
         assert.matches("Myanmar font", table.concat(details, "|"), 1, true)
+        -- With a database open, its dict_meta decides the toggles.
+        local listed = { { id = "cpd", name = "Critical Pali Dictionary", author = "V. Trenckner et al.", count = 2 },
+            { id = "new", name = "A New Dictionary", author = "Someone", count = 5 } }
+        instance.saveSettings = function() end
+        instance.lookup = { _dictionaries = function() return { list = function() return listed end } end }
+        local toggles = dictionaries.sub_item_table_func()
+        assert.equal(2, #toggles)
+        assert.equal("Critical Pali Dictionary", toggles[1].text)
+        assert.equal("A New Dictionary", toggles[2].text)
+        assert.equal("A New Dictionary\nSomeone\n5 entries", toggles[2].help_text_func())
+        assert.is_true(toggles[2].checked_func())
+        assert.same({ "cpd", "new" }, instance:enabledDictionaries())
+        toggles[2].callback()
+        assert.is_false(toggles[2].checked_func())
+        assert.same({ "cpd" }, instance:enabledDictionaries())
+        toggles[2].callback()
+        assert.same({ "cpd", "new" }, instance:enabledDictionaries())
+        listed = {}
+        assert.equal("None in this database", dictionaries.sub_item_table_func()[1].text)
         instance.direct:remove()
     end)
 end)

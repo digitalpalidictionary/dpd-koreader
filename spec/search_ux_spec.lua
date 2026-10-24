@@ -13,6 +13,7 @@ describe("manual search recovery and history controls", function()
     before_each(function()
         saved, state = {}, {messages={},logs={},saves=0}
         for _, name in ipairs(names) do saved[name]=package.loaded[name]; package.loaded[name]={} end
+        package.loaded["libs/libkoreader-lfs"].attributes=function() end
         package.loaded["ui/widget/container/widgetcontainer"]={extend=function(_, value) return value end}
         package.loaded["dpd/db"]={read_only_message="read-only folder: "}
         package.loaded["ui/widget/confirmbox"]={new=function(_, value)
@@ -76,6 +77,22 @@ describe("manual search recovery and history controls", function()
         assert.equal(1,#state.messages)
         assert.equal(0,looked_up)
         assert.is_nil(state.model)
+    end)
+
+    it("gives an ID popup the dictionary's effective word without changing the draft", function()
+        plugin.lookup.byId=function() return miss("dhamma 1.01") end
+        plugin.ui.dictionary={}
+        plugin.showModel=nil
+        plugin.viewer_class={new=function(_, options) state.viewer_options=options; return options end}
+        local handed
+        function plugin:normalLookup(word) handed=word end
+        plugin:lookupInput("34626","pali","  34626  ")
+        assert.equal("dhamma",state.viewer_options.normal_word)
+        assert.equal("34626",state.viewer_options.model.original_clean)
+        state.viewer_options.normal_callback(state.viewer_options.normal_word)
+        assert.equal("dhamma",handed)
+        state.viewer_options.edit_callback()
+        assert.equal("  34626  ",state.input.input)
     end)
 
     it("shows a recoverable English miss without recording it", function()
@@ -273,9 +290,13 @@ describe("manual search recovery and history controls", function()
         assert.are_not.equal(recovery,state.confirm)
         broken=false
         plugin.settings.db_path="/tmp/valid.db"
-        plugin.db={info={},journal_mode="delete"}
+        plugin.db={info={dpd_release_version=require("dpd/db_compat").release},journal_mode="delete"}
         state.confirm.buttons[2][1].callback()
         assert.is_truthy(state.messages[#state.messages]:find("Core columns: OK",1,true))
+        -- The verdict comes first, the file name apart from its folder.
+        assert.is_truthy(state.messages[#state.messages]:find("^Database ready\n"))
+        assert.is_truthy(state.messages[#state.messages]:find("the release this plugin is tested with",1,true))
+        assert.is_truthy(state.messages[#state.messages]:find("\n\nvalid.db · [%d.]+ MB\n/tmp\n"))
         state.dismiss()
         assert.equal("~naa.na",state.input.input)
         assert.equal("english",plugin.settings.lookup_mode)
@@ -367,11 +388,69 @@ describe("manual search recovery and history controls", function()
         assert.equal(0,#state.logs)
     end)
 
+    it("labels the Database item with what opening it last found, without opening it", function()
+        local files, opened = {}, 0
+        package.loaded["libs/libkoreader-lfs"].attributes=function(path, field)
+            local file = files[path]
+            if not file then return end
+            return ({mode="file", size=file.size, modification=1})[field]
+        end
+        local release
+        package.loaded["dpd/db"].new=function()
+            opened=opened+1
+            return {close=function() end, info={dpd_release_version=release}}
+        end
+        function plugin:closeViewers() end
+        plugin.settings.db_path="/tmp/dpd.db"
+        local items={};plugin:addToMainMenu(items)
+        local database
+        for _,item in ipairs(items.dpd.sub_item_table) do
+            if item.text_func and item.text_func():find("^Database: ") then database=item end
+        end
+        assert.equal("Database: missing", database.text_func())
+        files["/tmp/dpd.db"]={size=10}
+        assert.equal("Database: not checked", database.text_func())
+        assert.equal(0, opened)
+        for _, case in ipairs({{"v0.4.20260926","ready"},{"v0.5.20270101","newer release"},
+                {"v0.3.20250101","older release"},{nil,"unknown release"}}) do
+            release=case[1]
+            plugin:chooseDatabase(); state.confirm.onConfirm("/tmp/dpd.db")
+            assert.equal("Database: " .. case[2], database.text_func())
+        end
+        -- A replaced file hasn't been checked yet.
+        files["/tmp/dpd.db"].size=11
+        assert.equal("Database: not checked", database.text_func())
+        package.loaded["dpd/db"].new=function() error("Incompatible DPD database", 0) end
+        plugin:chooseDatabase(); state.confirm.onConfirm("/tmp/dpd.db")
+        assert.equal("Database: not checked", database.text_func())
+    end)
+
+    it("puts the release verdict first in Database status", function()
+        package.loaded["libs/libkoreader-lfs"].attributes=function() return 0 end
+        plugin.settings.db_path="/tmp/dpd.db"
+        for _, case in ipairs({{"v0.4.20260926","^Database ready\nDPD v0.4.20260926, the release this plugin is tested with"},
+                {"v0.5.20270101","^Newer release, should work\nDPD v0.5.20270101. Tested with DPD v0.4.20260926"},
+                {"v0.3.20250101","^Older release, should work\n"},{nil,"^Release unknown\n"}}) do
+            plugin.db={info={dpd_release_version=case[1]},journal_mode="wal"}
+            plugin:databaseStatus()
+            assert.is_truthy(state.messages[#state.messages]:find(case[2]), case[2])
+        end
+    end)
+
+    it("reports missing or malformed database versions without saying the file could not open", function()
+        plugin.db={info={}}
+        local expected={verdict="Plugin up to date", line="Database · couldn't check its version",
+            advice="See Database status."}
+        assert.same(expected,plugin:databaseCheck())
+        plugin.db.info.dpd_release_version="unknown"
+        assert.same(expected,plugin:databaseCheck())
+    end)
+
     it("opens concise help from the menu without database access", function()
         local items={};plugin:addToMainMenu(items)
         local help
         for _,item in ipairs(items.dpd.sub_item_table) do
-            if item.text=="Help" then help=item end
+            if item.text_func and item.text_func()=="Help" then help=item end
         end
         for _,item in ipairs(help.sub_item_table) do
             if item.text=="DPD help" then item.callback() end
@@ -386,7 +465,7 @@ describe("manual search recovery and history controls", function()
         local items={};plugin:addToMainMenu(items)
         local help
         for _,item in ipairs(items.dpd.sub_item_table) do
-            if item.text=="Help" then help=item end
+            if item.text_func and item.text_func()=="Help" then help=item end
         end
         for _,item in ipairs(help.sub_item_table) do
             if item.text=="Diagnostics" then
@@ -428,6 +507,34 @@ describe("manual search recovery and history controls", function()
         assert.is_nil(plugin.settings.db_path)
     end)
 
+    it("gives dictionary and selection DPD buttons the missing database repair step", function()
+        state.error="dpd/db.lua:26: DPD database not found or unreadable: /books/dpd-mobile.db"
+        plugin.ui.dictionary={addToDictButtons=function(_, item) state.dictionary_button=item end}
+        plugin.ui.highlight={addToHighlightDialog=function(_, _, item) state.selection_button=item end}
+        plugin:registerEntryPoints()
+        state.dictionary_button.callback({word="dhamma"})
+        local highlight={selected_text={text="dhamma"},onClose=function() end}
+        function plugin:clearSelection(value) assert.equal(highlight,value); state.cleared=true end
+        state.selection_button(highlight).callback()
+        local expected="DPD database not found or unreadable: /books/dpd-mobile.db\n\n"
+            .. "Choose it under Search → Digital Pāḷi Dictionary → Database → Choose database file."
+        assert.same({expected,expected},state.messages)
+        assert.is_true(state.cleared)
+    end)
+
+    it("keeps database advice in the plugin update dialog", function()
+        function plugin:releaseLinkButton(_, what) return {text=what .. " release page"} end
+        local release={version="99.0.0",zip_name="dpd.zip",zip_url="zip",sums_url="sums",notes="Release notes"}
+        for _, advice in ipairs({"Download dpd-mobile-db.zip, extract it and copy dpd-mobile.db.",
+                "See Database status."}) do
+            plugin:showUpdate(release,{line="Database · not installed",advice=advice,page="database"})
+            assert.is_truthy(state.confirm.text:find("Database · not installed\n\n" .. advice .. "\n\nRelease notes",1,true))
+            assert.equal("Database release page",state.confirm.buttons_table[1][2].text)
+            assert.equal("Close",state.confirm.buttons_table[2][1].text)
+            assert.equal("Install",state.confirm.buttons_table[2][2].text)
+        end
+    end)
+
     it("warns once when long-press falls back after damaged data", function()
         package.loaded["ui/uimanager"].nextTick=function(_, action) action() end
         local fallback=0
@@ -452,7 +559,7 @@ describe("manual search recovery and history controls", function()
         assert.is_true(plugin.ui.dictionary:onLookupWord("dhamma",true,nil,{}))
         assert.equal(2,#state.messages)
         assert.equal(1,state.messages[2]:find("DPD database not found or unreadable: /books/dpd-mobile.db",1,true))
-        assert.is_truthy(state.messages[2]:find("Choose it under Search → Digital Pāḷi Dictionary → Choose database file.\n\nUntil then, long-press opens your normal dictionary.",1,true))
+        assert.is_truthy(state.messages[2]:find("Choose it under Search → Digital Pāḷi Dictionary → Database → Choose database file.\n\nUntil then, long-press opens your normal dictionary.",1,true))
         plugin.direct:remove()
     end)
 
@@ -465,7 +572,7 @@ describe("manual search recovery and history controls", function()
         state.error="dpd/db.lua:43: Incompatible DPD database: missing dpd_headwords.id"
         assert.is_true(plugin.ui.dictionary:onLookupWord("dhamma",true,nil,{}))
         assert.equal("This file isn't a DPD database this version can read. Choose dpd-mobile.db from a current DPD release "
-            .. "under Search → Digital Pāḷi Dictionary → Choose database file.\n\nUntil then, long-press opens your normal dictionary.",
+            .. "under Search → Digital Pāḷi Dictionary → Database → Choose database file.\n\nUntil then, long-press opens your normal dictionary.",
             state.messages[1])
         plugin.direct:remove()
     end)
@@ -566,9 +673,10 @@ describe("manual search recovery and history controls", function()
         end)
 
         it("shows a miss and an empty selection instead of closing on nothing", function()
+            local Dictionaries=require("dpd/dictionaries")
             for _, enabled in ipairs({{"mw"},{}}) do
                 state.model=nil
-                plugin.settings.dictionaries=enabled
+                plugin.settings.dictionaries_off=Dictionaries.enabled(Dictionaries.order,enabled)
                 assert.is_true(plugin:lookupInput("zzzz","dictionaries","zzzz"))
                 assert.is_false(state.model.found)
                 assert.is_true(state.model.dictionary_search)
@@ -661,6 +769,25 @@ describe("manual search recovery and history controls", function()
             assert.is_true(book.values.dpd_direct_lookup)
             assert.is_true(plugin:tryDirect("dhamma",true,nil,{}))
             assert.equal(3,state.synced)
+        end)
+
+        it("offers the default and this book as two checkboxes", function()
+            local items = plugin:longPressItems()
+            assert.equal(2, #items)
+            assert.equal("Open DPD on long-press by default", items[1].text)
+            assert.equal("Open DPD on long-press in this book", items[2].text)
+            assert.is_truthy(items[2].help_text_func():find("follows the default", 1, true))
+            items[2].callback()
+            assert.is_false(items[2].checked_func())
+            assert.is_true(items[1].checked_func())
+            assert.is_truthy(items[2].help_text_func():find("its own setting", 1, true))
+            assert.is_false(plugin:tryDirect("dhamma",true,nil,{}))
+            -- The default doesn't change this book's own setting.
+            items[1].callback()
+            assert.is_false(plugin.settings.direct_lookup)
+            assert.is_false(items[2].checked_func())
+            plugin.ui.doc_settings=nil
+            assert.equal(1, #plugin:longPressItems())
         end)
 
         it("follows the global setting outside a book", function()

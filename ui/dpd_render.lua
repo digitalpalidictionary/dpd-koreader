@@ -19,6 +19,7 @@ table.actions a { text-decoration: none; }
 p { margin: .3em 0; }
 h3 { font-size: 1em; font-weight: bold; margin: .7em 0 .35em; border-top: 1px solid #000; padding-top: .35em; }
 h3.lead { margin-top: 0; border-top: 0; padding-top: 0; }
+h3 .quiet { font-weight: normal; }
 .header { font-size: .85em; margin-bottom: .7em; }
 .grammar { font-size: .85em; margin: .15em 0; }
 .grammar-more { margin-bottom: .5em; }
@@ -37,6 +38,8 @@ h3.lead { margin-top: 0; border-top: 0; padding-top: 0; }
 .component { margin: .25em 0; }
 .component p { margin: .12em 0; }
 .component p + p { margin-left: .7em; }
+/* Without its heading, a part's rows still step in. */
+.component.bare p { margin-left: .7em; }
 /* Only the component's own sense rows step in, not the fields of an opened sense. */
 .component .detail p { margin-left: 0; }
 .count { font-size: .85em; }
@@ -47,6 +50,10 @@ h3.lead { margin-top: 0; border-top: 0; padding-top: 0; }
 .detail p.meta, .detail .cite { font-size: .9em; }
 .detail p.example { margin-top: .5em; }
 .detail .item { white-space: nowrap; }
+table.fields { border-collapse: collapse; table-layout: fixed; width: 100%; margin: .18em 0 0; }
+/* Baselines keep MuPDF's linked words level with plain text and labels. */
+table.fields td { vertical-align: baseline; padding: .18em .3em 0 0; }
+table.fields td.label { font-style: italic; padding-right: .6em; }
 .provenance { margin: .2em 0 .5em .95em; font-size: .85em; }
 .similar { margin: .4em 0 .8em; border-top: 1px solid #000; padding-top: .4em; }
 .similar-body { margin-left: .8em; }
@@ -211,6 +218,16 @@ function M.niggahita(text, mark)
     return table.concat(out)
 end
 
+-- The popup's title: a family list names itself and its size ("Idioms:
+-- dhamma · 19") instead of repeating the word it was opened from.
+function M.title(model)
+    local family = model and model.family
+    if family and family.title and family.title ~= "" then
+        return family.title .. ((family.total or 0) > 0 and (" · " .. family.total) or "")
+    end
+    return model and model.query
+end
+
 -- Views opened from a result are not results themselves.
 local function isResult(model)
     return not (model.paradigm or model.family or model.frequency or model.sutta or model.root_details
@@ -355,6 +372,35 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
             first = last + 1
         end
     end
+    -- Labelled rows with the labels in their own column, sized to the longest
+    -- label up to 7em, or its widest word, so a longer label wraps. When that
+    -- leaves the values under 10em, or a field has a long word, use paragraphs:
+    -- MuPDF wraps them without inserting separators that break word selection.
+    local function fieldTable(rows, factor)
+        if #rows == 0 then return end
+        local width, widest_word, long_word = 0, 0, false
+        for _, row in ipairs(rows) do
+            width = math.max(width, labelWidth(row[1], factor))
+            for word in row[1]:gmatch("%S+") do widest_word = math.max(widest_word, labelWidth(word, factor)) end
+            for word in row[2]:gsub("<[^>]*>", ""):gmatch("%S+") do
+                local _, length = word:gsub("[^\128-\191]", "")
+                if length > 20 then long_word = true; break end
+            end
+        end
+        width = math.min(width, math.max(7, widest_word)) + .6
+        -- The detail sits about 1em in; its cells pad .6em after a label.
+        if long_word or layout.content_em - indent_em - 1.6 - width < 10 then
+            for _, row in ipairs(rows) do
+                add('<p><i>' .. row[1] .. ':</i> ' .. row[2] .. '</p>')
+            end
+        else
+            add(string.format('<table class="fields"><col style="width:%.3fem"><col>', width))
+            for _, row in ipairs(rows) do
+                add('<tr><td class="label">' .. row[1] .. '</td><td>' .. row[2] .. '</td></tr>')
+            end
+            add('</table>')
+        end
+    end
     local function fields(values, names)
         for _, field in ipairs(names) do
             local value = values[field[1]]
@@ -376,9 +422,9 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
                 M.escape(group.title or group.label or group.kind)) .. count .. '</p>')
         end
     end
-    -- An expanded sense, grouped so nothing is said twice: origin, specialist
-    -- notes in smaller type, one row of buttons for the views it opens, then
-    -- what belongs to this meaning, and examples with their citations.
+    -- An expanded sense: grammar and origin, related words and variants,
+    -- buttons for the views it opens, then commentary, examples and notes.
+    -- The web link and completion metadata stay last.
     local function detail(values, sense_id, owner_control, pos)
         owner_control = owner_control or control
         local function value(name)
@@ -416,22 +462,38 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
             add("<p" .. (class and (' class="' .. class .. '"') or "") .. ">" .. table.concat(kept, " · ") .. "</p>")
         end
         add('<div class="detail">')
+        -- Grammar and origin, one labelled row per field in a label column.
+        local rows = {}
+        local function field(label, text) if text then rows[#rows + 1] = { label, text } end end
         local grammar = grammarNote(values.grammar_line, pos, values.derived_from)
-        line(nil, present(grammar) and labelled("Grammar", M.inline(grammar)) or nil)
-        line(nil, value("construction"), value("derived_from") and ("<i>from</i> " .. value("derived_from")))
+        field("Grammar", present(grammar) and M.inline(grammar) or nil)
+        local from = value("derived_from") and ("<i>from</i> " .. value("derived_from"))
+        if value("construction") then field("Construction", value("construction") .. (from and (" · " .. from) or ""))
+        else field("From", value("derived_from")) end
         local root = value("root_key")
         if root and present(values.root_meaning) then root = root .. " (" .. M.inline(values.root_meaning) .. ")" end
-        line(nil, labelled("Root", root), labelled("Root sign", value("root_sign")), labelled("Root base", value("root_base")))
+        field("Root", root)
+        field("Root sign", value("root_sign"))
+        field("Root base", value("root_base"))
+        field("Sanskrit", value("sanskrit"))
+        field("Cognates", value("cognate"))
+        field("Derivative", value("derivative"))
         -- A suffix that ends the construction ("√dhar + ma") is already shown there.
-        local suffix = not tostring(values.construction or ""):find("%+%s*" .. literal(values.suffix or "") .. "%s*$")
-        line("meta", labelled("Sanskrit", value("sanskrit")), labelled("Cognates", value("cognate")),
-            labelled("Derivative", value("derivative")), suffix and labelled("Suffix", value("suffix")) or nil,
-            labelled("Phonetic change", value("phonetic")), labelled("IPA", value("ipa_line")),
-            labelled("Traditional lemma (grammar-book headword)", value("traditional_line")))
-        line(nil, labelled("Non-Indo-Aryan origin", value("non_ia")))
-        line(nil, labelled("Compound type", value("compound_type")),
-            values.compound_construction ~= values.construction
-                and labelled("Compound construction", value("compound_construction")) or nil)
+        if not tostring(values.construction or ""):find("%+%s*" .. literal(values.suffix or "") .. "%s*$") then
+            field("Suffix", value("suffix"))
+        end
+        field("Phonetic change", value("phonetic"))
+        field("IPA", value("ipa_line"))
+        field("Traditional lemma (grammar-book headword)", value("traditional_line"))
+        field("Non-Indo-Aryan origin", value("non_ia"))
+        field("Compound type", value("compound_type"))
+        if values.compound_construction ~= values.construction then
+            field("Compound construction", value("compound_construction"))
+        end
+        fieldTable(rows, .9)
+        line(nil, labelled("Synonym", value("synonym")), labelled("Antonym", value("antonym")),
+            labelled("Variant", value("variant")), labelled("Phonetic variant", value("var_phonetic")),
+            labelled("Textual variant", value("var_text")))
         local actions = {}
         if values.paradigm_kind then
             actions[#actions + 1] = { "dpd:detail-paradigm/" .. sense_id, values.paradigm_kind }
@@ -462,10 +524,6 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
         end
         buttons(actions, owner_control, .9, 2.4, true)
         line(nil, labelled("Commentary", value("commentary")))
-        line(nil, labelled("Synonym", value("synonym")))
-        line(nil, labelled("Antonym", value("antonym")))
-        line(nil, labelled("Variant", value("variant")), labelled("Phonetic variant", value("var_phonetic")),
-            labelled("Textual variant", value("var_text")))
         -- An example carries its citation in its own paragraph; verse keeps its
         -- line breaks. A sutta name can put its vagga on a second line.
         for n = 1, 2 do
@@ -759,9 +817,8 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
                     -- One part of the article at a time.
                     -- A whole article in one part needs no part label.
                     if page.part > 1 or page.has_more then
-                        local progress = page.total and page.total > 0 and page.next_offset
-                            and (" · " .. math.min(100, math.floor(page.next_offset / page.total * 100)) .. "%") or ""
-                        add('<p class="header">Part ' .. page.part .. progress .. '</p>')
+                        local last = not page.has_more and " · last part" or ""
+                        add('<p class="header">Part ' .. page.part .. last .. '</p>')
                     end
                     pager(page, key)
                     add('<div class="article">' .. page.html .. '</div>')
@@ -893,7 +950,7 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
     if #parses > 0 then
         local labels, widths, total = {}, {}, 0
         local available = (layout.content_em - indent_em) / .85
-        local separator = "  |  "
+        local separator, toggle_gap = "  |  ", "    "
         local gap = not state.grammar_open and labelWidth(separator, .85) or 0
         for i, parse in ipairs(parses) do
             labels[i] = '<i>' .. M.escape(parse.pos) .. '</i> · '
@@ -924,16 +981,18 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
             for i = 1, shown do
                 row[i] = shown > 1 and ('<span class="grammar-parse">' .. labels[i] .. '</span>') or labels[i]
             end
+            local text = table.concat(row, separator)
             if shown < #parses then
+                -- The toggle is not another parse, so a wide space sets it off
+                -- instead of the bar; it is as wide as the separator it replaces.
                 local more = toggle("dpd:grammar-toggle", false, moreParses(hidden), control)
-                if used > 0 then row[#row + 1] = more
+                if used > 0 then text = text .. toggle_gap .. more
                 else
-                    add('<p class="grammar">' .. row[1] .. '</p>')
-                    row = { more }
+                    add('<p class="grammar">' .. text .. '</p>')
+                    text = more
                 end
             end
-            add((shown < #parses and '<p class="grammar grammar-more">' or '<p class="grammar">')
-                .. table.concat(row, separator) .. '</p>')
+            add((shown < #parses and '<p class="grammar grammar-more">' or '<p class="grammar">') .. text .. '</p>')
         end
     end
     -- A dictionary search says what it missed in its own empty state.
@@ -1084,7 +1143,7 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
     end
     if model.family then
         local family = model.family
-        add(heading(M.escape(family.title or model.query)))
+        -- The title bar names the list (M.title), so the body starts with it.
         if family.error then add('<p class="note">' .. M.escape(family.error) .. '</p>') end
         for index, item in ipairs(family.items or {}) do
             -- The whole row opens the member; only the word is underlined.
@@ -1128,7 +1187,9 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
     end
     variants()
     if #(model.deconstructions or {}) > 0 then
-        add(heading("Analyses · " .. #model.deconstructions .. " · unchecked"))
+        local count = #model.deconstructions
+        add(heading(count .. (count == 1 and " possible split" or " possible splits")
+            .. ' <span class="quiet">· not yet checked by DPD</span>'))
         for index, analysis in ipairs(model.deconstructions) do
             -- An analysis expands to what it adds or to where its respelled
             -- parts are explained; one DPD could not split keeps its raw text.
@@ -1142,8 +1203,15 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
                 header[#header + 1] = control("dpd:component/" .. index .. "/" .. i, escaped)
             end
             local breakup = analysis.parts and table.concat(header, " + ") or M.escape(analysis.raw)
-            local number = expands and toggle("dpd:analysis/" .. index, open, index .. " ·", control) or (index .. " ·")
-            add('<div class="entry"><p class="row' .. (expands and "" or " still") .. '">' .. number .. " " .. breakup .. '</p>')
+            -- The parts name the analysis, so the chevron toggles it alone. Its
+            -- tap area is a button's, recorded like the button cells; the parts'
+            -- own text still wins a tap on them.
+            local chevron = ""
+            if expands then
+                chevron = toggle("dpd:analysis/" .. index, open, "", control)
+                layout.buttons[chevron:match('href="([^"]+)"')] = { width_em = 2.4, height_em = layout.target_em }
+            end
+            add('<div class="entry"><p class="row' .. (expands and "" or " still") .. '">' .. chevron .. breakup .. '</p>')
             if open then
                 add('<div class="components">')
                 for i, part in ipairs(analysis.parts) do
@@ -1158,7 +1226,17 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
                         local compact = (analysis.compact or {})[i]
                         -- Its rows repeat headwords or an earlier part: name which senses instead.
                         local only = compact and ' <span class="count">· only ' .. M.escape(senseNames(senses)) .. '</span>' or ""
-                        add('<div class="component"><p>' .. control("dpd:component/" .. index .. "/" .. i, name) .. only .. '</p>')
+                        -- A heading that only repeats the rows under it ("vissajjiya"
+                        -- above vissajjiya 1 and 2, all its senses) is left out; one
+                        -- naming a form of another headword ("vebhaṅgiyaṃ" above
+                        -- vebhaṅgiya) stays.
+                        local repeats = not compact and #senses > 0 and total <= #senses and #senses <= 2
+                            and #(component.reference_targets or {}) == 0
+                        for _, sense in ipairs(repeats and senses or {}) do
+                            if tostring(sense.lemma_1 or ""):gsub(" %d[%d.]*$", "") ~= part then repeats = false end
+                        end
+                        add('<div class="component' .. (repeats and ' bare">' or ('"><p>'
+                            .. control("dpd:component/" .. index .. "/" .. i, name) .. only .. '</p>')))
                         for j = 1, compact and 0 or math.min(2, #senses) do
                             local sense = senses[j]
                             local expansions = ((state.component_expanded or {})[index] or {})[i] or {}

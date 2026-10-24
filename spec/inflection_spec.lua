@@ -244,7 +244,7 @@ describe("DPD paradigm rendering", function()
         local frame = {expanded={[7]=true}, details={[7]={grammar_line="masc", ipa_line="/d̪ʰəmmə/",
             paradigm_kind="Declension", construction="dhar + ma"}}}
         local html = Render.render(value({senses={sense}}), frame)
-        assert.is_truthy(html:find("<i>IPA:</i> /d̪ʰəmmə/", 1, true))
+        assert.is_truthy(html:find('<td class="label">IPA</td><td>/d̪ʰəmmə/', 1, true))
         local link = html:find('href="dpd:detail-paradigm/7">Declension</a>', 1, true)
         assert.is_truthy(link)
         -- The origin comes first; the table button leads the row of buttons below it.

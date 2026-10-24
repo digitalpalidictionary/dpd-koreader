@@ -8,10 +8,25 @@ The plugin's menu is **Search → Digital Pāḷi Dictionary**, on the first pag
 of Search after KOReader's own dictionary items. This guide calls it the DPD
 menu. For a short reminder on the device, open **Help → DPD help** there.
 
-The last section, [Lookup rules in detail](#lookup-rules-in-detail), lists
-exact limits and unusual cases. You don't need it for everyday reading.
+Choose the section you need:
 
-## Look up a word
+- [Everyday reading](#everyday-reading): look up a word, read an entry and
+  follow links without losing your place.
+- [More from an entry](#more-from-an-entry): tables, frequency, suttas,
+  roots, families and other dictionaries.
+- [Search and spelling](#search-and-spelling): missing words, similar forms
+  and diacritics.
+- [Settings](#settings): input, recent lookups and which books open DPD.
+- [Updates and recovery](#updates-and-recovery):
+  [update the plugin](#update-the-plugin),
+  [replace the database](#replace-the-database),
+  [fix a problem](#troubleshooting) or [uninstall](#uninstalling).
+- [Reference](#reference): differences from DPD's website and app, plus
+  exact lookup rules and unusual cases. You can skip this for everyday reading.
+
+## Everyday reading
+
+### Look up a word
 
 **Long-press a word** in your book. If DPD has something for it, the DPD
 popup opens. Otherwise, or if something goes wrong, your normal dictionary
@@ -41,7 +56,7 @@ KOReader's dictionary: tap it to edit the word you selected or typed, or hold
 it to edit the form DPD matched. When a typed lookup finds nothing, **Edit
 search** brings back your text so you can correct it.
 
-## Read an entry
+### Read an entry
 
 The title shows the DPD form that matched, such as `buddha` for a selected
 `Buddha`. Below it, every sense of the word appears in DPD's order, with its
@@ -56,13 +71,14 @@ number (such as 1.01 in *dhamma 1.01*) and its part of speech in italics.
 
 An expanded sense shows, when DPD has them:
 
-1. Where the word comes from: its construction, the word it derives from and
-   its root (√ marks a root), as in `√dhar + ma · from dharati`.
-2. **Grammar**, when it adds to the part of speech.
+1. A table of **Grammar**, when it adds to the part of speech, and the word's
+   origin: its construction, the word it derives from, its root (√ marks a
+   root) and the other origin fields, as in `√dhar + ma · from dharati`.
+2. Synonym, antonym, variant, phonetic variant and textual variant, together
+   on one line that wraps when needed.
 3. A row of buttons for the views it has: **Declension** or **Conjugation**,
    **Frequency**, **Sutta information**, and its word families.
-4. Commentary, synonyms and antonyms, variants, examples with their sources,
-   and notes.
+4. Commentary, examples with their sources, notes and the web link.
 5. DPD's editorial status (✔ complete, ◑ meaning without a source yet,
    ✘ incomplete) and the entry's permanent `dpdict.net/<ID>` reference.
 
@@ -82,7 +98,7 @@ way, and each way is an analysis.
 - The first analysis that adds to the word's own entries opens with brief
   meanings for its parts. The others start collapsed, one tap away, with the
   words they add in bold.
-- **Analyses · N · unchecked** means DPD made these splits automatically and
+- **N possible splits · not yet checked by DPD** means DPD made these splits automatically and
   no editor has reviewed them, so a split can be wrong, and the one that opens
   first isn't necessarily right. The entries for the parts are DPD's checked
   ones.
@@ -97,14 +113,22 @@ context. They are for information and never take you to another word.
 
 - **Other dictionaries** looks the word up in the other dictionaries bundled
   with DPD.
-- **KOReader dictionary** closes DPD and opens the same word in KOReader's
-  dictionary. A word selected in your book stays selected, so that
+- **KOReader dictionary** closes DPD and opens the popup's original word in
+  KOReader's dictionary. If you follow a link to another entry, the button
+  names that original word, for example **KOReader: dhamma**. A word
+  selected in your book stays selected, so that
   dictionary's **Highlight**, **Search** and **Wikipedia** buttons work as
   usual.
 
 A button that doesn't apply to the current view is greyed out.
 
-## Follow words inside the popup
+On devices with keys, **Tab**, **Down** or **Right** moves focus through the
+entry's links and bottom buttons; **Shift+Tab**, **Up** or **Left** moves
+backwards. **Enter** or the centre/select key activates the focused item.
+Focus continues onto the next page when needed. Page-turn keys still turn
+pages, and **Back** or **Esc** returns to the previous view or closes the popup.
+
+### Follow words inside the popup
 
 Hold a word in the popup, or hold and drag to select a phrase, and a second
 DPD popup opens on top. This works on links too: holding selects the text,
@@ -159,15 +183,17 @@ time, and **Show more** adds the next 20. Tap a member to open it, then
 ### Other dictionaries
 
 **Other dictionaries**, below an entry, looks its headwords up in the
-dictionaries bundled with the DPD database. By default these are the
-Dictionary of Pāli Proper Names, the Critical Pali Dictionary, the PTS
-Pāḷi-English Dictionary and Nyanatiloka's Buddhist Dictionary. Choose others under **Other dictionaries**
-in the DPD menu: Pali English Ultimate, Edgerton's Buddhist Hybrid Sanskrit
-Dictionary, Monier-Williams, Apte and WordNet. Hold a name there for its full
-title and author.
+dictionaries bundled with the DPD database. **Other dictionaries** in the
+DPD menu lists the ones in your database; turn each on or off there, and hold
+a name for its full title and author. Pali English Ultimate, Edgerton's
+Buddhist Hybrid Sanskrit Dictionary, Monier-Williams, Apte and WordNet start
+off; the others, including any a newer database adds, start on.
 
 Each result shows the start of the article; tap it to open the rest. Long
 articles come a part at a time, with **Next part** and **Previous part**.
+While an article is open, **◂ Part**, **Part ▸** and **Entries** stay in the
+bottom row. **Entries** returns to the collapsed entry's heading; an article
+in one part has only **Entries**.
 When a dictionary has no exact entry, close spellings are shown, marked ≈.
 Monier-Williams and Apte first try the Sanskrit word DPD gives for the
 headword and say so, as in **via Sanskrit dharma**.
@@ -175,15 +201,16 @@ headword and say so, as in **via Sanskrit dharma**.
 **Search other dictionaries**, in the DPD menu, searches the same
 dictionaries for exactly what you type, such as a Sanskrit word (`dharma`,
 `ātman`) or a name DPD doesn't have (`Mahā Bodhi`). **DPD** below the results
-looks the word up in DPD instead.
+looks the word up in DPD instead and stays available while an article is open.
 
-These dictionaries come with DPD v0.4.20260926 and newer, and PTS with
-releases after it. With an older database, the **Other dictionaries** button
-doesn't appear below entries, and **Search other dictionaries** finds
-nothing. A dictionary missing from the open database, such as PTS before its
-release, finds nothing, and holding its name in the menu says so.
+These dictionaries come with DPD v0.4.20260926 and newer, and the PTS
+Pāḷi-English Dictionary with releases after it. With an older database, the
+**Other dictionaries** button doesn't appear below entries, and **Search other
+dictionaries** finds nothing.
 
-## When there's no exact match
+## Search and spelling
+
+### When there's no exact match
 
 DPD never quietly swaps your word for another one. Anything that isn't an
 exact match is labelled.
@@ -214,7 +241,7 @@ exact match is labelled.
 - **Nothing found.** After a long-press, your normal dictionary opens. After a
   typed lookup, the popup says there's no entry and offers **Edit search**.
 
-## Spelling and diacritics
+### Spelling and diacritics
 
 - Diacritics and capitals are optional: `Buddha` finds `buddha`. An exact
   spelling still comes first, and other spellings are labelled.
@@ -233,11 +260,12 @@ exact match is labelled.
 
 All settings are in the DPD menu.
 
-- **DPD on word long-press** (on by default) opens DPD when you long-press a
-  word. Turn it off to have your normal dictionary open first; it then has a
-  **DPD** button that opens DPD on top.
-- **DPD on long-press in this book** makes an exception for the open book
-  only, such as an English book. The book keeps it when you reopen it.
+- **Open DPD on long-press by default** (on by default) opens DPD when you
+  long-press a word. Turn it off to have your normal dictionary open first;
+  it then has a **DPD** button that opens DPD on top.
+- **Open DPD on long-press in this book**, below it with a book open, makes
+  an exception for that book only, such as an English book. The book keeps
+  it when you reopen it. Its help says whether the book follows the default.
 - **Display and input**:
   - **Popup font size** (16 by default) is separate from KOReader's
     dictionary font. The next popup uses the new size.
@@ -250,30 +278,81 @@ All settings are in the DPD menu.
 - **Recent lookups** has **Show recent lookups**, **Record recent lookups**
   (on by default; turning it off also forgets the list) and **Clear recent
   lookups**. The list is kept only on your device, in KOReader's settings.
-- **Choose database file** and **Database status**: see
+- **Database**, labelled with its state, has **Database status** and
+  **Choose database file**: see
   [Updating and the database](#updating-and-the-database).
-- **Help** has **DPD help**, **About & licenses** and **Diagnostics**.
+- **Help** has **DPD help**, **About & licenses**, **Check for updates**,
+  **Check for updates automatically** (off by default) and **Diagnostics**.
+  It reads **Help · 99.0.0 available**, for example, when a newer plugin has
+  been found.
+  See [Updating and the database](#updating-and-the-database).
 
 KOReader's **Vocabulary builder** saves the words you look up in DPD in a
 book, with their sentence, when its own setting is on, as it does for
 KOReader's dictionary.
 
-## Words in English books
+To open DPD with a gesture, choose an action under **Taps and gestures** →
+**Gesture manager**: **DPD: Look up a word**, **DPD: Search other
+dictionaries** and **DPD: Recent lookups** are under **General**, and **DPD:
+Toggle long-press in this book** is under **Reader**. Profiles and Quick menus
+list the same actions.
 
-**DPD on word long-press** doesn't check the book's language, and short Pāḷi
-forms such as `to`, `the`, `have` and `time` are also English words. In an
-English book, turn off **DPD on long-press in this book**. Pāḷi terms there
+### Words in English books
+
+Long-press doesn't check the book's language, and short Pāḷi forms such as
+`to`, `the`, `have` and `time` are also English words. In an English book,
+turn off **Open DPD on long-press in this book**. Pāḷi terms there
 are still one tap away, through the **DPD** button in your normal
 dictionary.
 
-## Updating and the database
+## Updates and recovery
 
-**Plugin.** Exit KOReader, delete `koreader/plugins/dpd.koplugin`, put the
-folder from the new zip in its place and restart. Your DPD settings and
-recent lookups are kept: they're stored in KOReader's settings, not in the
-plugin folder.
+### Updating and the database
 
-**Database.** Exit KOReader and replace `dpd-mobile.db` with the one from the
+#### Update the plugin
+
+**From 0.3.0 or earlier:** [update by hand](#update-by-hand) once. The in-app
+updater is new in 0.3.1.
+
+**Plugin.** Open **Help → Check for updates** in the DPD menu. It asks to
+turn on Wi-Fi if needed, then says whether there's a new version and shows
+what changed. When the plugin is current, the result starts with a bold
+verdict and separate **Plugin** and **Database** status lines. An available
+plugin opens its release notes, with release-page buttons above **Close**
+and **Install**.
+**Install** downloads the new version over a verified
+connection to GitHub, checks it against the release's checksum, unpacks it beside the current one and swaps the two;
+restart KOReader to use it (on Android, close KOReader and open it again).
+Until then DPD stays off and long-press opens your normal dictionary. If
+installation fails, the message says whether the current plugin is unchanged
+or gives instructions to restore it. The previous version is kept as
+`dpd.koplugin.previous` until the new one has started.
+
+**Check for updates automatically** (off by default) checks about once a
+week, only when Wi-Fi is already on, without holding up your reading, and
+shows **DPD plugin 99.0.0 is available: see Help.**, for example, when there's
+a new version; the **Help** label keeps showing it. It never turns Wi-Fi on
+or installs anything by itself. Checking contacts GitHub and sends only
+DPD's version.
+
+#### Update by hand
+
+To update by hand, or where DPD can't install the update, exit KOReader,
+delete `koreader/plugins/dpd.koplugin`, put the folder from the new zip in
+its place and restart. **Check for updates** links to the release page: on
+e-readers without a browser, **Plugin QR code** opens it on your phone. Your DPD
+settings and recent lookups are kept: they're stored in KOReader's settings,
+not in the plugin folder.
+
+#### Replace the database
+
+**Database.** **Check for updates** also says whether your database is up to
+date, a newer DPD database is out, or none is installed, and then offers its
+release page (**Database QR code** on e-readers). It never downloads the
+database itself: it is about 200 MB. The **is out** wording refers to a newer
+release online; **Database status**'s **newer release** means the installed
+file is newer than the one this plugin was tested with. Exit KOReader and
+replace `dpd-mobile.db` with the one from the
 [latest DPD release](https://github.com/digitalpalidictionary/dpd-db/releases/latest).
 Delete any `dpd-mobile.db-wal` and `dpd-mobile.db-shm` files beside it, then
 restart. **Database status** shows the new release.
@@ -283,11 +362,20 @@ creates small `-wal` and `-shm` files beside it, so the folder holding it
 must be writable, wherever you keep it. If it isn't in `koreader/data/dpd/`,
 pick it with **Choose database file**.
 
-**Database status** shows which DPD release is open, whether its core columns
-are OK, and the release this plugin was tested with. Newer releases work as
-long as the core columns are OK.
+#### Check database status
 
-## Troubleshooting
+The **Database** item shows what DPD last found: **ready** for the release
+this plugin was tested with, **newer release**, **older release** or
+**unknown release** for others, **missing**, **cannot open**, or **not
+checked** until DPD first opens the file. Drawing the menu never opens it.
+
+**Database status** starts with the same verdict in bold, such as **Database
+ready** or **Newer release, should work**, then the DPD release and the one
+this plugin was tested with, the file and its folder, and the checks behind
+the verdict (core columns, journal mode). Other releases work as long as the
+core columns are OK.
+
+### Troubleshooting
 
 - **DPD never opens:** check **Database status**. If the database isn't found,
   use **Choose database file**. Make sure external plugins are enabled.
@@ -299,7 +387,21 @@ long as the core columns are OK.
   carry on with your search, or check **Database status**.
 - **A long-press picks only part of the word:** drag across the whole word,
   or type it in **Look up a word**.
-- **English words open DPD:** turn off **DPD on long-press in this book**.
+- **English words open DPD:** turn off **Open DPD on long-press in this book**.
+- **DPD is missing after an update:** this can happen if the device switched
+  off during the swap, or if the new version can't start. Exit KOReader. If
+  `koreader/plugins/` has a `dpd.koplugin.previous` folder, delete any
+  `dpd.koplugin` folder, rename `dpd.koplugin.previous` to `dpd.koplugin`
+  and restart: that is the version you had before. Otherwise install the zip
+  by hand.
+- **Check for updates says DPD's folder is a link or a development copy:**
+  DPD doesn't replace a folder you manage yourself; update it by hand.
+- **Check for updates says it can't update through the proxy:** turn off the
+  HTTP proxy in KOReader's network settings for the update, or update by
+  hand.
+- **Check for updates says the database is inside DPD's folder:** move
+  `dpd-mobile.db` to `koreader/data/dpd/`, choose it again with **Choose
+  database file**, then install. An update replaces the whole plugin folder.
 - **The DPD menu says "Needs a newer KOReader":** update KOReader to
   v2026.07 or newer. Until then DPD stays off and long-presses open your
   normal dictionary.
@@ -309,17 +411,21 @@ long as the core columns are OK.
   `koreader/data/dpd/dpd-debug.log`, or open **Help → Diagnostics → Show
   diagnostic log** and take a screenshot. The log records the words you look
   up, links you tap, errors and the lookup, build and total time of each
-  popup, so turn it off afterwards. On Android, KOReader keeps no
-  `crash.log`, so this log is the only record of what happened.
+  popup, so turn it off afterwards. If KOReader itself closed, send its
+  `crash.log` too. On Android, KOReader writes none as it runs: open its
+  **Help → Report a bug** soon after the problem to save one. See
+  [reporting feedback](TESTING.md#reporting-feedback) for where it is.
 - **Reporting a problem:** see [reporting feedback](TESTING.md#reporting-feedback).
 
-## Uninstalling
+### Uninstalling
 
 Exit KOReader, delete `koreader/plugins/dpd.koplugin` and restart. The
 database and diagnostic log are kept in `koreader/data/dpd/` (unless you chose
 a database elsewhere); delete that folder too to remove them.
 
-## Compared with DPD's website and app
+## Reference
+
+### Compared with DPD's website and app
 
 The plugin aims to show what the dictionary panel of
 [dpdict.net](https://www.dpdict.net/) shows, plus the other dictionaries and
@@ -351,30 +457,29 @@ Not available:
   redirects. The mobile database doesn't include this data.
 - Sinhala, Devanagari and Thai input, pronunciation audio, bold-definition
   search, Tipiṭaka translations and Russian.
-- General typo search beyond **Did you mean**, KOReader gesture or shortcut
-  actions for DPD, and a smaller database.
+- General typo search beyond **Did you mean**, and a smaller database.
 - Anything beyond the dictionary itself, such as reading texts; KOReader is
   the reader here.
 
-## Lookup rules in detail
+### Lookup rules in detail
 
 This section is for reference. It adds exact limits and unusual cases to the
 sections above, in the same order.
 
-### Long-press and popups
+#### Long-press and popups
 
-- **DPD on word long-press** affects only words selected in a book. Searches
+- **Open DPD on long-press** affects only words selected in a book. Searches
   you type in KOReader's own dictionary behave as usual.
 - After **KOReader dictionary**, a highlight you make there is saved when that
   dictionary closes. Dragging across words opens KOReader's selection menu as
   before.
-- With **DPD on word long-press** off, closing a DPD popup opened from the
+- With DPD off on long-press, closing a DPD popup opened from the
   normal dictionary's **DPD** button returns you to that dictionary.
-- In **DPD on long-press in this book**, choosing the same as **DPD on word
-  long-press** removes the exception, so the book follows that setting again.
+- In **Open DPD on long-press in this book**, choosing the same as the
+  default removes the exception, so the book follows the default again.
 - Vocabulary builder: a word it already has isn't sent again. Reviewing a
-  saved word opens it in DPD while **DPD on word long-press** is on, even in
-  a book that turns DPD off for itself.
+  saved word opens it in DPD while **Open DPD on long-press by default** is
+  on, even in a book that turns DPD off for itself.
 - The pencil: the popup stays open under the editor, so **Cancel** returns to
   it, and the search you submit replaces it. In an entry opened from another
   one, the pencil edits that entry's word and opens the result on top, so
@@ -391,7 +496,7 @@ sections above, in the same order.
   your next lookup.
 - KOReader scales **Popup font size** for the screen.
 
-### Look up a word in detail
+#### Look up a word in detail
 
 - Up to six suggestions appear. Close spellings marked ≈ also include words
   that differ in aspiration or doubled consonants. For a short or very common
@@ -419,12 +524,12 @@ sections above, in the same order.
   **Search other dictionaries** it also turns `"s` into ś, `.s` into ṣ, `.r`
   into ṛ and `.rr` into ṝ; Pāḷi lookup leaves those as typed.
 
-### Entries in detail
+#### Entries in detail
 
-- The origin line also gives the root's meaning, sign and base, as in
-  `√i 1 (come, go)`. A smaller line adds the Sanskrit, cognates, derivative,
-  suffix, phonetic change, the headword's IPA pronunciation and, for nouns
-  like `satthar`, the traditional lemma (`satthu`).
+- The grammar and origin table also gives the root's meaning, sign and base,
+  as in `√i 1 (come, go)`, along with Sanskrit, cognates, derivative, suffix,
+  phonetic change, the headword's IPA pronunciation and, for nouns like
+  `satthar`, the traditional lemma (`satthu`).
 - **Grammar** appears only when it adds something: `dhamma 1.04` shows
   "normally pl dhammā", while `dhamma 1.01` shows none. A suffix that ends the
   construction, or a compound construction identical to the construction,
@@ -446,7 +551,7 @@ sections above, in the same order.
   start of the section; **Back** from another view restores the readings you
   were on and your place.
 
-### Compounds in detail
+#### Compounds in detail
 
 - Each alternative gives brief meanings only for words that the headwords and
   the analysis that opened first don't already explain, once each.
@@ -475,7 +580,7 @@ sections above, in the same order.
   entries too: `buddhānussati` lets you open `buddha` and `anussati`.
 - A part DPD has no headword for keeps its place in the breakup and says so.
 
-### Tables, counts and suttas in detail
+#### Tables, counts and suttas in detail
 
 - In a declension or conjugation table, each form has its own line within its
   cell, and the form you looked up is marked in every cell where it occurs:
@@ -508,7 +613,7 @@ sections above, in the same order.
   your place. A word can belong to several thematic sets. A family that can't
   be read is reported without closing the entry.
 
-### Other dictionaries in detail
+#### Other dictionaries in detail
 
 - Each dictionary has a one-line heading with a short name, such as
   *Edgerton · Buddhist Hybrid Sanskrit*, and its entry count. Holding a name
@@ -516,13 +621,20 @@ sections above, in the same order.
 - Each entry shows the headword and its homonym number (*kamma³*) before the
   start of the article. Groups of exact entries show their total and how many
   are loaded; **More entries** loads the next batch.
-- Parts are labelled **Part N · X%**; an article in one part has no label.
-  The percentage is how much of the article you've reached, by text rather
-  than screen pages. **Previous part** appears above and below each part
-  after the first; **Next part** appears below while more remains. A new
-  part opens at the entry's title.
+- Parts are labelled **Part N**, with **· last part** on the final part;
+  an article in one part has no label. **Previous part** appears above and
+  below each part after the first; **Next part** appears below while more
+  remains. A new part opens at the entry's title.
+- While an article is open, the bottom row offers **◂ Part**, **Part ▸** and
+  **Entries** in place of the greyed **Other dictionaries** button. The part
+  buttons keep their positions, with **◂ Part** disabled on the first part
+  and **Part ▸** on the last. An article in one part offers only **Entries**.
+  A direct dictionary search keeps **DPD** beside these buttons, and
+  **KOReader dictionary**, when available, stays on the right.
 - Opening an entry closes the one that was open. Reopening an entry in the
-  same view returns to the part you last read.
+  same view returns to your reading page in the part you last read. Returning
+  to a previously read part also keeps its reading page. **Entries**
+  or the entry's chevron collapses it and returns to its heading in the list.
 - A word DPD lacks, such as a name, is looked up as typed.
 - Each dictionary without an exact entry shows up to three close spellings.
   **N approximate · limited search** counts the close spellings shown, not
@@ -548,7 +660,7 @@ sections above, in the same order.
   other dictionaries** doesn't change whether **Look up a word** opens in
   Pāḷi or English.
 
-### Similar forms and corrections in detail
+#### Similar forms and corrections in detail
 
 - Several similar forms are ordered attested readings first, then by
   closeness in length. Each says whether it has headwords, compound analyses,
@@ -569,7 +681,7 @@ sections above, in the same order.
   so `jāneyyu` offers jāneyyuṃ first. The search is bounded, so the list
   isn't guaranteed to hold the closest words.
 
-### Shortened words in detail
+#### Shortened words in detail
 
 - DPD tries this only after exact and similar-form lookup both miss.
 - It removes one or two letters from the end, labelled **approximate ·
@@ -586,7 +698,7 @@ sections above, in the same order.
 - Long-press skips this because a shortened word can be an unrelated one.
   Compound parts and recorded references still resolve exactly.
 
-### Forms printed oddly in detail
+#### Forms printed oddly in detail
 
 - **`ti` joined to the next word:** after a closing quote, some texts print
   `ti` attached to the following word, as in `’’tiettha`, and long-press then
@@ -602,8 +714,8 @@ sections above, in the same order.
   three letters or fewer are left alone, so English `in` and `run` still go
   to your normal dictionary. Words in DPD's English index are left alone too,
   but words and names outside it, such as `sedan` and `Japan`, can still open
-  a Pāḷi form. Turn off **DPD on long-press in this book** when that gets in
-  the way.
+  a Pāḷi form. Turn off **Open DPD on long-press in this book** when that
+  gets in the way.
 - **ṃ printed as ñ or ṅ:** chanting books write `dhammañ’ca` and
   `Yaṅ’kiñci`, and long-press stops at the apostrophe. A selected word ending
   in `ñ` or `ṅ` that has no entry is looked up with `ṃ` (`dhammaṃ`, `yaṃ`). To
@@ -611,7 +723,7 @@ sections above, in the same order.
   apostrophe.
 - All three apply to long-press as well as typed lookups.
 
-### Long Pāḷi words in detail
+#### Long Pāḷi words in detail
 
 - This applies to a word of 15 letters or more with Pāḷi diacritics, when
   DPD knows a beginning or ending of at least five letters. When neither is
@@ -621,7 +733,7 @@ sections above, in the same order.
 - To look up another part, shorten the word with the pencil in the title
   bar. **KOReader dictionary** still opens your normal dictionary.
 
-### Spellings DPD accepts
+#### Spellings DPD accepts
 
 - Decomposed Unicode, found in some EPUBs, matches the usual form.
 - Closing-quote spellings match in capitals too, as in `HOTĪ”TI`.
@@ -631,7 +743,7 @@ sections above, in the same order.
 - **Look up a word** also accepts abbreviation symbols and brackets as
   typed, such as `*`, `[]`, `BHS(G)` and `ms(s)`.
 
-### The database in detail
+#### The database in detail
 
 - **Database status** also shows the schema version, read-only access and
   journal mode. The database is in SQLite's WAL mode, which is why the `-wal`

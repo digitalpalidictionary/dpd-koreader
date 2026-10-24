@@ -14,6 +14,7 @@
 -- capped slices of likely English keys (a few hundred rows read at most).
 local Normalize = require("dpd/normalize")
 local SortKey = require("dpd/sortkey")
+local English = require("dpd/english")
 local Suggest = {}
 Suggest.__index = Suggest
 Suggest.limit = 6
@@ -21,6 +22,7 @@ Suggest.scan = 1000
 Suggest.english_scan = 400
 Suggest.english_letter_scan = 10
 Suggest.english_capital_scan = 50
+Suggest.english_case_scan = 200
 Suggest.approximate_limit = 3
 local CACHE = 32
 local TOP = "\244\143\191\191"
@@ -204,13 +206,34 @@ function Suggest:_english(text, limit)
         for i = 1, #bounds - 1 do slice(bounds[i], bounds[i + 1], Suggest.english_letter_scan) end
     end
     params[#params + 1], params[#params + 2], params[#params + 3] = text, capital, limit
-    local rows = self.db:query("SELECT lookup_key FROM lookup WHERE lookup_key IN ("
+    local rows = self.db:query("SELECT lookup_key, length(epd) AS epd_bytes FROM lookup WHERE lookup_key IN ("
         .. table.concat(slices, " UNION ") .. ") AND coalesce(epd, '') NOT IN ('', '[]')"
         -- Exact first, single words before phrases, then keys with the most entries.
         .. " ORDER BY lookup_key IN (?, ?) DESC, instr(lookup_key, ' ') > 0, length(epd) DESC, lookup_key LIMIT ?",
         params)
+    -- Internal capitals (Awakened One, epithet of the Buddha) fall outside
+    -- those case-sensitive ranges. Add case-only matches through the fuzzy
+    -- index, then rank all candidates alike. The complete exact bucket is
+    -- separate from the sampled prefix range so typing a full key keeps it.
+    local seen = {}
+    for _, row in ipairs(rows) do seen[row.lookup_key] = true end
+    local function add(candidates)
+        for _, row in ipairs(candidates) do
+            if not seen[row.lookup_key] then rows[#rows + 1] = row; seen[row.lookup_key] = true end
+        end
+    end
+    add(English.caseKeys(self.db, text))
+    if length >= 3 then add(English.caseKeys(self.db, text, Suggest.english_case_scan)) end
+    table.sort(rows, function(a, b)
+        local exact_a, exact_b = Normalize.lower(a.lookup_key) == text, Normalize.lower(b.lookup_key) == text
+        if exact_a ~= exact_b then return exact_a end
+        local phrase_a, phrase_b = a.lookup_key:find(" ", 1, true) ~= nil, b.lookup_key:find(" ", 1, true) ~= nil
+        if phrase_a ~= phrase_b then return not phrase_a end
+        if a.epd_bytes ~= b.epd_bytes then return (a.epd_bytes or 0) > (b.epd_bytes or 0) end
+        return a.lookup_key < b.lookup_key
+    end)
     local out = {}
-    for _, row in ipairs(rows) do out[#out + 1] = { text = row.lookup_key } end
+    for i = 1, math.min(limit, #rows) do out[i] = { text = rows[i].lookup_key } end
     return out
 end
 

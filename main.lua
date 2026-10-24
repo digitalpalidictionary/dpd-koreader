@@ -2,6 +2,7 @@ local Compat = require("dpd/compat")
 local DataStorage = require("datastorage")
 local DB = require("dpd/db")
 local VERSION = require("dpd/version")
+local DBCompat = require("dpd/db_compat")
 local Diag = require("dpd/diag")
 local Direct = require("dpd/direct")
 local InfoMessage = require("ui/widget/infomessage")
@@ -10,6 +11,7 @@ local Lookup = require("dpd/lookup")
 local PathChooser = require("ui/widget/pathchooser")
 local Popup = require("dpd/popup")
 local UIManager = require("ui/uimanager")
+local Updater = require("dpd/updater")
 local WidgetContainer = require("ui/widget/container/widgetcontainer")
 local lfs = require("libs/libkoreader-lfs")
 local logger = require("logger")
@@ -22,9 +24,15 @@ local unsupported_warned = false
 -- Say once per session, per kind of problem, why long-press fell back to the
 -- normal dictionary: a damaged word must not hide a later missing database.
 local database_warned = {}
+-- What opening the database last found, while its file is unchanged: the
+-- menu label shows it without opening the database to draw the menu.
+local database_seen
+-- Every running instance (File Manager, reader), so an update installed from
+-- one, even from a dialog left over from a closed one, stops them all.
+local running = setmetatable({}, { __mode = "k" })
 
 local NO_DATABASE = "No DPD database found. Copy dpd-mobile.db to koreader/data/dpd/, or choose it "
-    .. "under Search → Digital Pāḷi Dictionary → Choose database file."
+    .. "under Search → Digital Pāḷi Dictionary → Database → Choose database file."
 -- DB.new's reasons the reader can act on, shown as they are; others stay generic.
 local database_reasons = { "DPD database not found", "This file is not a SQLite database" }
 -- A missing column means the wrong file or an older DPD release; the column
@@ -36,7 +44,7 @@ local INCOMPATIBLE = "This file isn't a DPD database this version can read. "
 local LOOKUP_FAILED = "DPD could not look up this word. Check Database status in the DPD menu."
 local DAMAGED = "Some DPD data could not be read. Replace the database with a fresh DPD mobile download."
 -- Where the reader fixes a missing, moved or wrong database file.
-local CHOOSE_MENU = "Search → Digital Pāḷi Dictionary → Choose database file"
+local CHOOSE_MENU = "Search → Digital Pāḷi Dictionary → Database → Choose database file"
 local CHOOSE = "Choose it under " .. CHOOSE_MENU .. "."
 local function databaseMessage(err)
     -- assert prefixes the error with where it was raised.
@@ -76,6 +84,7 @@ end
 
 function DPD:init()
     self.settings = G_reader_settings:readSetting("dpd", {})
+    require("dpd/dictionaries").convertSettings(self.settings)
     if self.settings.direct_lookup == nil then self.settings.direct_lookup = true end
     if self.settings.font_size == nil then self.settings.font_size = 16 end
     if not self.settings.db_path then
@@ -87,6 +96,15 @@ function DPD:init()
     local missing = Compat.missing()
     placeInSearch()
     self.ui.menu:registerToMainMenu(self)
+    self:onDispatcherRegisterActions()
+    if Updater.restart_pending or Updater.broken then
+        -- A new version is unpacked but this session still runs the old code;
+        -- loading any of the new files now would mix the two. After a failed
+        -- restore there are no files to load at all.
+        self.restart_pending = true
+        return
+    end
+    running[self] = true
     if #missing > 0 then
         -- Keep the menu, which explains why, but never route a lookup to DPD.
         self.unsupported = Compat.message(missing)
@@ -99,57 +117,89 @@ function DPD:init()
     end
     self:registerEntryPoints()
     self:syncDirectMode()
+    -- Only now has this version started properly: an update's backup can go.
+    Updater.cleanUp(self.path)
+    self:scheduleUpdateCheck()
 end
 
+-- The other dictionaries in the open database, or nil when none is open or
+-- it cannot be read.
+function DPD:databaseDictionaries()
+    if not self.lookup then return nil end
+    local ok, listed = pcall(function() return self.lookup:_dictionaries():list() end)
+    return ok and listed or nil
+end
+
+function DPD:dictionariesOff()
+    return self.settings.dictionaries_off or require("dpd/dictionaries").default_off
+end
+
+-- Those not turned off among the open database's dictionaries, or among
+-- those known here before a database opens.
 function DPD:enabledDictionaries()
-    return self.settings.dictionaries or require("dpd/dictionaries").defaults
+    local Dictionaries = require("dpd/dictionaries")
+    local ids = Dictionaries.order
+    local listed = self:databaseDictionaries()
+    if listed then
+        ids = {}
+        for _, dictionary in ipairs(listed) do ids[#ids + 1] = dictionary.id end
+    end
+    return Dictionaries.enabled(ids, self:dictionariesOff())
 end
 
+-- One toggle per dictionary in the database, read when the submenu opens.
+-- Without a readable database, the dictionaries known here.
 function DPD:dictionariesMenu()
-    local Dictionaries = require("dpd/dictionaries")
-    local items = {}
-    for _, id in ipairs(Dictionaries.order) do
-        items[#items + 1] = {
-            text = Dictionaries.names[id],
-            -- Hold for the full title, author and size; lookups show a short name.
-            help_text_func = function() return self:dictionaryDetails(id) end,
-            checked_func = function()
-                for _, enabled in ipairs(self:enabledDictionaries()) do if enabled == id then return true end end
-                return false
-            end,
-            callback = function()
-                local chosen, found = {}, false
-                for _, enabled in ipairs(self:enabledDictionaries()) do
-                    if enabled == id then found = true else chosen[#chosen + 1] = enabled end
-                end
-                if not found then chosen[#chosen + 1] = id end
-                self.settings.dictionaries = chosen
-                self:saveSettings()
-            end,
-        }
-    end
-    return { text = "Other dictionaries", sub_item_table = items }
+    return { text = "Other dictionaries", sub_item_table_func = function()
+        local Dictionaries = require("dpd/dictionaries")
+        if self.settings.db_path and not self.stopped then pcall(self.ensureLookup, self) end
+        local listed = self:databaseDictionaries()
+        if listed and #listed == 0 then
+            return { { text = "None in this database", callback = function() self:hasDictionaries() end } }
+        end
+        local ids = Dictionaries.order
+        if listed then
+            ids = {}
+            for _, dictionary in ipairs(listed) do ids[#ids + 1] = dictionary.id end
+        end
+        local items = {}
+        for i, id in ipairs(ids) do
+            items[#items + 1] = {
+                text = Dictionaries.names[id] or listed and listed[i].name or id,
+                -- Hold for the full title, author and size; lookups show a short name.
+                help_text_func = function() return self:dictionaryDetails(id) end,
+                checked_func = function()
+                    for _, off in ipairs(self:dictionariesOff()) do if off == id then return false end end
+                    return true
+                end,
+                callback = function()
+                    local off, found = {}, false
+                    for _, other in ipairs(self:dictionariesOff()) do
+                        if other == id then found = true else off[#off + 1] = other end
+                    end
+                    if not found then off[#off + 1] = id end
+                    self.settings.dictionaries_off = off
+                    self:saveSettings()
+                end,
+            }
+        end
+        return items
+    end }
 end
 
 -- Bibliographic details from the open database's dict_meta, else the copy
--- recorded from the tested release. A dictionary the open database lacks
--- (PTS before its first release) says so.
+-- recorded from the tested release.
 function DPD:dictionaryDetails(id)
     local Dictionaries = require("dpd/dictionaries")
     local fallback = Dictionaries.bibliography[id] or { Dictionaries.names[id] or id }
-    local name, author, count, missing = fallback[1], fallback[2], nil, false
-    if self.db then
-        local ok, rows = pcall(self.db.query, self.db,
-            "SELECT name, author, entry_count FROM dict_meta WHERE dict_id = ?", { id })
-        if ok and rows[1] then
-            name, author, count = rows[1].name or name, rows[1].author or author, tonumber(rows[1].entry_count)
-        else
-            missing = ok or tostring(rows):find("no such table: dict_meta", 1, true) ~= nil
+    local name, author, count = fallback[1], fallback[2], nil
+    for _, dictionary in ipairs(self:databaseDictionaries() or {}) do
+        if dictionary.id == id then
+            name, author, count = dictionary.name or name, dictionary.author or author, dictionary.count
         end
     end
     return name .. (author and author ~= "" and ("\n" .. author) or "")
         .. (count and ("\n" .. count .. " entries") or "")
-        .. (missing and "\n\nNot in this DPD database. It comes with newer DPD releases." or "")
         .. (Dictionaries.notes[id] and ("\n\n" .. Dictionaries.notes[id]) or "")
 end
 
@@ -159,6 +209,13 @@ function DPD:getHistory()
 end
 
 function DPD:saveSettings() G_reader_settings:saveSetting("dpd", self.settings) end
+
+-- Bold for the start of a message, where KOReader's text boxes support it.
+local function bold(text)
+    local ok, TextBoxWidget = pcall(require, "ui/widget/textboxwidget")
+    if not (ok and type(TextBoxWidget) == "table" and TextBoxWidget.PTF_HEADER) then return text end
+    return TextBoxWidget.PTF_HEADER .. TextBoxWidget.PTF_BOLD_START .. text .. TextBoxWidget.PTF_BOLD_END
+end
 
 function DPD:message(text, dismiss_callback)
     UIManager:show(InfoMessage:new{ text = text, dismiss_callback = dismiss_callback })
@@ -176,9 +233,38 @@ end
 function DPD:showDatabaseError(err, fallback, dismiss_callback)
     local text = databaseMessage(err)
     if not text then return self:showError(err, fallback, dismiss_callback) end
+    if text:find("^DPD database not found") then text = text .. "\n\n" .. CHOOSE end
     logger.warn("DPD:", err)
     Diag.log("Error:", err)
     self:message(text, dismiss_callback)
+end
+
+-- "ready" for the tested release; "newer release", "older release" or
+-- "unknown release" for others with the core columns; "cannot open" when
+-- DB.new rejected the file.
+local function releaseState(db)
+    if not db then return "cannot open" end
+    local release, tested = (db.info or {}).dpd_release_version, DBCompat.release
+    if release == tested then return "ready" end
+    if Updater.isNewer(release, tested) then return "newer release" end
+    if Updater.isNewer(tested, release) then return "older release" end
+    return "unknown release"
+end
+
+local function noteDatabase(path, db)
+    database_seen = { path = path, size = path and lfs.attributes(path, "size"),
+        modification = path and lfs.attributes(path, "modification"), state = releaseState(db) }
+end
+
+-- The menu's database state: only a stat, never an open.
+local function databaseState(path)
+    if not (path and lfs.attributes(path, "mode") == "file") then return "missing" end
+    local seen = database_seen
+    if seen and seen.path == path and seen.size == lfs.attributes(path, "size")
+            and seen.modification == lfs.attributes(path, "modification") then
+        return seen.state
+    end
+    return "not checked"
 end
 
 function DPD:ensureLookup()
@@ -187,7 +273,9 @@ function DPD:ensureLookup()
     assert(not self.stopped, "Digital Pāḷi Dictionary is disabled until KOReader restarts.")
     if self.lookup then return self.lookup end
     local started = time.now()
-    local db = DB.new(self.settings.db_path)
+    local ok, db = pcall(DB.new, self.settings.db_path)
+    noteDatabase(self.settings.db_path, ok and db)
+    if not ok then error(db, 0) end
     self.db, self.lookup = db, Lookup.new(db)
     logger.dbg("DPD open ms:", time.to_ms(time.since(started)), "journal:", db.journal_mode,
         "release:", db.info.dpd_release_version)
@@ -263,6 +351,7 @@ function DPD:showModel(model, options)
     local Viewer = self.viewer_class or require("ui/dpd_viewer")
     viewer = Viewer:new{
         model = model, lookup = self.lookup, lookup_ms = lookup_ms, normal_callback = options.normal_callback,
+        normal_word = options.normal_word,
         -- Without text, the edit is of this popup's own lookup: what was selected.
         -- A child's edit replaces only the child; a view opened from an entry
         -- passes itself as the parent of its edit.
@@ -484,6 +573,7 @@ function DPD:showId(text, options)
         model.original, model.original_clean = text, text
         local shown = self:showModel(model, {
             -- Other dictionaries know the word (dhamma), not DPD's ID or homonym number.
+            normal_word = model.query:gsub(" %d[%d.]*$", ""),
             normal_callback = self.ui.dictionary and function(current)
                 if current == text then current = model.query:gsub(" %d[%d.]*$", "") end
                 self:normalLookup(current, true)
@@ -526,7 +616,7 @@ function DPD:showDictionarySearch(word, options)
             normal_callback = self.ui.dictionary and function(current) self:normalLookup(current, true) end or nil,
             edit_callback = options.edit_callback, parent = options.parent,
         })
-        if shown and model.found then self:getHistory():add(model.query, "dictionaries") end
+        if shown and model.found then self:getHistory():add(model.query, "dictionaries", options.draft) end
         return shown
     end)
     if not ok then
@@ -666,12 +756,94 @@ function DPD:directEnabled()
     return self.settings.direct_lookup
 end
 
+-- Two checkboxes: the default for every book, and this book's own choice,
+-- which follows the default until it is changed here.
+function DPD:longPressItems()
+    local items = { { text = "Open DPD on long-press by default",
+        checked_func = function() return self.settings.direct_lookup end,
+        help_text = "When on, long-press on a word opens DPD. When off, your normal dictionary opens, "
+            .. "with a DPD button. A book with its own setting below keeps it.",
+        callback = function()
+            self.settings.direct_lookup = not self.settings.direct_lookup
+            self:saveSettings()
+            self:syncDirectMode()
+        end } }
+    if self.ui.doc_settings then
+        items[2] = { text = "Open DPD on long-press in this book",
+            checked_func = function() return self:directEnabled() end,
+            help_text_func = function()
+                return (self:bookDirect() == nil and "This book follows the default."
+                    or "This book has its own setting; the default doesn't change it.")
+                    .. " Turn this off in an English book, whose short words can be Pāḷi forms too. "
+                    .. "Choosing the same as the default makes the book follow it again."
+            end,
+            callback = function() self:toggleBookDirect() end }
+    end
+    return items
+end
+
 function DPD:toggleBookDirect()
     local value = not self:directEnabled()
     -- Matching the global setting is no exception: the book follows it again.
     if value == self.settings.direct_lookup then self.ui.doc_settings:delSetting("dpd_direct_lookup")
     else self.ui.doc_settings:saveSetting("dpd_direct_lookup", value) end
     self:syncDirectMode()
+end
+
+-- Actions for Gesture manager, Profiles and Quick menus. They are registered
+-- even when the menu shows only a restart or a warning, so a gesture the
+-- reader set up still answers, with what that menu would show.
+function DPD:onDispatcherRegisterActions()
+    local Dispatcher = require("dispatcher")
+    Dispatcher:registerAction("dpd_look_up", { category = "none", event = "DPDLookUp",
+        title = "DPD: Look up a word", general = true })
+    Dispatcher:registerAction("dpd_search_dictionaries", { category = "none", event = "DPDSearchDictionaries",
+        title = "DPD: Search other dictionaries", general = true })
+    Dispatcher:registerAction("dpd_recent", { category = "none", event = "DPDShowRecent",
+        title = "DPD: Recent lookups", general = true })
+    Dispatcher:registerAction("dpd_toggle_book_long_press", { category = "none", event = "DPDToggleBookLongPress",
+        title = "DPD: Toggle long-press in this book", reader = true })
+end
+
+-- True after showing why the action can't run, as the menu would.
+function DPD:actionBlocked()
+    if self.restart_pending or Updater.restart_pending or Updater.broken then
+        self:askUpdateRestart()
+        return true
+    end
+    if self.stopped then
+        self:stoppedMessage()
+        return true
+    end
+    if self.unsupported then
+        self:message(self.unsupported)
+        return true
+    end
+end
+
+function DPD:onDPDLookUp()
+    if not self:actionBlocked() then self:inputLookup() end
+    return true
+end
+
+function DPD:onDPDSearchDictionaries()
+    if not self:actionBlocked() then self:inputLookup(false, nil, "dictionaries") end
+    return true
+end
+
+function DPD:onDPDShowRecent()
+    if not self:actionBlocked() then self:inputLookup(true) end
+    return true
+end
+
+-- A gesture has no checkbox to show the result, so say it.
+function DPD:onDPDToggleBookLongPress()
+    if not self.ui.doc_settings or self:actionBlocked() then return true end
+    self:toggleBookDirect()
+    local Notification = require("ui/widget/notification")
+    Notification:notify(self:directEnabled() and "Long-press opens DPD in this book."
+        or "Long-press opens your normal dictionary in this book.", Notification.SOURCE_DISPATCHER)
+    return true
 end
 
 -- Long-press falls back to the normal dictionary when DPD cannot open its
@@ -787,7 +959,11 @@ function DPD:suggest(text, mode)
 end
 
 function DPD:stoppedMessage()
-    self:message("Digital Pāḷi Dictionary is disabled until KOReader restarts.")
+    if Updater.restart_pending or Updater.broken then
+        self:askUpdateRestart()
+    else
+        self:message("Digital Pāḷi Dictionary is disabled until KOReader restarts.")
+    end
     return false
 end
 
@@ -908,12 +1084,13 @@ function DPD:chooseDatabase(on_selected, on_invalid, on_cancel)
             if not ok then return self:showDatabaseError(candidate,
                 "That file could not be opened as a DPD database. Choose the extracted dpd-mobile.db file.",
                 on_invalid and function() if not self.stopped then on_invalid(candidate) end end) end
+            noteDatabase(path, candidate)
             candidate:close()
             self:closeDatabase()
             self.settings.db_path = path
             self:saveSettings()
             if on_selected then on_selected()
-            else self:message("DPD database selected. DPD on word long-press is " .. (self:directEnabled() and "on." or "off.")) end
+            else self:message("DPD database selected. Long-press opens " .. (self:directEnabled() and "DPD." or "your normal dictionary.")) end
         end,
     }
     local plugin, onCloseWidget = self, chooser.onCloseWidget
@@ -946,14 +1123,30 @@ end
 function DPD:databaseStatus(on_dismiss)
     -- The menu outlives a stop; choosing another database can't undo that.
     if self.stopped then return self:stoppedMessage() end
+    -- The verdict first, in bold, then the file, then the checks behind it.
     local ok, result = pcall(function()
         self:ensureLookup()
-        local size = lfs.attributes(self.settings.db_path, "size") or 0
-        return "Digital Pāḷi Dictionary for KOReader " .. VERSION .. "\n\n" .. self.settings.db_path .. "\n"
-            .. string.format("%.1f MB", size / 1000000) .. "\nRelease: " .. (self.db.info.dpd_release_version or "unknown")
-            .. "\nSchema: " .. (self.db.info.db_schema_version or "unknown")
-            .. "\nCore columns: OK\nOpen: read-only\nJournal: " .. self.db.journal_mode
-            .. "\n\nTested with " .. require("dpd/db_compat").tested() .. ". Newer releases with the same core columns work."
+        local path = self.settings.db_path
+        local size = lfs.attributes(path, "size") or 0
+        local release = self.db.info.dpd_release_version or "release unknown"
+        local folder, file = path:match("^(.*)/([^/]+)$")
+        local tested = "Tested with " .. DBCompat.tested()
+        local verdict = ({
+            ready = { "Database ready", "DPD " .. release .. ", the release this plugin is tested with" },
+            ["newer release"] = { "Newer release, should work", "DPD " .. release .. ". " .. tested
+                .. "; newer releases with the same core columns work." },
+            ["older release"] = { "Older release, should work", "DPD " .. release .. ". " .. tested
+                .. "; older releases with the same core columns work, perhaps without some details." },
+            ["unknown release"] = { "Release unknown", "The file doesn't name its DPD release. " .. tested
+                .. "; it works when the core columns are OK." },
+        })[releaseState(self.db)]
+        return bold(verdict[1]) .. "\n" .. verdict[2]
+            .. "\n\n" .. (file or path) .. " · " .. (size >= 1e9 and string.format("%.2f GB", size / 1e9)
+                or string.format("%.1f MB", size / 1e6))
+            .. (folder and ("\n" .. folder) or "")
+            .. "\nSchema " .. (self.db.info.db_schema_version or "unknown") .. " · opened read-only"
+            .. "\nCore columns: OK · Journal: " .. self.db.journal_mode
+            .. "\n\nDigital Pāḷi Dictionary for KOReader " .. VERSION
     end)
     local dismissed = on_dismiss and function() UIManager:nextTick(function() on_dismiss(ok) end) end
     if ok then self:message(result, dismissed)
@@ -1024,7 +1217,10 @@ Dictionaries
 The buttons below the entry stay in place on every page. Other dictionaries opens the sources bundled with DPD; Back returns to the entry. A long article is read in parts. In the DPD menu, hold a name under Other dictionaries for its full title and author. KOReader dictionary hands the word to your usual dictionary and closes the current DPD popup. Unknown words selected in a book fall back automatically; very long Pāḷi words first show the parts DPD knows, with KOReader dictionary below.
 
 Setup
-Use Choose database file for the extracted dpd-mobile.db. Database status checks it. Display and input holds the popup font size, which applies to the next popup. DPD on long-press in this book turns long-press lookup on or off for one book, such as an English one.]] })
+Database → Choose database file selects the extracted dpd-mobile.db, and Database → Database status checks it. Display and input holds the popup font size, which applies to the next popup. Open DPD on long-press by default turns DPD lookup on long-press on or off; Open DPD on long-press in this book overrides it for one book, such as an English one.
+
+Updates
+Help → Check for updates installs a new version of the plugin over Wi-Fi, keeping your settings. The database is replaced by hand.]] })
 end
 
 function DPD:diagnosticsMenu()
@@ -1045,17 +1241,277 @@ function DPD:diagnosticsMenu()
 end
 
 function DPD:aboutLicenses()
+    -- dpd/about loads on first use: from the new files, or none after a failed restore.
+    if Updater.restart_pending or Updater.broken then return self:askUpdateRestart() end
     local TextViewer = require("ui/widget/textviewer")
     UIManager:show(TextViewer:new{title="About & licenses",
-        text=require("dpd/about").text(self.db and self.db.info)})
+        text=require("dpd/about").text(self.db and self.db.info, self:databaseDictionaries())})
 end
 
 function DPD:helpMenu()
-    return { text = "Help", sub_item_table = {
+    return { text_func = function()
+            local available = self.settings.update_available
+            return Updater.isNewer(available, VERSION) and ("Help · " .. available .. " available") or "Help"
+        end, sub_item_table = {
         { text = "DPD help", callback = function() self:showHelp() end },
         { text = "About & licenses", callback = function() self:aboutLicenses() end, separator = true },
+        { text_func = function()
+                local available = self.settings.update_available
+                if Updater.isNewer(available, VERSION) then return "Check for updates (" .. available .. " available)" end
+                return "Check for updates"
+            end,
+            callback = function() self:checkForUpdates() end },
+        { text = "Check for updates automatically", checked_func = function() return self.settings.update_auto end,
+            help_text = "About once a week, when Wi-Fi is already on, DPD asks GitHub for its latest version and "
+                .. "says when there is a new one. It never turns Wi-Fi on or installs anything by itself.",
+            callback = function()
+                self.settings.update_auto = not self.settings.update_auto or nil
+                self:saveSettings()
+                if self.settings.update_auto then self:scheduleUpdateCheck()
+                else self:cancelUpdateCheck(true) end
+            end, separator = true },
         self:diagnosticsMenu(),
     } }
+end
+
+-- Updates ------------------------------------------------------------------
+
+function DPD:askUpdateRestart()
+    if Updater.broken then return self:message(bold("Update not finished") .. "\n"
+        .. Updater.broken:gsub("^%l", string.upper) .. ".") end
+    local Device = require("device")
+    UIManager:askForRestart(bold("Plugin " .. Updater.restart_pending .. " installed") .. "\n"
+        .. (Device:canRestart() and "DPD lookups are off until KOReader restarts."
+            or "Close KOReader and open it again to use it. DPD lookups are off until then."))
+end
+
+function DPD:checkForUpdates()
+    if self.stopped then return end
+    if Updater.restart_pending or Updater.broken then return self:askUpdateRestart() end
+    -- runWhenConnected, not runWhenOnline: isOnline's DNS probe fails behind ad
+    -- blockers and captive portals, and runWhenOnline then never runs the check.
+    require("ui/network/manager"):runWhenConnected(function() self:runUpdateCheck() end)
+end
+
+-- Paint the progress message before starting the download.
+function DPD:busyMessage(text)
+    local message = InfoMessage:new{ text = text }
+    UIManager:show(message)
+    UIManager:forceRePaint()
+    return message
+end
+
+-- Socket timeouts do not bound DNS or slowly arriving HTTP headers.
+function DPD:updateTask(task, busy, timeout)
+    local timed_out
+    local deadline = function()
+        timed_out = true
+        if busy.dismiss_callback then busy.dismiss_callback() end
+    end
+    UIManager:scheduleIn(timeout, deadline)
+    local completed, result, err = require("ui/trapper"):dismissableRunInSubprocess(task, busy)
+    UIManager:unschedule(deadline)
+    busy.dismiss_callback = nil
+    if self.stopped then return nil, "cancelled" end
+    if not completed then return nil, timed_out and "the connection timed out" or "cancelled" end
+    return result, err or (not result and "the update task failed" or nil)
+end
+
+function DPD:runUpdateCheck()
+    if self.stopped then return end
+    local Trapper = require("ui/trapper")
+    if not Trapper:isWrapped() then return Trapper:wrap(function() self:runUpdateCheck() end) end
+    -- Wi-Fi may have taken a while: an update may have been installed meanwhile.
+    if Updater.restart_pending or Updater.broken then return self:askUpdateRestart() end
+    local busy = self:busyMessage("Checking for updates…")
+    local release, err = self:updateTask(Updater.check, busy, 30)
+    local database
+    if release and not (Updater.restart_pending or Updater.broken) then
+        database, err = self:databaseCheck(function() return self:updateTask(Updater.latestDatabase, busy, 30) end)
+    end
+    UIManager:close(busy)
+    if err == "cancelled" then return end
+    if Updater.restart_pending or Updater.broken then return self:askUpdateRestart() end
+    if not release then
+        return self:message(bold("Couldn't check for plugin updates") .. "\n" .. err:gsub("^%l", string.upper) .. ".")
+    end
+    self.settings.update_checked = os.time()
+    self.settings.update_available = Updater.isNewer(release.version, VERSION) and release.version or nil
+    self:saveSettings()
+    if self.settings.update_available then return self:showUpdate(release, database) end
+    local text = bold(database.verdict) .. "\nPlugin " .. VERSION .. " · up to date\n" .. database.line
+        .. (database.advice and ("\n\n" .. database.advice) or "")
+    if not database.page then return self:message(text) end
+    local link = self:releaseLinkButton(database.page, "Database")
+    UIManager:show(require("ui/widget/confirmbox"):new{ text = text, icon = "notice-info",
+        ok_text = link.text, ok_callback = link.callback, cancel_text = "Close" })
+end
+
+-- What the update check says about the database: verdict, line, advice, with the
+-- release page to offer when the database is out of date or missing. The
+-- plugin never replaces the database: it is large and installed by hand.
+function DPD:databaseCheck(fetch_latest)
+    local ok = pcall(self.ensureLookup, self)
+    local installed = ok and self.db and self.db.info.dpd_release_version
+    if ok and self.db and not Updater.parseVersion(installed) then
+        return { verdict = "Plugin up to date", line = "Database · couldn't check its version",
+            advice = "See Database status." }
+    end
+    if not installed then
+        local path = self.settings.db_path
+        if path and lfs.attributes(path, "mode") == "file" then
+            return { verdict = "Plugin up to date", line = "Database · couldn't open it to check its version",
+                advice = "See Database status." }
+        end
+    end
+    if not installed then
+        return { verdict = "No database installed", line = "Database · not installed", page = Updater.database_page,
+            advice = "Download dpd-mobile-db.zip from DPD's latest release, extract it and copy dpd-mobile.db "
+                .. "to koreader/data/dpd/." }
+    end
+    local latest, err = (fetch_latest or Updater.latestDatabase)()
+    if err == "cancelled" then return nil, err end
+    local page = latest and latest.page or Updater.database_page
+    if not latest then
+        return { verdict = "Plugin up to date", line = "Database " .. installed .. " · couldn't check: " .. err }
+    end
+    if Updater.isNewer(latest.tag, installed) then
+        return { verdict = "Database update available", line = "Database " .. installed .. " · " .. latest.tag .. " is out",
+            newer = true, page = page, advice = "Download dpd-mobile-db.zip from its release page, extract it "
+                .. "and replace dpd-mobile.db." }
+    end
+    return { verdict = "Up to date", line = "Database " .. installed .. " · up to date" }
+end
+
+-- Android and desktops open the page in a browser; e-readers without one
+-- show it as a QR code for a phone. `what` names the page when a dialog
+-- offers both the plugin's and the database's.
+function DPD:releaseLinkButton(page, what)
+    local Device = require("device")
+    if Device:canOpenLink() then
+        return { text = what and (what .. " release page") or "Open release page",
+            callback = function() Device:openLink(page) end }
+    end
+    return { text = what and (what .. " QR code") or "Show QR code", callback = function()
+        UIManager:show(require("ui/widget/qrmessage"):new{ text = page,
+            width = Device.screen:getWidth(), height = Device.screen:getHeight() })
+    end }
+end
+
+local function byHand(release, label)
+    return "To install by hand, download " .. release.zip_name .. " from the release page"
+        .. (label and (" (" .. label .. ")") or "")
+        .. " and replace koreader/plugins/dpd.koplugin with the folder inside it."
+end
+
+function DPD:showUpdate(release, database)
+    local TextViewer = require("ui/widget/textviewer")
+    local viewer
+    local close = { text = "Close", callback = function() UIManager:close(viewer) end }
+    local link = self:releaseLinkButton(release.page, "Plugin")
+    local install = release.zip_url ~= nil and release.sums_url ~= nil
+    local buttons = { { link }, { close, { text = "Install", enabled = install,
+        callback = function() UIManager:close(viewer); self:installUpdate(release) end } } }
+    if database.page then buttons[1][2] = self:releaseLinkButton(database.page, "Database") end
+    viewer = TextViewer:new{
+        title = "Plugin " .. release.version .. " is available",
+        text = "Plugin " .. VERSION .. " → " .. release.version .. "\n" .. database.line
+            .. (database.newer and ", installed by hand" or "")
+            .. (database.advice and ("\n\n" .. database.advice) or "")
+            .. (release.notes and ("\n\n" .. release.notes) or "")
+            .. (install and "\n\nInstall keeps your settings and database. KOReader then needs a restart." or "")
+            .. "\n\n" .. byHand(release, link.text),
+        buttons_table = buttons,
+    }
+    UIManager:show(viewer)
+end
+
+function DPD:installUpdate(release)
+    if self.stopped then return end
+    local Trapper = require("ui/trapper")
+    if not Trapper:isWrapped() then return Trapper:wrap(function() self:installUpdate(release) end) end
+    if Updater.restart_pending or Updater.broken then return self:askUpdateRestart() end
+    local busy = self:busyMessage("Installing plugin " .. release.version .. "…")
+    local ok, err, broken = Updater.install(release, self.path, DataStorage:getDataDir() .. "/data/dpd",
+        self.settings.db_path, function(task) return self:updateTask(task, busy, 180) end)
+    UIManager:close(busy)
+    if err == "cancelled" then return end
+    -- Stop lookups: they would load the new files into the old code, or, if
+    -- the old folder couldn't be put back, find no files at all.
+    if ok or broken then
+        for instance in pairs(running) do instance:stopPlugin() end
+        self:stopPlugin()
+    end
+    if not ok then
+        logger.warn("DPD: update failed:", err)
+        Diag.log("Update failed:", err)
+        local link = self:releaseLinkButton(release.page, "Plugin")
+        return UIManager:show(require("ui/widget/confirmbox"):new{
+            icon = "notice-warning",
+            text = bold(broken and "Update not finished" or ("Couldn't install " .. release.version)) .. "\n"
+                .. err:gsub("^%l", string.upper) .. "."
+                .. (broken and "" or (" Plugin " .. VERSION .. " is unchanged."))
+                .. "\n\n" .. byHand(release) .. " Your settings and database are kept.",
+            ok_text = link.text, ok_callback = link.callback, cancel_text = "Close",
+        })
+    end
+    Diag.log("Installed update", release.version)
+    self.settings.update_available = nil
+    self:saveSettings()
+    self:askUpdateRestart()
+end
+
+-- Opt-in, at most weekly and only on an existing connection: never turns
+-- Wi-Fi on, prompts or installs, and runs in a child process so a slow
+-- network never holds up reading. A newer version is announced once, and the
+-- Help menu keeps showing it.
+function DPD:scheduleUpdateCheck()
+    local settings = self.settings
+    if self.stopped or self.unsupported or Updater.restart_pending or Updater.broken then return end
+    if not settings.update_auto or Updater.auto_checked or Updater.auto_pending then return end
+    if os.time() - (tonumber(settings.update_checked) or 0) < Updater.check_interval then return end
+    local NetworkMgr = require("ui/network/manager")
+    if not NetworkMgr:isConnected() then return end
+    local pending = { owner = self }
+    Updater.auto_pending = pending
+    -- Wait until opening the book or File Manager has settled.
+    pending.callback = function()
+        if Updater.auto_pending ~= pending then return end
+        Updater.auto_pending = nil
+        if self.stopped or not settings.update_auto or Updater.restart_pending or Updater.broken
+            or not NetworkMgr:isConnected() then return end
+        if os.time() - (tonumber(settings.update_checked) or 0) < Updater.check_interval then return end
+        -- Reserve the session only when a request actually starts. Losing
+        -- Wi-Fi or closing a book during the delay must allow a later retry.
+        Updater.auto_checked = true
+        local launched = Updater.checkInBackground(function(version)
+            if not settings.update_auto then
+                Updater.auto_checked = nil
+                return
+            end
+            if not version or Updater.restart_pending or Updater.broken then return end
+            settings.update_checked = os.time()
+            settings.update_available = Updater.isNewer(version, VERSION) and version or nil
+            if settings.update_available and settings.update_notified ~= version then
+                settings.update_notified = version
+                local Notification = require("ui/widget/notification")
+                -- One line: a notification cuts longer text.
+                Notification:notify("DPD plugin " .. version .. " is available: see Help.",
+                    Notification.SOURCE_ALWAYS_SHOW)
+            end
+            G_reader_settings:saveSetting("dpd", settings)
+        end)
+        if not launched then Updater.auto_checked = nil end
+    end
+    UIManager:scheduleIn(15, pending.callback)
+end
+
+function DPD:cancelUpdateCheck(all)
+    local pending = Updater.auto_pending
+    if pending and (all or pending.owner == self) then
+        Updater.auto_pending = nil
+        UIManager:unschedule(pending.callback)
+    end
 end
 
 function DPD:displayMenu()
@@ -1078,7 +1534,15 @@ end
 
 function DPD:addToMainMenu(items)
     local entries
-    if self.unsupported then
+    -- The instance that installed the update stops without a restart_pending
+    -- of its own, and the menu is rebuilt after it.
+    if self.restart_pending or Updater.restart_pending or Updater.broken then
+        items.dpd = { text = "Digital Pāḷi Dictionary", sorting_hint = "search", sub_item_table = {
+            { text = Updater.broken and "Restore DPD after the failed update" or "Restart KOReader to finish the update",
+                callback = function() self:askUpdateRestart() end },
+        } }
+        return
+    elseif self.unsupported then
         entries = { { text = "Needs a newer KOReader", callback = function() self:message(self.unsupported) end } }
     else
         entries = {
@@ -1091,25 +1555,17 @@ function DPD:addToMainMenu(items)
                 { text = "Clear recent lookups", enabled_func = function() return #self:getHistory():list() > 0 end,
                     callback = function() self:clearHistory() end },
             }, separator = true },
-            { text = "Choose database file", callback = function() self:chooseDatabase() end },
-            { text = "Database status", callback = function() self:databaseStatus() end, separator = true },
-            self:displayMenu(),
-            self:dictionariesMenu(),
-            { text = "DPD on word long-press", checked_func = function() return self.settings.direct_lookup end,
-                callback = function()
-                    self.settings.direct_lookup = not self.settings.direct_lookup
-                    self:saveSettings()
-                    self:syncDirectMode()
-                end, separator = not self.ui.doc_settings },
         }
-        if self.ui.doc_settings then
-            entries[#entries + 1] = { text = "DPD on long-press in this book", checked_func = function()
-                    return self:directEnabled()
-                end,
-                help_text = "Overrides DPD on word long-press for this book only, for example an English "
-                    .. "book. Choosing the same as that setting makes the book follow it again.",
-                callback = function() self:toggleBookDirect() end, separator = true }
-        end
+        for _, item in ipairs(self:longPressItems()) do entries[#entries + 1] = item end
+        entries[#entries + 1] = self:displayMenu()
+        entries[#entries + 1] = self:dictionariesMenu()
+        entries[#entries + 1] = { text_func = function() return "Database: " .. databaseState(self.settings.db_path) end,
+            separator = true, sub_item_table = {
+                { text = "Database status", callback = function() self:databaseStatus() end },
+                { text = "Choose database file", callback = function() self:chooseDatabase() end },
+            } }
+        -- Lookups, then settings, then setup and help.
+        entries[#entries - 1].separator = true
     end
     -- Help, About and Diagnostics in one place, below the settings.
     entries[#entries + 1] = self:helpMenu()
@@ -1126,7 +1582,13 @@ function DPD:closeDatabase()
     self.db, self.lookup = nil, nil
 end
 
-function DPD:onSuspend() self:closeDatabase() end
+function DPD:onSuspend()
+    self:cancelUpdateCheck()
+    self:closeDatabase()
+end
+function DPD:onResume() self:scheduleUpdateCheck() end
+function DPD:onNetworkConnected() self:scheduleUpdateCheck() end
+function DPD:onNetworkDisconnected() self:cancelUpdateCheck() end
 function DPD:removeEntryPoints()
     if self.ui.highlight and type(self.ui.highlight.removeFromHighlightDialog) == "function" then
         self.ui.highlight:removeFromHighlightDialog("06_dpd")
@@ -1139,6 +1601,8 @@ function DPD:removeEntryPoints()
 end
 
 function DPD:onCloseDocument()
+    running[self] = nil
+    self:cancelUpdateCheck()
     if self.stopped then return end
     self.stopped = true
     Diag.log("Plugin stopped")

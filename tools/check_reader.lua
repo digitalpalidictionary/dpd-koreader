@@ -86,8 +86,16 @@ plugin.settings.direct_lookup=false; plugin:syncDirectMode()
 assert(reader.dictionary.onLookupWord==require("apps/reader/modules/readerdictionary").onLookupWord)
 -- Plugin management stops the instance in-session: its buttons must go and no
 -- remaining entry point may reopen the database before KOReader restarts.
-plugin:stopPlugin(); flush()
+plugin.settings.direct_lookup = true; plugin:syncDirectMode()
+assert(require("pluginloader"):stopPluginInstanceByName("dpd")); flush()
 assert(not reader.dictionary._dict_buttons.dpd and not reader.highlight._highlight_buttons["06_dpd"])
 assert(not plugin:showLookup("pacchima") and not plugin.db and not plugin.viewer)
 flush()
-print("PASS: EPUB opening, real plugin discovery, Search menu placement, ReaderDictionary direct lookup/fallback, dictionary-popup button and in-session stop")
+local dictionary_lookup, book_direct = reader.dictionary.onLookupWord, plugin:bookDirect()
+for _ = 1, 2 do
+    require("dispatcher"):execute({ dpd_toggle_book_long_press = true }); flush()
+    assert(plugin:bookDirect() == book_direct and not plugin.direct and not plugin.db
+        and reader.dictionary.onLookupWord == dictionary_lookup,
+        "A stopped plugin's gesture must not change the book or reinstall its lookup wrapper")
+end
+print("PASS: EPUB opening, real plugin discovery, Search menu placement, ReaderDictionary direct lookup/fallback, dictionary-popup button, in-session stop and stopped gestures")

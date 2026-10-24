@@ -327,7 +327,7 @@ describe("reported lookup routing", function()
             assert.equal(1, #model.deconstructions)
             local html = Render.render(model, Navigation.new(model):current())
             assert.is_truthy(html:find("Headwords",1,true))
-            assert.is_truthy(html:find("Analyses",1,true))
+            assert.is_truthy(html:find("possible split",1,true))
             -- The headword part repeats the definition above; only iti is new.
             assert.same({false, true}, model.deconstructions[1].unique)
             assert.is_true(model.deconstructions[1].has_new)

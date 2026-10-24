@@ -112,6 +112,26 @@ describe("lookup dialog", function()
         assert.is_nil(reopened)
     end)
 
+    it("replays complete queries and dictionary drafts regardless of current Velthuis", function()
+        local long = "muttakarīsacammaaṭṭhinhārukhaṇḍakheḷasiṅghāṇikālohitappabhutinānākuṇapajātaṃ"
+        assert.is_true(#long > 100)
+        for _, velthuis in ipairs({ false, true }) do
+            for _, item in ipairs({
+                { query = "vacūm", mode = "dictionaries", draft = "vacuum" },
+                { query = long, mode = "pali" },
+            }) do
+                local history = require("dpd/history").new({})
+                history:add(item.query, item.mode, item.draft)
+                local got
+                local dialog = require("ui/dpd_input").show{settings={velthuis=velthuis},history=history,
+                    on_lookup=function(q,m,d) got={query=q,mode=m,draft=d} end}
+                action(dialog,"Recent")
+                shown.item_table[1].callback()
+                assert.same(item,got)
+            end
+        end
+    end)
+
     it("releases the Recent owner once on dismissal or selection, without clearing a newer dialog", function()
         local Input = require("ui/dpd_input")
         local history = require("dpd/history").new({history={{query="dhamma",mode="pali"}}})

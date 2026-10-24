@@ -1,0 +1,62 @@
+name: Bug report
+description: Something in the DPD plugin doesn't work or looks wrong.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Setup problems, such as DPD not opening or not finding its database, often have a fix in the [troubleshooting list](https://github.com/digitalpalidictionary/dpd-koreader/blob/main/docs/USAGE.md#troubleshooting).
+
+        Issues are public, so remove anything you'd rather not share from logs and screenshots before posting.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The word you long-pressed or searched, what you did, what you expected and what you saw. Screenshots help, especially for layout problems.
+      placeholder: Long-pressed "bhikkhave" in an EPUB of the Majjhima Nikāya. KOReader's own dictionary opened instead of DPD.
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostic-log
+    attributes:
+      label: DPD diagnostic log
+      description: |
+        The most useful thing to attach, on any device:
+        1. In the DPD menu (**Search → Digital Pāḷi Dictionary**), turn on **Help → Diagnostics → Write diagnostic log**. DPD shows where it writes the log.
+        2. Repeat what went wrong. If it happens when KOReader starts, restart KOReader first.
+        3. Attach that `dpd-debug.log` file, or a screenshot of **Help → Diagnostics → Show diagnostic log**.
+        4. Turn the log off again.
+
+        Each session in the log starts with the plugin version, KOReader version and device. The log also records the words you looked up and the links you tapped.
+      placeholder: Drag the log file or a screenshot here.
+    validations:
+      required: false
+
+  - type: textarea
+    id: crash-log
+    attributes:
+      label: KOReader's crash.log (if KOReader closed or froze, or DPD showed an error)
+      description: |
+        KOReader writes DPD's errors here even when the diagnostic log is off. In KOReader's main menu (≡), open **Help → Report a bug**: it shows where `crash.log` is. On Android, opening it is what saves the log, so do it soon after the problem.
+
+        Copy the file from your device, for example over USB:
+        * Kindle: `koreader/crash.log`
+        * Kobo: `.adds/koreader/crash.log` (a hidden folder; in a Mac's Finder, press Cmd+Shift+. to show it)
+        * PocketBook: `applications/koreader/crash.log`
+        * Android: the path **Report a bug** shows, with a file manager or over USB
+
+        It can include the names and paths of books you opened. Attach the file, or paste the lines from around the time of the problem.
+      placeholder: Drag the file here, or paste the lines.
+    validations:
+      required: false
+
+  - type: input
+    id: versions
+    attributes:
+      label: Plugin version, KOReader version and device
+      description: Not needed if you attached the diagnostic log. The plugin's version is in **Help → About & licenses** in the DPD menu; KOReader's version and your device are in KOReader's **Help → Report a bug**.
+      placeholder: e.g. DPD 0.3.0, KOReader v2026.07.1, Kindle Paperwhite 12th generation
+    validations:
+      required: false

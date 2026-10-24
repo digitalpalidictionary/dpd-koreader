@@ -6,6 +6,7 @@ local entries = {
     { id = 2, dict_id = "cpd", word = "kamma", word_fuzzy = "kama", html = "<?xml version='1.0'?><article><h2><b>kamma</b></h2>, <i>n.</i> work-<br/>ing<br/>deed</article>" },
     { id = 3, dict_id = "nyanatiloka", word = "kamma", word_fuzzy = "kama", html = "<p>action</p>" },
     { id = 4, dict_id = "mw", word = "karman", word_fuzzy = "karman", html = "<html><head><title>x</title></head><body><p><span class=\"sdata\">karman</span> <span class=\"record-id\">[ID=1]</span><a href=\"https://x\">scan</a></p></body></html>" },
+    { id = 5, dict_id = "zz", word = "kamma", word_fuzzy = "kama", html = "<p>deed</p>" },
 }
 
 local function fake()
@@ -15,10 +16,12 @@ local function fake()
         self.params[#self.params + 1] = p
         if sql:find("SELECT 1 FROM dict_meta", 1, true) then return self.empty and {} or { { 1 } } end
         if sql:find("FROM dict_meta", 1, true) then
-            return { { dict_id = "mw", name = "MW", author = "Monier-Williams", entry_count = 1 },
+            local rows = { { dict_id = "mw", name = "MW", author = "Monier-Williams", entry_count = 1 },
                 { dict_id = "cpd", name = "CPD", author = "Trenckner", entry_count = 1 },
                 { dict_id = "dppn", name = "DPPN", author = "Malalasekera", entry_count = 1 },
                 { dict_id = "nyanatiloka", name = "Nyanatiloka", entry_count = 1 } }
+            for _, row in ipairs(self.extra or {}) do rows[#rows + 1] = row end
+            return rows
         end
         local out = {}
         if sql:find("WHERE id = ?", 1, true) then
@@ -58,11 +61,58 @@ describe("other dictionaries", function()
         function db:query() error("no such table: dict_meta") end
         assert.is_false(Dictionaries.new(db):available())
     end)
-    it("lists dictionaries in a fixed order and defaults to DPPN, CPD, PTS and Nyanatiloka", function()
+    it("lists the database's dictionaries, known ones in a fixed order and others after them by name", function()
         local ids = {}
         for _, d in ipairs(Dictionaries.new(fake()):list()) do ids[#ids + 1] = d.id end
         assert.same({ "dppn", "cpd", "nyanatiloka", "mw" }, ids)
-        assert.same({ "dppn", "cpd", "pts", "nyanatiloka" }, Dictionaries.defaults)
+        local db = fake()
+        db.extra = { { dict_id = "zz", name = "Zed", entry_count = 1 }, { dict_id = "aa", name = "Alpha", entry_count = 1 } }
+        local reader = Dictionaries.new(db)
+        ids = {}
+        for _, d in ipairs(reader:list()) do ids[#ids + 1] = d.id end
+        assert.same({ "dppn", "cpd", "nyanatiloka", "mw", "aa", "zz" }, ids)
+        -- Read once per database.
+        local reads = #db.queries
+        reader:list()
+        assert.equal(reads, #db.queries)
+    end)
+
+    it("turns on every dictionary but PEU, the Sanskrit ones and WordNet, including new ones", function()
+        assert.same({ "dppn", "cpd", "pts", "nyanatiloka" }, Dictionaries.enabled(Dictionaries.order))
+        assert.same({ "new" }, Dictionaries.enabled({ "new", "mw" }))
+        assert.same({ "mw" }, Dictionaries.enabled({ "new", "mw" }, { "new" }))
+        local db = fake()
+        db.extra = { { dict_id = "zz", name = "Zed", entry_count = 1 } }
+        local ids = {}
+        for _, group in ipairs(Dictionaries.new(db):lookup({ "kamma" })) do ids[#ids + 1] = group.id end
+        assert.same({ "cpd", "nyanatiloka", "zz" }, ids)
+    end)
+
+    it("migrates every public snapshot dictionary choice, including PTS and an empty selection", function()
+        local settings = { dictionaries = { "mw" } }
+        Dictionaries.convertSettings(settings)
+        assert.is_nil(settings.dictionaries)
+        assert.same({ "dppn", "cpd", "pts", "nyanatiloka", "peu", "bhs", "apte", "wordnet" },
+            settings.dictionaries_off)
+        assert.same({ "mw" }, Dictionaries.enabled(Dictionaries.order, settings.dictionaries_off))
+        settings = { dictionaries = {} }
+        Dictionaries.convertSettings(settings)
+        assert.same(Dictionaries.order, settings.dictionaries_off)
+        assert.same({}, Dictionaries.enabled(Dictionaries.order, settings.dictionaries_off))
+    end)
+
+    it("keeps existing disabled settings and leaves new installations unchanged", function()
+        for _, off in ipairs({ {}, { "pts" } }) do
+            local settings = { dictionaries = { "mw" }, dictionaries_off = off }
+            Dictionaries.convertSettings(settings)
+            assert.is_nil(settings.dictionaries)
+            assert.equal(off, settings.dictionaries_off)
+            Dictionaries.convertSettings(settings)
+            assert.equal(off, settings.dictionaries_off)
+        end
+        local settings = {}
+        Dictionaries.convertSettings(settings)
+        assert.same({}, settings)
     end)
 
     it("finds keys as is, then capitalized, binding dict_id in every query", function()
@@ -366,8 +416,8 @@ describe("other dictionaries", function()
         assert.truthy(view:find("<p>part two</p>", 1, true))
         assert.truthy(view:find("dpd:dict-prev/1/2", 1, true))
         assert.truthy(view:find("dpd:dict-next/1/2", 1, true))
-        assert.truthy(view:find("Part 2", 1, true))
-        assert.truthy(view:find("Part 2 · 50%", 1, true))
+        assert.truthy(view:find('<p class="header">Part 2</p>', 1, true))
+        assert.is_nil(view:find("50%", 1, true))
         local _, previous = view:gsub('href="dpd:dict%-prev/1/2"', "")
         local _, next_part = view:gsub('href="dpd:dict%-next/1/2"', "")
         -- Previous part above and below the article; Next part only below it.
@@ -392,6 +442,28 @@ describe("other dictionaries", function()
         view = Render.render(value, state)
         assert.truthy(view:find("2&nbsp;approximate · limited&nbsp;search", 1, true))
         assert.is_nil(view:find("2&nbsp;entries", 1, true))
+    end)
+
+    it("labels multipart articles without estimating progress or a total", function()
+        local value = { query = "kamma", dictionaries = { groups = {
+            { id = "cpd", entries = { { id = 1, word = "kamma" } } },
+        } } }
+        for _, case in ipairs({
+            { part = 1, has_more = true, label = "Part 1" },
+            { part = 2, has_more = true, label = "Part 2" },
+            { part = 3, has_more = false, label = "Part 3 · last part" },
+            { part = 1, has_more = false },
+        }) do
+            local page = { open = true, html = "<p>article</p>", part = case.part,
+                has_more = case.has_more, next_offset = 32000, total = 64000 }
+            local view = Render.render(value, { analyses = {}, dictionary_pages = { ["1/1"] = page } })
+            if case.label then
+                assert.truthy(view:find('<p class="header">' .. case.label .. '</p>', 1, true))
+            else
+                assert.is_nil(view:find('<p class="header">Part ', 1, true))
+            end
+            assert.is_nil(view:find("50%", 1, true))
+        end
     end)
 
     -- Fields as DPD v0.4.20260926 writes them.

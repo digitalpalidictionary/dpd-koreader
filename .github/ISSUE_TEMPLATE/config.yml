@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Troubleshooting
+    url: https://github.com/digitalpalidictionary/dpd-koreader/blob/main/docs/USAGE.md#troubleshooting
+    about: Fixes for common problems, such as DPD not opening or not finding its database.
+  - name: A mistake in a dictionary entry
+    url: https://github.com/digitalpalidictionary/dpd-db/issues
+    about: If dpdict.net shows the same mistake, report it to DPD itself. If only the plugin shows it, file a bug report here.

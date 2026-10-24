@@ -274,10 +274,10 @@ local function plan()
     add(article("article-kr-mw", "dpd:dict-entry/"))
     add(article("article-kr-mw-next", "dpd:dict-next/"))
     local chosen
-    add(call(function() chosen = plugin.settings.dictionaries; plugin.settings.dictionaries = all_dictionaries end))
+    add(call(function() chosen = plugin.settings.dictionaries_off; plugin.settings.dictionaries_off = {} end))
     add(other("other-pacchima", "pacchima"))
     add(other("other-dhamma", "dhamma"))
-    add(call(function() plugin.settings.dictionaries = chosen end))
+    add(call(function() plugin.settings.dictionaries_off = chosen end))
     return tasks
 end
 
@@ -320,7 +320,7 @@ local function start(tries)
     write("INFO", "vocabulary", reader.vocabbuilder and ("on " .. tostring(vocabulary_was)) or "plugin off",
         "dictionaries " .. table.concat(plugin:enabledDictionaries(), ","))
     if not plugin.settings.direct_lookup then
-        return write("FAIL", "direct", "", "turn on DPD on word long-press")
+        return write("FAIL", "direct", "", "turn on Open DPD on long-press by default")
     end
     run(plan(), 1)
 end

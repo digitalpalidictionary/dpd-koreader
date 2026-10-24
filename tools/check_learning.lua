@@ -80,13 +80,17 @@ local function tapRendered(viewer, uri)
     error("MuPDF did not retain the rendered control: " .. uri)
 end
 local pan_checked = setmetatable({}, {__mode="k"})
-local function holdRendered(viewer, word, required_link)
+local function holdRendered(viewer, word, required_link, after_label)
     local box = viewer.scroll.htmlbox_widget
+    local label_page, label_line
     for number = 1, box.page_count do
         local links, lines = pageData(box, number)
-        for _, line in ipairs(lines) do
+        for line_number, line in ipairs(lines) do
             for _, glyph in ipairs(line) do
-                if type(glyph) == "table" and glyph.word == word then
+                if type(glyph) == "table" and glyph.word == after_label then
+                    label_page, label_line = number, line_number
+                end
+                if type(glyph) == "table" and glyph.word == word and (not after_label or label_page) then
                     local x, y = (glyph.x0+glyph.x1)/2, (glyph.y0+glyph.y1)/2
                     local linked = not required_link
                     if required_link then
@@ -107,7 +111,7 @@ local function holdRendered(viewer, word, required_link)
                         end
                         assert(viewer:handleEvent(Event:new("Gesture", {ges="hold_release",pos=position,time=time.now()})))
                         flush()
-                        return box
+                        return box, label_page and (number > label_page or line_number > label_line)
                     end
                 end
             end
@@ -251,7 +255,7 @@ viewer = popup(lookup:get("dhammassa"))
 frame = viewer.navigation:current()
 tapRendered(viewer, "dpd:sense/34626")
 assert(frame.details[34626].paradigm_kind == "Declension" and frame.details[34626].ipa_line)
-assert(viewer.scroll.html_body:find("<i>IPA:</i>", 1, true))
+assert(viewer.scroll.html_body:find('<td class="label">IPA</td>', 1, true))
 tapRendered(viewer, "dpd:detail-paradigm/34626")
 local paradigm_frame = viewer.navigation:current()
 local paradigm = paradigm_frame.model.paradigm
@@ -374,8 +378,10 @@ local key = "1/" .. largest_index
 tapRendered(viewer, "dpd:dict-entry/" .. key)
 local pages = dict_frame.dictionary_pages[key]
 assert(pages.open and pages.part == 1 and pages.has_more, "first part of a long article")
+assert(not viewer.action_buttons["dpd:dictionaries"] and not viewer.action_buttons["dpd:dict-prev/" .. key].enabled)
 screenshot("dictionaries-kamma-cpd")
-tapRendered(viewer, "dpd:dict-next/" .. key)
+showPage(viewer, math.ceil(viewer.scroll.htmlbox_widget.page_count/2))
+tapButton(viewer, "dpd:dict-next/" .. key)
 pages = dict_frame.dictionary_pages[key]
 assert(pages.part == 2 and pages.offset > 0)
 -- The new part opens at the entry's title.
@@ -383,15 +389,27 @@ local box = viewer.scroll.htmlbox_widget
 local title_seen = false
 for _, link in ipairs((pageData(box, box.page_number))) do title_seen = title_seen or link.uri == "dpd:dict-entry/" .. key end
 assert(title_seen, "next part starts at the entry title")
-tapRendered(viewer, "dpd:dict-prev/" .. key)
+tapButton(viewer, "dpd:dict-prev/" .. key)
 pages = dict_frame.dictionary_pages[key]
 assert(pages.part == 1 and pages.offset == 0)
 print(string.format("DICTIONARIES kamma: open + next + previous part of a %d-byte article %.0f ms", largest,
     time.to_ms(time.since(started_dict))))
 -- Opening another entry closes the first and frees its part, but keeps
 -- where it was: reopening resumes that part, and Previous part still works.
-tapRendered(viewer, "dpd:dict-next/" .. key)
+tapButton(viewer, "dpd:dict-next/" .. key)
 local part2_offset = dict_frame.dictionary_pages[key].offset
+showPage(viewer, math.ceil(viewer.scroll.htmlbox_widget.page_count/2))
+local reading_page = viewer.scroll.htmlbox_widget.page_number
+screenshot("dictionaries-kamma-cpd-mid-part")
+tapButton(viewer, "dpd:dict-entry/" .. key)
+assert(not dict_frame.dictionary_pages[key].open and not dict_frame.dictionary_pages[key].html)
+assert(viewer.scroll.htmlbox_widget.page_number == viewer:sectionPage("dpd:dict-entry/" .. key),
+    "Entries from mid-part returns to the collapsed heading")
+assert(not viewer.action_buttons["dpd:dict-next/" .. key] and not viewer.action_buttons["dpd:dictionaries"].enabled)
+tapRendered(viewer, "dpd:dict-entry/" .. key)
+assert(dict_frame.dictionary_pages[key].part == 2 and dict_frame.dictionary_pages[key].offset == part2_offset)
+assert(viewer.scroll.htmlbox_widget.page_number == reading_page,
+    "resuming restores the reading page of the remembered part")
 tapRendered(viewer, "dpd:dict-entry/2/1")
 pages = dict_frame.dictionary_pages[key]
 assert(dict_frame.dictionary_pages["2/1"].open and not pages.open and not pages.html, "one article at a time")
@@ -449,10 +467,11 @@ while true do
     local part = bib_frame.dictionary_pages["1/1"]
     assert(type(part.html) == "string" and #part.html < require("dpd/dictionaries").article_page * 2)
     if not part.has_more then assert(part.next_offset == bibliography.n); break end
-    tapRendered(viewer, "dpd:dict-next/1/1")
+    tapButton(viewer, "dpd:dict-next/1/1")
     parts = parts + 1
 end
-tapRendered(viewer, "dpd:dict-prev/1/1")
+assert(not viewer.action_buttons["dpd:dict-next/1/1"].enabled, "last part keeps a disabled Next button")
+tapButton(viewer, "dpd:dict-prev/1/1")
 assert(bib_frame.dictionary_pages["1/1"].part == parts - 1)
 assert(max_html < 40000 and max_pages < 25, max_html .. " bytes, " .. max_pages .. " pages")
 print(string.format("DICTIONARIES %s: %d bytes in %d parts, at most %d HTML bytes and %d screen pages, %.0f ms",
@@ -665,6 +684,24 @@ local dictionary = {onLookupWord=function(self, ...)
 end}
 local plugin = require("main"):new{ui={dictionary=dictionary,
     menu={registerToMainMenu=function() end}}}
+
+-- Long field words must reach the real popup selection callback intact,
+-- both on the label's line and after the Construction paragraph wraps.
+assert(plugin:showId("43028")); flush()
+local long_parent = assert(plugin.viewer)
+tapRendered(long_parent, "dpd:sense/43028")
+screenshot("long-fields-selection")
+holdRendered(long_parent, "paralokavajjabhayadassāvī,")
+local long_child = assert(plugin.viewer)
+assert(long_child ~= long_parent and long_child.model.query == "paralokavajjabhayadassāvī"
+    and #fallback_calls == 0, "Grammar must select the complete word, not an inserted break fragment")
+long_child:close(); flush()
+local _, wrapped = holdRendered(long_parent, "paralokavajjabhayadassāvine", nil, "Construction:")
+long_child = assert(plugin.viewer)
+assert(wrapped and long_child ~= long_parent and long_child.model.query == "paralokavajjabhayadassāvine"
+    and #fallback_calls == 0, "A wrapped Construction paragraph must retain complete selectable words")
+long_child:close(); long_parent:close(); flush()
+
 rss("baseline")
 assert(plugin:showLookup("buddhānussati", {close_callback=function() owner_closed=owner_closed+1 end}))
 flush()

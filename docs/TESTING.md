@@ -50,8 +50,8 @@ other devices, use the [checklist](#checks) below. It needs a clone of the
 [source repository](https://github.com/digitalpalidictionary/dpd-koreader): the plugin
 download has no `tools` folder. With KOReader's SSH server (with **Login
 without password** on) and HTTP inspector running on the device (tick the
-inspector's **Start on KOReader startup** once) and **DPD on word long-press**
-on, from your computer:
+inspector's **Start on KOReader startup** once) and **Open DPD on
+long-press by default** on, from your computer:
 
 ```sh
 python3 tools/kindle_check.py --install --host root@<device-ip>
@@ -103,7 +103,7 @@ which items you ran.
    result with its **Expect** line. Note any that differ.
 2. Tap **KOReader dictionary** from a DPD result. Close that dictionary; the
    highlight clears. Also check closing DPD itself.
-3. Turn off **DPD on word long-press**, long-press `pacchima`, and open DPD
+3. Turn off **Open DPD on long-press by default**, long-press `pacchima`, and open DPD
    with the dictionary's **DPD** button. Closing DPD returns to the dictionary
    underneath.
 4. Suspend and resume with a book open, then look up `pacchima` in the same
@@ -129,16 +129,26 @@ which items you ran.
 10. If your device lets you rotate with a popup open, expand a sense, scroll,
     rotate, and check that the popup fits with its expansions and page kept.
     Open a component, rotate back and test Back.
-11. If another plugin also changes dictionary lookup, turn DPD off and on a
+11. Before a release, install the previous release, open **Help → Check for
+    updates** and check the separate **Plugin** and **Database** lines. The
+    release-page buttons sit above **Close | Install**, with **Install** on
+    the right. A pending update also appears in the **Help** label. Tap
+    **Install** and restart. **Database status** and a lookup
+    work, and no `dpd.koplugin.previous` folder is left after the restart.
+12. If another plugin also changes dictionary lookup, turn DPD off and on a
     few times. Each time, open a DPD result and choose **KOReader
     dictionary**: it reaches the usual dictionary, not DPD again. The other
     plugin keeps working.
-12. Use DPD for a long session of at least 150 lookups, expanding senses and
+13. Use DPD for a long session of at least 150 lookups, expanding senses and
     details and using Back. Revisit earlier entries, suspend and resume, and
     reopen the book. Note any errors or slowdowns.
-13. At popup font sizes 16, 20 and 26, try `vajjakammappabhedanti`, large
+14. At popup font sizes 16, 20 and 26, try `vajjakammappabhedanti`, large
     grammar and variant groups and many expanded alternatives. Check
     wrapping, margins, reachable controls and scrolling in both orientations.
+    In an expanded sense, linked and plain construction words share a
+    baseline. Synonyms, antonyms and variants appear after the field table
+    and before the buttons; commentary and examples follow the buttons,
+    and the completion line stays last.
     At sizes 16 and 26, check that the popup stays on the page you tapped:
     - In `vajjakammappabhedanti`, open analyses 2–5, then expand and collapse
       the `akamma` sense in analysis 5 on a later page.
@@ -147,59 +157,69 @@ which items you ran.
     - Underlined words open entries; ▸/▾ rows expand in place.
     - A popup opened by holding a word shows a Back arrow that closes only
       that popup.
-14. Long-press a number in your own book: it's looked up as an ordinary word,
+15. Long-press a number in your own book: it's looked up as an ordinary word,
     not as a DPD ID.
-15. In **Look up a word**, compare suggestions for `dhamma`, pasted
+16. In **Look up a word**, compare suggestions for `dhamma`, pasted
     `“dhamma,”` and a word containing a soft hyphen. Compare `saṃ`, `saṁ` and `saŋ`. Switch to English, look up
     *meditation*, open a result and go Back. With Velthuis input on,
     `~naa.na` becomes `ñāṇa`, while English *aardvark* stays unchanged.
-16. In **Recent lookups**, each word appears once and moves to the top;
+17. In **Recent lookups**, each word appears once and moves to the top;
     opening root details, frequency or other dictionaries adds no entries.
     Check the clear and off controls.
-17. Tap quickly and repeatedly while a sense expands or an article opens. A
+18. Tap quickly and repeatedly while a sense expands or an article opens. A
     repeated tap before the screen redraws doesn't close it again or navigate
     twice; a later tap works normally.
-18. Submit an empty or spaces-only lookup: the dialog stays open. Type part of
+19. Submit an empty or spaces-only lookup: the dialog stays open. Type part of
     a search, open Recent and dismiss it: your text and mode return. Repeat
     with an empty or disabled history. Choosing a recent word runs that
     lookup.
-19. Submit a missing Pāḷi word with Velthuis input on, and a missing English
+20. Submit a missing Pāḷi word with Velthuis input on, and a missing English
     word. **Edit search** on each restores the exact text and mode. Misses add
     no history entries. Correct the text and submit.
-20. With some recent lookups saved, turn off **Record recent lookups**. Cancel
+21. With some recent lookups saved, turn off **Record recent lookups**. Cancel
     the confirmation, then repeat and confirm: only confirming clears the
     list and stops recording. Turn recording back on, add an entry, and test
     Cancel, Back and confirming **Clear recent lookups**, which leaves
     recording on.
-21. Long-press a long English word in your own book: your normal dictionary
+22. Long-press a long English word in your own book: your normal dictionary
     opens.
-22. With all nine dictionaries chosen, use **Search other dictionaries** for
+23. With all nine dictionaries chosen, use **Search other dictionaries** for
     `dharma` (Monier-Williams, Apte's `dharmaḥ` and Edgerton) and
     `Mahā Bodhi` (three DPPN entries). Search `kṛ`, open its Monier-Williams
     article and use **Next part**: it has three. Tap **DPD**, then Back; tap
     the pencil. Search `qqqqzzzz`: the
     popup says no entries and **Edit search** restores the text. **Look up a
     word** still opens in the mode it had.
-23. In the test book, with KOReader's **Vocabulary builder** on, long-press
+24. In the test book, with KOReader's **Vocabulary builder** on, long-press
     `pacchima`: DPD opens and the word is saved once, with its sentence.
     Long-press it again, and tap **KOReader dictionary**: no "Vocabulary
-    exists" notice appears, then or after closing them. Turn off **DPD on
-    long-press in this book**, below **DPD on word long-press**: `pacchima`
-    opens your normal dictionary, also after closing and reopening the book.
-    Reviewing `pacchima` in the Vocabulary builder still opens DPD. Turn the
-    book's setting back on.
+    exists" notice appears, then or after closing them. Turn off **Open DPD on
+    long-press in this book**: `pacchima` opens your normal
+    dictionary, also after closing and reopening the book. Reviewing
+    `pacchima` in the Vocabulary builder still opens DPD. Turn the book's
+    setting back on.
 
 ## Reporting feedback
 
-Open an issue on [GitHub](https://github.com/digitalpalidictionary/dpd-koreader/issues).
-Include:
+Open an issue on [GitHub](https://github.com/digitalpalidictionary/dpd-koreader/issues);
+its bug report form asks for the same things. Include:
 
-- your exact KOReader version and device;
-- the selected word;
-- the action that failed;
-- the relevant `DPD` lines from `koreader/crash.log`, or, if KOReader crashed
-  or runs on Android, the DPD diagnostic log (see
-  [troubleshooting](USAGE.md#troubleshooting)).
+- the word you selected or searched, what you did and what you saw;
+- the DPD diagnostic log: turn on **Help → Diagnostics → Write diagnostic
+  log** in the DPD menu, repeat what went wrong (restart KOReader first if it
+  happens at startup), then send `dpd-debug.log` or a screenshot of **Show
+  diagnostic log** (see [troubleshooting](USAGE.md#troubleshooting)). Each
+  session in the log starts with the plugin version, KOReader version and
+  device;
+- if KOReader closed or froze, or DPD showed an error, KOReader's
+  `crash.log`, which gets DPD's errors even with the diagnostic log off.
+  KOReader's **Help → Report a bug** (in its main menu) shows where it is.
+  On Android, opening it is what saves the log, so do it soon after the
+  problem. Over USB, it is `koreader/crash.log` on a Kindle,
+  `.adds/koreader/crash.log` on a Kobo (a hidden folder) and
+  `applications/koreader/crash.log` on a PocketBook;
+- without the diagnostic log, the plugin version (**Help → About & licenses**
+  in the DPD menu), your KOReader version and your device.
 
 Issues are public. The diagnostic log records the words you looked up, and
 `crash.log` can include the names and paths of books you opened, so remove

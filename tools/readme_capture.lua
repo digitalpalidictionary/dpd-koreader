@@ -136,9 +136,9 @@ else
     typed("bhikkhū"); tap("dpd:sense/49885"); tap("dpd:detail-frequency/49885"); shot("frequency")
     font(20); typed("√gam"); tap("dpd:root-matrix/1"); shot("matrix")
     font(16)
-    plugin.settings.dictionaries = {"dppn", "cpd", "pts", "nyanatiloka", "peu", "bhs", "mw", "apte", "wordnet"}
+    plugin.settings.dictionaries_off = {}
     hold("kāye"); tap("dpd:dictionaries"); shot("dictionaries")
-    plugin.settings.dictionaries = nil
+    plugin.settings.dictionaries_off = nil
     -- Extra hero capture comes last to preserve the other workflows and history.
     font(20); hold("dhammaṃ"); shot("hero-senses")
 end

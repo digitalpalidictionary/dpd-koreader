@@ -1,4 +1,5 @@
 local Suggest = require("dpd/suggest")
+local English = require("dpd/english")
 
 local headwords = {
     { "kamma 1", 5000 }, { "kāma 1", 900 },
@@ -18,7 +19,11 @@ local lookup = {
 }
 local epd = { { "meditate", '[["jhāyati","pr","meditates"]]' }, { "meditated upon", '[["x","pp","y"]]' },
     { "meditation", '[["jhāna","nt","meditation"],["adhicitta","nt","meditation"]]' }, { "medium", "" },
-    { "Nibbāna", '[["nibbāna","nt","Nibbāna"]]' }, { "nibble", '[["x","pr","y"]]' } }
+    { "Nibbāna", '[["nibbāna","nt","Nibbāna"]]' }, { "nibble", '[["x","pr","y"]]' },
+    { "Awakened One", '[["buddha","masc","Awakened One"]]' },
+    { "epithet of the Buddha", '[["buddha","masc","epithet"]]' },
+    { "name of Kakusandha Buddha's father", '[["aggidatta","masc","name"]]' },
+    { "Aṅguttara Nikāya", '[["aṅguttara","masc","name"]]' } }
 
 local spelling_rows = { kama = { "kāma", "kama" }, kamma = { "kamma" } }
 
@@ -43,6 +48,13 @@ local function fake()
                 end
                 out[#out + 1] = { k = tonumber(k), n = n, ebt = ebt }
                 i = i + 3
+            end
+        elseif sql:find("length(epd) AS epd_bytes", 1, true) and sql:find("WHERE fuzzy_key", 1, true) then
+            for _, e in ipairs(epd) do
+                local key = English.indexKey(e[1])
+                if (p[2] and key >= p[1] and key < p[2] or not p[2] and key == p[1]) and e[2] ~= "" then
+                    out[#out + 1] = { lookup_key = e[1], epd_bytes = #e[2] }
+                end
             end
         elseif sql:find("fuzzy_key >= ?", 1, true) then
             assert(sql:find("LIMIT ?)", 1, true), "fuzzy range is capped")
@@ -75,7 +87,7 @@ local function fake()
                 if #a[2] ~= #b[2] then return #a[2] > #b[2] end
                 return a[1] < b[1]
             end)
-            for i = 1, math.min(limit, #hits) do out[i] = { lookup_key = hits[i][1] } end
+            for i = 1, math.min(limit, #hits) do out[i] = { lookup_key = hits[i][1], epd_bytes = #hits[i][2] } end
         else error("unexpected query " .. sql) end
         return out
     end
@@ -183,7 +195,7 @@ describe("autocomplete", function()
         local query = db.query
         local prefix
         function db:query(sql, params)
-            prefix = params[1]
+            if sql:find("WHERE lookup_key IN (", 1, true) then prefix = params[1] end
             return query(self, sql, params)
         end
         Suggest.new(db):complete("  SAṀŊ’S  ", "english")
@@ -203,12 +215,26 @@ describe("autocomplete", function()
         assert.equal("meditate", texts(Suggest.new(fake()):complete("meditate", "english"))[1])
     end)
 
+    it("keeps internally capitalized English suggestions as the typed prefix grows", function()
+        local s = Suggest.new(fake())
+        for _, text in ipairs({ "awakened o", "awakened one", "AWAKENED ONE", "Awakened One." }) do
+            assert.same({ "Awakened One" }, texts(s:complete(text, "english")), text)
+        end
+        assert.same({ "epithet of the Buddha" }, texts(s:complete("epithet of the b", "english")))
+        assert.same({ "epithet of the Buddha" }, texts(s:complete("epithet of the buddha", "english")))
+        assert.same({ "name of Kakusandha Buddha's father" },
+            texts(s:complete("name of kakusandha buddha's f", "english")))
+        assert.same({ "Aṅguttara Nikāya" }, texts(s:complete("aṅguttara ni", "english")))
+        assert.same({}, texts(s:complete("anguttara ni", "english")), "diacritics remain meaningful")
+        assert.same({}, texts(s:complete("awakenedone", "english")), "spaces remain meaningful")
+    end)
+
     it("reads English candidates from a few capped slices, per next letter from three characters", function()
         local db = fake()
         local query = db.query
         local params
         function db:query(sql, p)
-            params = p
+            if sql:find("WHERE lookup_key IN (", 1, true) then params = p end
             return query(self, sql, p)
         end
         Suggest.new(db):complete("me", "english")

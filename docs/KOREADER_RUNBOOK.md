@@ -162,6 +162,14 @@ When data, dictionary handoff or lifecycle code changed, add
 When `dpd/suggest.lua` changed, run `check_suggest_recall.lua` (a few
 seconds) before and after the change and compare how often headwords with
 ṅ ḍ ṇ ḷ ṃ appear in the suggestions, typed as KOReader's keyboard can.
+When English lookup or autocomplete changed, also run
+`check_english_case.lua "$DPD_PLUGIN" "$DPD_DB"`. It checks English case,
+punctuation and diacritics, the index fold across all English keys, and
+bounded autocomplete reads with the real SQLite binding.
+When popup keyboard handling changed, run
+`check_keyboard.lua "$DPD_PLUGIN" "$DPD_DB" "$DPD_EVIDENCE"` with a fresh
+profile. It sends native key events and captures the visible link focus;
+desktop results do not establish physical D-pad or assistive-technology behavior.
 
 For each book-taking check, use a fresh `DPD_BOOK` copy from
 [the setup above](#2-get-the-database-and-the-plugin).
@@ -170,11 +178,18 @@ For each book-taking check, use a fresh `DPD_BOOK` copy from
 
 The checks capture popups only. For a full review, also run
 `tools/capture_screens.lua`, which captures the screens no check reaches: the
-reader popups, all nine other dictionaries, the DPD menu and submenus,
-dictionary details, Database status, About, Help, confirmations, diagnostics
-and the input dialog. Together with the screenshot folders of `check_ux`,
-`check_learning`, `check_channels`, `check_input`, `check_expansion`,
-`check_controls` and `check_variants`, that gives about 80 screens.
+reader popups, all nine other dictionaries, a long article in the middle of
+its second part with the part buttons (`dict-article-mid`), the DPD menu and
+submenus, Gesture manager's General and Reader lists with DPD's actions and
+the notice the long-press toggle shows (`gesture-*`), dictionary details,
+Database status, About, Help, confirmations, diagnostics and the input dialog.
+It leaves KOReader's Gestures plugin on for that. Together with the screenshot
+folders of `check_ux`, `check_learning`, `check_channels`, `check_input`,
+`check_expansion`, `check_controls` and `check_variants`, that gives about 85
+screens.
+`check_updater` adds the **Check for updates** screens: the update dialog,
+both QR codes, database status, a failed install, the restart prompt and the
+background notice. It serves its own fake releases, so it needs no network.
 
 `capture_screens.lua` reads the README's sutta passage rather than the test
 book. Generate it in a fresh temporary directory for each capture, from the

@@ -79,7 +79,7 @@ describe("expanded-sense additions", function()
             link_line="dpdict.net/7"}}}
         local html = Render.render(value({senses={sense}}), frame)
         local function at(text) return assert(html:find(text, 1, true), text) end
-        assert.is_true(at("<i>IPA:</i>") < at("<i>Traditional lemma (grammar-book headword):</i> satthu"))
+        assert.is_true(at('class="label">IPA<') < at('class="label">Traditional lemma (grammar-book headword)</td><td>satthu'))
         assert.is_true(at("<i>Notes:</i>") < at("✔ complete"))
         assert.is_true(at("✔ complete") < at("dpdict.net/7"))
         assert.is_nil(html:find("Early Buddhist texts", 1, true))
@@ -90,9 +90,9 @@ describe("expanded-sense additions", function()
         local frame = {expanded={[7]=true}, details={[7]={root_key="√i 1", root_meaning="come, go",
             field_parts={root_key={{text="√i 1", target_index=1}}}, targets={{text="√i 1", kind="root", model={}}}}}}
         local html = Render.render(value({senses={sense}}), frame)
-        assert.is_truthy(html:find("√i 1</a> (come, go)</p>", 1, true))
+        assert.is_truthy(html:find("√i 1</a> (come, go)</td>", 1, true))
         frame.details[7].root_meaning = nil
-        assert.is_truthy(Render.render(value({senses={sense}}), frame):find("√i 1</a></p>", 1, true))
+        assert.is_truthy(Render.render(value({senses={sense}}), frame):find("√i 1</a></td>", 1, true))
     end)
 end)
 
@@ -105,25 +105,25 @@ describe("compact expanded sense", function()
     it("keeps only the grammar the sense row and origin do not already say", function()
         -- dhamma 1.01, 1.04 and 1.12, and akaṭa 3, in the official mobile database.
         local html = expanded({grammar_line="masc, from dharati", derived_from="dharati"})
-        assert.is_falsy(html:find("Grammar:", 1, true))
-        assert.is_truthy(html:find("<i>from</i> dharati", 1, true))
+        assert.is_falsy(html:find('class="label">Grammar<', 1, true))
+        assert.is_truthy(html:find('<td class="label">From</td><td>dharati</td>', 1, true))
         html = expanded({grammar_line="masc, normally pl dhammā, from dharati", derived_from="dharati"})
-        assert.is_truthy(html:find("<i>Grammar:</i> normally pl dhammā</p>", 1, true))
+        assert.is_truthy(html:find('<td class="label">Grammar</td><td>normally pl dhammā</td>', 1, true))
         html = expanded({grammar_line="nt, from dharati, irreg", derived_from="dharati"}, "nt")
-        assert.is_truthy(html:find("<i>Grammar:</i> irreg</p>", 1, true))
+        assert.is_truthy(html:find('<td class="label">Grammar</td><td>irreg</td>', 1, true))
         html = expanded({grammar_line="pp of na karoti", derived_from="karoti"}, "pp")
-        assert.is_truthy(html:find("<i>Grammar:</i> pp of na karoti</p>", 1, true))
+        assert.is_truthy(html:find('<td class="label">Grammar</td><td>pp of na karoti</td>', 1, true))
     end)
 
     it("leaves out a suffix or compound construction the construction already shows", function()
         local html = expanded({construction="√dhar + ma", suffix="ma"})
-        assert.is_falsy(html:find("Suffix:", 1, true))
+        assert.is_falsy(html:find('class="label">Suffix<', 1, true))
         html = expanded({construction="√kar + a", suffix="ta"})
-        assert.is_truthy(html:find("<i>Suffix:</i> ta", 1, true))
+        assert.is_truthy(html:find('<td class="label">Suffix</td><td>ta', 1, true))
         html = expanded({construction="dhamma + cakka", compound_construction="dhamma + cakka"})
-        assert.is_falsy(html:find("Compound construction:", 1, true))
+        assert.is_falsy(html:find('class="label">Compound construction<', 1, true))
         html = expanded({construction="buddha + anussati", compound_construction="buddha + anussati + ti"})
-        assert.is_truthy(html:find("<i>Compound construction:</i> buddha + anussati + ti", 1, true))
+        assert.is_truthy(html:find('<td class="label">Compound construction</td><td>buddha + anussati + ti', 1, true))
     end)
 
     it("names a family button only when the entry does not already", function()
@@ -144,6 +144,30 @@ describe("compact expanded sense", function()
         assert.is_truthy(html:find(">Compounds: cakka · 41</a>", 1, true))
     end)
 
+    it("groups synonyms, antonyms and variants between the field table and buttons", function()
+        local html = expanded({construction="√dhar + ma", synonym="sabhāva", antonym="adhamma",
+            variant="dhammo", var_phonetic="dhammaṃ", var_text="dhammā", paradigm_kind="Declension",
+            commentary="a comment", example_1="an example", notes="a note", web_line="https://x.org",
+            status_line="✔ complete", link_line="dpdict.net/7"})
+        local related = assert(html:match('</table>%s*(<p>.-</p>)%s*<table class="actions"'))
+        local _, paragraphs = related:gsub("<p>", "")
+        assert.equal(1, paragraphs)
+        local previous = 0
+        for _, text in ipairs({"Synonym:</i> sabhāva", "Antonym:</i> adhamma", "Variant:</i> dhammo",
+                "Phonetic variant:</i> dhammaṃ", "Textual variant:</i> dhammā"}) do
+            local position = assert(related:find(text, 1, true), text)
+            assert.is_true(previous < position)
+            previous = position
+        end
+        local function at(text) return assert(html:find(text, 1, true), text) end
+        assert.is_true(at("Declension</a>") < at("<i>Commentary:</i>"))
+        assert.is_true(at("<i>Commentary:</i>") < at("an example"))
+        assert.is_true(at("an example") < at("<i>Notes:</i>"))
+        assert.is_true(at("<i>Notes:</i>") < at("<i>Web link:</i>"))
+        assert.is_true(at("<i>Web link:</i>") < at("✔ complete"))
+        assert.is_true(at("✔ complete") < at("dpdict.net/7"))
+    end)
+
     it("cites each example inside its paragraph and keeps verse lines", function()
         local html = expanded({example_1="line one,\nline two.", source_1="SNP4",
             sutta_1="kasibhāradvājasuttaṃ\nuragavaggo 4", example_2="prose", source_2="-", sutta_2="nakhasikhā"})
@@ -153,11 +177,24 @@ describe("compact expanded sense", function()
         assert.is_falsy(html:find("Example 1:", 1, true))
     end)
 
-    it("keeps short small-type items whole but lets long ones wrap", function()
-        local long = string.rep("dharma ", 12)
-        local html = expanded({ipa_line="/d̪ʰəmmə/", sanskrit=long})
-        assert.is_truthy(html:find('<span class="item"><i>IPA:</i> /d̪ʰəmmə/</span>', 1, true))
-        assert.is_truthy(html:find('<p class="meta"><i>Sanskrit:</i> ' .. long, 1, true))
+    it("gives each short origin field a labelled row", function()
+        local html = expanded({construction="√dhar + ma", derived_from="dharati", ipa_line="/d̪ʰəmmə/",
+            sanskrit="dharma", derivative="kita"})
+        assert.is_truthy(html:find('<td class="label">Construction</td><td>√dhar + ma · <i>from</i> dharati</td>', 1, true))
+        assert.is_truthy(html:find('<td class="label">IPA</td><td>/d̪ʰəmmə/</td>', 1, true))
+        assert.is_truthy(html:find('<td class="label">Derivative</td><td>kita</td>', 1, true))
+        assert.is_truthy(html:find('<td class="label">Sanskrit</td><td>dharma</td>', 1, true))
+        assert.is_truthy(html:find("Construction</td>.-Sanskrit</td>.-Derivative</td>.-IPA</td>"))
+    end)
+
+    it("keeps long field words intact in paragraphs that MuPDF can wrap", function()
+        local word = "paralokavajjabhayadassāvī"
+        local html = expanded({grammar_line="masc nom pl of " .. word,
+            construction=word .. " + ino & a"})
+        assert.is_truthy(html:find('<p><i>Grammar:</i> masc nom pl of ' .. word .. '</p>', 1, true))
+        assert.is_truthy(html:find('<p><i>Construction:</i> ' .. word .. ' + ino &amp; a</p>', 1, true))
+        assert.is_falsy(html:find('class="fields"', 1, true))
+        assert.is_falsy(html:find("\226\128\139", 1, true))
     end)
 end)
 

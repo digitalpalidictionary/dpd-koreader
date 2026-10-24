@@ -76,7 +76,11 @@ local function harness(options)
         package.loaded[name] = widget
     end
     local buttons = setmetatable({}, {__index=widget})
-    function buttons:getButtonById(id) return {id=id} end
+    function buttons:getButtonById(id)
+        for _, row in ipairs(self.buttons) do
+            for _, button in ipairs(row) do if button.id == id then return button end end
+        end
+    end
     package.loaded["ui/widget/buttontable"] = buttons
     package.loaded["ui/size"] = {line={medium=1}}
     package.loaded["ui/font"] = {getFace=function() return {} end}
@@ -90,7 +94,8 @@ local function harness(options)
     for _, name in ipairs(names) do package.loaded[name] = saved[name] end
     local viewer = setmetatable({model=options.model or model("root"), font_size=16,
         lookup=options.lookup, parent_viewer=options.parent_viewer, edit_callback=options.edit_callback,
-        normal_callback=options.normal_callback, release_selection_callback=options.release_selection_callback}, {__index=Viewer})
+        normal_callback=options.normal_callback, normal_word=options.normal_word,
+        release_selection_callback=options.release_selection_callback}, {__index=Viewer})
     local saved_settings = _G.G_reader_settings
     _G.G_reader_settings = {readSetting=function(_, key) return (options.settings or {})[key] end}
     screen.low_pan_rate = options.low_pan_rate
@@ -205,8 +210,40 @@ describe("popup failure containment", function()
         local family = model("dhamma")
         family.original = "Word family: dhamma"
         viewer.navigation:push(family)
+        viewer:update(); state:flush()
+        assert.equal("KOReader: dhammassa", viewer.action_buttons["dpd:normal"].text)
         viewer:onLink("dpd:normal"); state:flush()
         assert.same({"dhammassa"}, words)
+    end)
+
+    it("labels the retained dictionary word after a construction link and restores the root label on Back", function()
+        local words = {}
+        local value = model("dhamma")
+        value.deconstructions = {{parts={"ma"}, unique={}}}
+        local viewer, state = harness({model=value, lookup={get=function() return model("ma") end},
+            normal_callback=function(word) words[#words+1] = word end})
+        assert.equal("KOReader dictionary", viewer.action_buttons["dpd:normal"].text)
+        viewer:onLink("dpd:component/1/1"); state:flush()
+        assert.equal("ma", viewer.navigation:current().model.query)
+        assert.equal("KOReader: dhamma", viewer.action_buttons["dpd:normal"].text)
+        viewer:back(); state:flush()
+        assert.equal("KOReader dictionary", viewer.action_buttons["dpd:normal"].text)
+        viewer:onLink("dpd:component/1/1"); state:flush()
+        viewer:onLink("dpd:normal"); state:flush()
+        assert.same({"dhamma"}, words)
+    end)
+
+    it("labels an ID lookup with its effective handoff word at root and deeper views", function()
+        local words, value = {}, model("dhamma 1.01")
+        value.original, value.original_clean = "34626", "34626"
+        local viewer, state = harness({model=value,normal_word="dhamma",
+            normal_callback=function(word) words[#words+1]=word end})
+        assert.equal("KOReader: dhamma",viewer.action_buttons["dpd:normal"].text)
+        viewer.navigation:push(model("ma")); viewer:update(); state:flush()
+        assert.equal("KOReader: dhamma",viewer.action_buttons["dpd:normal"].text)
+        viewer:onLink("dpd:normal"); state:flush()
+        assert.same({"dhamma"},words)
+        assert.equal("34626",value.original_clean)
     end)
 
     it("contains hit-testing failure before onLink and consumes that tap", function()
@@ -325,12 +362,94 @@ describe("searching the other dictionaries", function()
         viewer:onLink("dpd:dpd-lookup"); state:flush()
         assert.same({"dharma", true}, looked_up)
         assert.equal("dharma in DPD", viewer.navigation:current().model.query)
-        assert.same({{"DPD", false}, {"KOReader dictionary", true}}, row(viewer))
+        assert.same({{"DPD", false}, {"KOReader: dharma", true}}, row(viewer))
         viewer:onLink("dpd:dpd-lookup"); state:flush()
         assert.equal(2, #viewer.navigation.stack)
         viewer:back(); state:flush()
         assert.equal("dharma", viewer.navigation:current().model.query)
         assert.same({{"DPD", true}, {"KOReader dictionary", true}}, row(viewer))
+    end)
+end)
+
+describe("article footer", function()
+    local function article(direct, normal)
+        local value = model("kamma")
+        value.dictionary_search = direct
+        value.dictionaries = {groups={{id="cpd", entries={{id=1, word="kamma"}}}}}
+        return harness({model=value, normal_callback=normal and function() end or nil,
+            lookup={hasOtherDictionaries=function() return true end, dictionaryPage=function(_, _, offset)
+                return {html="<p>article</p>", offset=offset, next_offset=offset+10,
+                    total=30, has_more=offset < 20}
+            end}})
+    end
+    local function row(viewer)
+        local actions = viewer.window[1][3][2].buttons
+        assert.equal(1, #actions)
+        local out = {}
+        for _, button in ipairs(actions[1]) do out[#out+1] = {button.text, button.enabled} end
+        return out
+    end
+
+    for _, direct in ipairs({false, true}) do
+        for _, normal in ipairs({false, true}) do
+            it("keeps one row in each article state, direct=" .. tostring(direct) .. ", normal=" .. tostring(normal), function()
+                local viewer, state = article(direct, normal)
+                local frame = viewer.navigation:current()
+                viewer.dictionaries = {"cpd"}
+                local function expected(buttons, open)
+                    if direct then buttons[#buttons+1] = {"DPD", true}
+                    elseif not open then buttons[#buttons+1] = {"Other dictionaries", false} end
+                    if normal then buttons[#buttons+1] = {"KOReader dictionary", true} end
+                    return buttons
+                end
+                viewer:update(); state:flush()
+                assert.same(expected({}, false), row(viewer))
+                for _, case in ipairs({
+                    {part=1, more=true, prev=false, next=true},
+                    {part=2, more=true, prev=true, next=true},
+                    {part=3, more=false, prev=true, next=false},
+                    {part=1, more=false},
+                }) do
+                    frame.dictionary_pages = {["1/1"]={open=true, html="<p>article</p>", part=case.part,
+                        has_more=case.more}}
+                    viewer:update(); state:flush()
+                    local buttons = {}
+                    if case.prev ~= nil then buttons = {{"◂ Part", case.prev}, {"Part ▸", case.next}} end
+                    buttons[#buttons+1] = {"Entries", true}
+                    assert.same(expected(buttons, true), row(viewer))
+                end
+                frame.dictionary_pages["1/1"].open = false
+                viewer:update(); state:flush()
+                assert.same(expected({}, false), row(viewer))
+            end)
+        end
+    end
+
+    it("routes article callbacks through the rebuild guard and restores the collapsed heading from mid-part", function()
+        local viewer, state = article(false, true)
+        local key = "1/1"
+        viewer:onLink("dpd:dict-entry/" .. key); state:flush()
+        local frame = viewer.navigation:current()
+        local next_button = viewer.action_buttons["dpd:dict-next/" .. key]
+        next_button.callback()
+        assert.equal(1, frame.dictionary_pages[key].part)
+        viewer.link_guard_s = -1
+        next_button.callback(); next_button.callback(); state:flush()
+        assert.equal(2, frame.dictionary_pages[key].part)
+        viewer.action_buttons["dpd:dict-prev/" .. key].callback(); state:flush()
+        assert.equal(1, frame.dictionary_pages[key].part)
+        for _, footer in ipairs({true, false}) do
+            viewer.scroll.htmlbox_widget.page_number = 8
+            state.page_count, state.links = 20, {[14]={"dpd:dict-entry/" .. key}}
+            if footer then viewer.action_buttons["dpd:dict-entry/" .. key].callback()
+            else viewer:onLink("dpd:dict-entry/" .. key) end
+            state:flush()
+            assert.is_false(frame.dictionary_pages[key].open)
+            assert.is_nil(frame.dictionary_pages[key].html)
+            assert.equal(14, viewer.scroll.htmlbox_widget.page_number)
+            assert.is_nil(viewer.action_buttons["dpd:dict-entry/" .. key])
+            viewer:onLink("dpd:dict-entry/" .. key); state:flush()
+        end
     end)
 end)
 
@@ -507,6 +626,90 @@ describe("viewer screen resize", function()
         assert.equal(1, state.errors)
     end)
 
+    it("keeps the selected article visible when a long preceding article closes", function()
+        local value = model("tissa")
+        value.dictionaries = {keys={"tissa"}, groups={{id="dppn", name="DPPN", total=2,
+            entries={{id=1, word="Tissa"}, {id=2, word="Tissa"}}}}}
+        local viewer, state = harness({model=value, lookup={dictionaryPage=function()
+            return {html="<p>article</p>", offset=0, next_offset=10, total=10, has_more=false}
+        end}})
+        state.page_count, state.links = 30, {[1]={"dpd:dict-entry/1/1"}}
+        viewer:onLink("dpd:dict-entry/1/1"); state:flush()
+        viewer.scroll.htmlbox_widget.page_number = 25
+        -- Collapsing the first article moves the second title back many pages.
+        -- Its new position can still be beyond the ordinary eight-page anchor search.
+        state.page_count, state.links = 20, {[14]={"dpd:dict-entry/1/2"}}
+        viewer:onLink("dpd:dict-entry/1/2"); state:flush()
+        assert.equal(14, viewer.scroll.htmlbox_widget.page_number)
+        local pages = viewer.navigation:current().dictionary_pages
+        assert.is_true(pages["1/2"].open)
+        assert.is_false(pages["1/1"].open)
+        assert.is_nil(pages["1/1"].html)
+        -- Collapsing the selected article keeps its title in place too.
+        viewer:onLink("dpd:dict-entry/1/2"); state:flush()
+        assert.equal(14, viewer.scroll.htmlbox_widget.page_number)
+        assert.is_false(pages["1/2"].open)
+    end)
+
+    it("retains reading pages per article and part relative to a moving heading", function()
+        local value = model("kamma")
+        value.dictionaries = {groups={{id="cpd", entries={{id=1, word="kamma"}, {id=2, word="kamma"}}}}}
+        local total = 30
+        local viewer, state = harness({model=value, lookup={dictionaryPage=function(_, _, offset)
+            return {html="<p>article</p>", offset=offset, next_offset=offset+10,
+                total=total, has_more=offset+10 < total}
+        end}})
+        state.page_count, state.links = 20, {[2]={"dpd:dict-entry/1/1"}, [16]={"dpd:dict-entry/1/2"}}
+        local function tap(uri) viewer:onLink("dpd:" .. uri); state:flush() end
+        tap("dict-entry/1/1")
+        viewer.scroll.htmlbox_widget.page_number = 7
+        tap("dict-next/1/1")
+        assert.equal(2, viewer.scroll.htmlbox_widget.page_number, "unread part starts at heading")
+        viewer.scroll.htmlbox_widget.page_number = 5
+        tap("dict-prev/1/1")
+        assert.equal(7, viewer.scroll.htmlbox_widget.page_number, "previous part retains reading page")
+        tap("dict-entry/1/1"); tap("dict-entry/1/1")
+        assert.equal(7, viewer.scroll.htmlbox_widget.page_number, "first part also retains reading page")
+        tap("dict-next/1/1")
+        assert.equal(5, viewer.scroll.htmlbox_widget.page_number)
+        tap("dict-entry/1/1")
+        assert.equal(2, viewer.scroll.htmlbox_widget.page_number, "Entries returns to heading")
+        -- Another article can move the saved heading without changing its reading position.
+        state.links = {[4]={"dpd:dict-entry/1/1"}, [16]={"dpd:dict-entry/1/2"}}
+        tap("dict-entry/1/1")
+        assert.equal(7, viewer.scroll.htmlbox_widget.page_number, "reopen uses heading-relative page")
+        tap("dict-entry/1/2")
+        viewer.scroll.htmlbox_widget.page_number = 18
+        tap("dict-entry/1/1")
+        assert.equal(7, viewer.scroll.htmlbox_widget.page_number)
+        tap("dict-entry/1/2")
+        assert.equal(18, viewer.scroll.htmlbox_widget.page_number, "articles retain separate pages")
+        tap("dict-entry/1/1"); tap("dict-entry/1/1")
+        state.page_count = 5
+        tap("dict-entry/1/1")
+        assert.equal(5, viewer.scroll.htmlbox_widget.page_number, "shorter layout clamps saved page")
+        tap("dict-entry/1/1")
+        total = 40
+        tap("dict-entry/1/1")
+        assert.equal(4, viewer.scroll.htmlbox_widget.page_number, "changed article discards old reading pages")
+        assert.same({}, viewer.navigation:current().dictionary_pages["1/1"].reading_pages)
+    end)
+
+    it("bounds a saved article page by its last Part control rather than later entries", function()
+        local value = model("kamma")
+        value.dictionaries = {groups={{id="cpd", entries={{id=1, word="kamma"}, {id=2, word="kamma"}}}}}
+        local viewer, state = harness({model=value, lookup={dictionaryPage=function(_, _, offset)
+            return {html="<p>article</p>", offset=offset, next_offset=10, total=20, has_more=true}
+        end}})
+        state.page_count, state.links = 20, {[2]={"dpd:dict-entry/1/1"},
+            [8]={"dpd:dict-next/1/1"}, [14]={"dpd:dict-entry/1/2"}}
+        local function tap() viewer:onLink("dpd:dict-entry/1/1"); state:flush() end
+        tap()
+        viewer.scroll.htmlbox_widget.page_number = 14
+        tap(); tap()
+        assert.equal(8, viewer.scroll.htmlbox_widget.page_number)
+    end)
+
     it("resumes an article's part when it is reopened in the same view", function()
         local value = model("tissa")
         value.dictionaries = {keys={"tissa"}, groups={{id="dppn", name="DPPN", total=2,
@@ -665,5 +868,43 @@ describe("viewer expansion keeps its place", function()
         viewer:onLink("dpd:sense/2"); state:flush()
         assert.equal(page, viewer.scroll.htmlbox_widget.page_number)
         assert.equal(4, state.opened) -- the kept page plus three earlier pages
+    end)
+
+    it("moves a row cut by a page break whole to the next page", function()
+        local viewer = harness()
+        local pages = {
+            {{uri="dpd:sense/1", y0=10}, {uri="dpd:sense/2", y0=900}},
+            {{uri="dpd:sense/2", y0=4}, {uri="dpd:sense/3", y0=60}},
+        }
+        local box = {page_count=2, dimen={h=960}, document={openPage=function(_, n)
+            return {getPageLinks=function() return pages[n] end, close=function() end}
+        end}}
+        local html = '<div class="entry"><p class="row"><a href="dpd:sense/1" class="toggle">a</a></p></div>'
+            .. '<div class="entry"><p class="row"><a href="dpd:sense/2" class="toggle">b</a></p></div>'
+        local moved = viewer:moveSplitRow(box, html)
+        assert.equal('<div class="entry"><p class="row"><a href="dpd:sense/1" class="toggle">a</a></p></div>'
+            .. '<div class="entry" style="margin-top:60.0px"><p class="row"><a href="dpd:sense/2" class="toggle">b</a></p></div>',
+            moved)
+        -- A row from the top two thirds of a page would leave that page nearly empty.
+        pages[1][2].y0 = 500
+        assert.is_nil(viewer:moveSplitRow(box, html))
+        -- Nothing continues across the break.
+        pages[1][2].y0, pages[2][1].uri = 900, "dpd:sense/9"
+        assert.is_nil(viewer:moveSplitRow(box, html))
+    end)
+
+    it("merges a field row's label and taller value into one line for holds", function()
+        local viewer = harness()
+        local function word(text, x0, x1) return {word=text, x0=x0, x1=x1} end
+        local lines = viewer.mergeRowLines({
+            {y0=192, y1=234, x0=50, x1=223, word("Construction", 50, 223)},
+            {y0=192, y1=238, x0=362, x1=627, word("buddha", 362, 470), word("anussati", 500, 627)},
+            {y0=236, y1=278, x0=50, x1=900, word("Sanskrit", 50, 160)},
+        })
+        assert.equal(2, #lines)
+        assert.same({192, 238, 50, 627}, {lines[1].y0, lines[1].y1, lines[1].x0, lines[1].x1})
+        assert.same({"Construction", "buddha", "anussati"},
+            {lines[1][1].word, lines[1][2].word, lines[1][3].word})
+        assert.equal("Sanskrit", lines[2][1].word)
     end)
 end)
