@@ -35,7 +35,7 @@ describe("popup refinements", function()
         assert.is_truthy(html:find("diṭṭhe dhamme", 1, true))
     end)
 
-    it("labels compound splits plainly and drops part headings that repeat their rows", function()
+    it("labels compound splits plainly and heads every part, even one that repeats its rows", function()
         local value = model("vissajjiyavebhaṅgiyaṃ", {
             deconstructions={{parts={"vissajjiya", "vebhaṅgiyaṃ"}, unique={true, true}, has_new=true, starts_open=true}},
             components={vissajjiya={senses={sense(1, "vissajjiya 1"), sense(2, "vissajjiya 2")}, total=2},
@@ -46,8 +46,9 @@ describe("popup refinements", function()
         -- The chevron alone toggles the analysis, with a button's tap area.
         assert.is_truthy(html:find('<p class="row"><a href="dpd:analysis/1" class="toggle">▾[^<]*</a><a href="dpd:component/1/1">vissajjiya</a>'))
         assert.same({width_em=2.4, height_em=2.5}, layout.buttons["dpd:analysis/1"])
-        assert.is_truthy(html:find('<div class="component bare">%s*<p class="row">'))
-        assert.is_falsy(html:find('<div class="component"><p><a href="dpd:component/1/1">', 1, true))
+        -- Without its heading, vissajjiya's rows would read as part of whatever came before.
+        assert.is_falsy(html:find("bare", 1, true))
+        assert.is_truthy(html:find('<div class="component"><p><a href="dpd:component/1/1"><b>vissajjiya</b></a>', 1, true))
         assert.is_truthy(html:find('<div class="component"><p><a href="dpd:component/1/2"><b>vebhaṅgiyaṃ</b></a>', 1, true))
     end)
 

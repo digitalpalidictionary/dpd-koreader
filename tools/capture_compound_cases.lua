@@ -29,6 +29,7 @@ local cases = {
     {"rakkhatiyeva", "rakkhatiyā", true},
     {"bhātime", "bhātu", false},
     {"middhīti", "middhī", false},
+    {"sīlasamādhipaññāvimuttivimuttiñāṇadassanasampannā", "samādhipaññāvimutti", false},
 }
 for index, case in ipairs(cases) do
     local model = lookup:get(case[1])
@@ -61,6 +62,30 @@ for index, case in ipairs(cases) do
     if index == 1 then assert(model.deconstructions[4].compact[2], "kammaṃ should name its senses too") end
     UIManager:show(viewer)
     flush()
+    if index == 9 then
+        -- samādhipaññāvimutti follows sīla's senses; its own heading must
+        -- separate them (it once dropped out and read as a third sīla sense).
+        local box = viewer.scroll.htmlbox_widget
+        local headings, senses = {}, {}
+        for page_number = 1, box.page_count do
+            local page = box.document:openPage(page_number)
+            for _, link in ipairs(page:getPageLinks()) do
+                -- The split line links each part too; the heading is the lower
+                -- link, and its smaller count ("5 senses ›") a second box on that line.
+                local part = link.uri:match("^dpd:component/1/(%d+)$")
+                local y, seen = page_number * 1e6 + link.y0, part and headings[part]
+                if part and (not seen or y > seen.y + viewer.font_px * .5) then headings[part] = { y = y, x0 = link.x0 }
+                elseif seen and math.abs(y - seen.y) <= viewer.font_px * .5 then seen.x0 = math.min(seen.x0, link.x0) end
+                part = link.uri:match("^dpd:component%-sense/1/(%d+)/")
+                if part then senses[part] = math.min(senses[part] or math.huge, link.x0) end
+            end
+            page:close()
+        end
+        assert(headings["2"], "samādhipaññāvimutti needs its own heading")
+        assert(math.abs(headings["2"].x0 - headings["1"].x0) < viewer.font_px * .25
+            and math.abs(senses["2"] - senses["1"]) < viewer.font_px * .25,
+            "every part's heading and senses should line up with sīla's")
+    end
     local pages = viewer.scroll.htmlbox_widget.page_count
     for page = 1, pages do
         if page > 1 then viewer.scroll:scrollToRatio((page - 1 + .1) / pages); flush() end
@@ -70,5 +95,5 @@ for index, case in ipairs(cases) do
     end
     viewer:close()
 end
-print("PASS: leading previews, inline subsets, later analyses on their own; eight real compound cases")
+print("PASS: leading previews, inline subsets, later analyses on their own; nine real compound cases")
 os.exit(0)

@@ -38,8 +38,6 @@ h3 .quiet { font-weight: normal; }
 .component { margin: .25em 0; }
 .component p { margin: .12em 0; }
 .component p + p { margin-left: .7em; }
-/* Without its heading, a part's rows still step in. */
-.component.bare p { margin-left: .7em; }
 /* Only the component's own sense rows step in, not the fields of an opened sense. */
 .component .detail p { margin-left: 0; }
 .count { font-size: .85em; }
@@ -1226,17 +1224,10 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
                         local compact = (analysis.compact or {})[i]
                         -- Its rows repeat headwords or an earlier part: name which senses instead.
                         local only = compact and ' <span class="count">· only ' .. M.escape(senseNames(senses)) .. '</span>' or ""
-                        -- A heading that only repeats the rows under it ("vissajjiya"
-                        -- above vissajjiya 1 and 2, all its senses) is left out; one
-                        -- naming a form of another headword ("vebhaṅgiyaṃ" above
-                        -- vebhaṅgiya) stays.
-                        local repeats = not compact and #senses > 0 and total <= #senses and #senses <= 2
-                            and #(component.reference_targets or {}) == 0
-                        for _, sense in ipairs(repeats and senses or {}) do
-                            if tostring(sense.lemma_1 or ""):gsub(" %d[%d.]*$", "") ~= part then repeats = false end
-                        end
-                        add('<div class="component' .. (repeats and ' bare">' or ('"><p>'
-                            .. control("dpd:component/" .. index .. "/" .. i, name) .. only .. '</p>')))
+                        -- Every part keeps its heading, even one that repeats its rows
+                        -- (vissajjiya above vissajjiya 1 and 2): it alone marks where
+                        -- the previous part's senses end.
+                        add('<div class="component"><p>' .. control("dpd:component/" .. index .. "/" .. i, name) .. only .. '</p>')
                         for j = 1, compact and 0 or math.min(2, #senses) do
                             local sense = senses[j]
                             local expansions = ((state.component_expanded or {})[index] or {})[i] or {}
