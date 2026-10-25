@@ -372,7 +372,8 @@ checked** until DPD first opens the file. Drawing the menu never opens it.
 
 **Database status** starts with the same verdict in bold, such as **Database
 ready** or **Newer release, should work**, then the DPD release and the one
-this plugin was tested with, the file and its folder, and the checks behind
+this plugin was tested with (currently DPD v0.4.20260926, schema 7), the file
+and its folder, and the checks behind
 the verdict (core columns, journal mode). Other releases work as long as the
 core columns are OK.
 

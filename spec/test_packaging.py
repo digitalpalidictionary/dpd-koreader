@@ -101,8 +101,7 @@ class OfflineDocumentationTests(unittest.TestCase):
         schema = re.search(r'schema = "([^"]+)"', compatibility).group(1)
         release = re.search(r'release = "([^"]+)"', compatibility).group(1)
         self.assertIn("dpd-db/releases/latest", readme)
-        self.assertIn(f"tested with DPD {release}", readme)
-        self.assertIn(f"schema {schema}", readme)
+        self.assertIn(f"tested with (currently DPD {release}, schema {schema})", usage)
         baseline = json.loads((ROOT / "tools/budget_baseline.json").read_text())
         self.assertEqual({"release": release, "schema": schema}, baseline["database"])
 

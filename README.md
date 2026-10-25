@@ -20,18 +20,16 @@ leaving your book. This plugin brings the
 - **Every sense in one view:** meanings in DPD's order, with grammar,
   examples and linked explanations.
 - **Fast on Kindle:** about 50 ms a lookup on a Paperwhite, plus the e-ink
-  refresh. See the [measurements and limits](docs/TESTING.md#kindle-results).
+  refresh.
 - **Search in Pāḷi or English:** labelled suggestions, optional diacritics
-  and Velthuis keyboard input. See [search](docs/USAGE.md#look-up-a-word).
+  and Velthuis keyboard input.
+- **Explore further:** inflection tables, frequency, suttas, roots, word
+  families and other dictionaries.
 
 <p align="center"><a id="find-any-word" href="docs/images/find.png"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/find-dark.png">
   <img src="docs/images/find.png" width="560" alt="Find any word: English to Pāḷi, spelling suggestions and Velthuis input">
 </picture></a></p>
-
-- **Explore further:** inflection tables, frequency, suttas, roots, word
-  families and other dictionaries. See
-  [entry views](docs/USAGE.md#more-from-an-entry).
 
 <p align="center"><a id="go-deeper" href="docs/images/deeper.png"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/deeper-dark.png">
@@ -63,9 +61,7 @@ and Linux; KOReader also runs on Kobo and PocketBook.
 
    Create `data/dpd` if needed. Keep the database **outside the plugin
    folder**. Its folder must be writable: DPD never modifies the database,
-   but SQLite creates small `-wal` and `-shm` files beside it. This plugin
-   was tested with DPD v0.4.20260926 (schema 7); newer releases work as long
-   as **Database status** reports the core columns OK.
+   but SQLite creates small `-wal` and `-shm` files beside it.
 
 3. **Restart.** Eject the device and restart KOReader. If external plugins
    are disabled, enable them under **Plugin management** and restart again.
@@ -82,7 +78,6 @@ and Linux; KOReader also runs on Kobo and PocketBook.
   it recognises.
 - **Tap ▸:** expand a sense or compound analysis. Tap underlined text to
   open another entry, then **Back** to return with your place kept.
-- **KOReader dictionary:** opens the word in your usual dictionary.
 - **Look up a word:** type a search from the DPD menu. Drag across a
   phrase in your book to use the selection menu's **DPD** button.
 - **English books:** turn off **Open DPD on long-press in this book** if
@@ -132,8 +127,7 @@ database you chose elsewhere).
 
 ## Documentation
 
-The download includes the [user guide](docs/USAGE.md) and
-[testing and feedback](docs/TESTING.md), with links that work offline.
+See the [user guide](docs/USAGE.md) and [testing and feedback](docs/TESTING.md).
 
 ## Contributing
 
