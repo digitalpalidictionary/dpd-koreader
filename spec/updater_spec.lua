@@ -193,3 +193,88 @@ describe("updater install", function()
         assert.matches("restart KOReader", err)
     end)
 end)
+
+describe("obsolete updater folders", function()
+    local saved, remove, paths, warnings, fail, git, linked
+    local dir = "/plugins/dpd.koplugin"
+    before_each(function()
+        saved = {}
+        for _, name in ipairs({ "libs/libkoreader-lfs", "ffi/util", "logger" }) do
+            saved[name] = package.loaded[name]
+        end
+        remove, paths, warnings = os.remove, {}, {}
+        Updater.cleaned, Updater.restart_pending = nil, nil
+        fail, git, linked = nil, false, false
+        package.loaded["libs/libkoreader-lfs"] = {
+            symlinkattributes = function(path)
+                if path == dir then return linked and "link" or "directory" end
+                return paths[path]
+            end,
+            attributes = function() return git and "directory" or nil end,
+            dir = function(path)
+                if fail == path then error("cannot enumerate obsolete folder") end
+                return ipairs({})
+            end,
+        }
+        package.loaded["ffi/util"] = { realpath = function(path) return path end }
+        package.loaded.logger = { warn = function(...) warnings[#warnings + 1] = {...} end }
+        os.remove = function(path)
+            if fail == path then return nil, "cannot remove obsolete folder" end
+            paths[path] = nil
+            return true
+        end
+    end)
+    after_each(function()
+        os.remove = remove
+        for _, name in ipairs({ "libs/libkoreader-lfs", "ffi/util", "logger" }) do
+            package.loaded[name] = saved[name]
+        end
+        Updater.cleaned = nil
+    end)
+
+    for _, suffix in ipairs({ ".previous", ".update" }) do
+        it("keeps starting after " .. suffix .. " cannot be enumerated", function()
+            paths[dir .. ".previous"], paths[dir .. ".update"] = "directory", "directory"
+            fail = dir .. suffix
+            Updater.cleanUp(dir)
+            assert.equal("directory", paths[fail])
+            assert.equal(1, #warnings)
+            assert.matches("cannot enumerate", warnings[1][3])
+            paths[fail] = nil
+            assert.is_nil(next(paths))
+            paths[fail] = "directory"
+            Updater.cleanUp(dir)
+            assert.equal(1, #warnings)
+        end)
+
+        it("reports " .. suffix .. " deletion failure and cleans the other folder", function()
+            paths[dir .. ".previous"], paths[dir .. ".update"] = "file", "file"
+            fail = dir .. suffix
+            Updater.cleanUp(dir)
+            assert.equal("file", paths[fail])
+            assert.equal(1, #warnings)
+            assert.equal("cannot remove obsolete folder", warnings[1][3])
+            paths[fail] = nil
+            assert.is_nil(next(paths))
+        end)
+    end
+
+    it("removes readable leftovers and unlinks rather than enumerates a backup link", function()
+        paths[dir .. ".previous"], paths[dir .. ".update"] = "link", "directory"
+        fail = dir .. ".previous"
+        os.remove = function(path) paths[path] = nil; return true end
+        Updater.cleanUp(dir)
+        assert.is_nil(next(paths))
+        assert.equal(0, #warnings)
+    end)
+
+    it("leaves development copies and linked plugin folders alone", function()
+        paths[dir .. ".previous"] = "directory"
+        fail, git = dir .. ".previous", true
+        Updater.cleanUp(dir)
+        Updater.cleaned, git, linked = nil, false, true
+        Updater.cleanUp(dir)
+        assert.equal("directory", paths[fail])
+        assert.equal(0, #warnings)
+    end)
+end)

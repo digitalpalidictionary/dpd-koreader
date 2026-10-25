@@ -854,9 +854,11 @@ assert(not exists(require("datastorage"):getDataDir() .. "/data/dpd/dpd-update.z
     "cancelled and stopped installs remove their download")
 print("PASS manual deadlines, responsive UI, cancellation, and stopped owners")
 
--- The background check: opt-in, weekly, once a session, announced once, and
+-- The background check: opt-in, weekly, retryable, announced once, and
 -- in a child process, so a stalled server never holds up the UI.
 fresh()
+local real_walltime, elapsed = os.time, 0
+os.time = function() return real_walltime() + elapsed end
 local ffiutil, time = require("ffi/util"), require("ui/time")
 local NetworkMgr = require("ui/network/manager")
 local connected = true
@@ -903,11 +905,11 @@ for _, item in ipairs(automatic:helpMenu().sub_item_table) do
 end
 assert(toggle, "automatic update checkbox exists")
 local skipped = assert(delay(toggle), "enabling the checkbox schedules a check immediately")
-assert(not Updater.auto_checked, "a pending check has not used the session's attempt")
+assert(not Updater.auto_checking, "a pending check has not started a request")
 assert(not delay(function() automatic:onNetworkConnected(); automatic:onResume() end), "events share the pending check")
 connected = false
 skipped()
-assert(not Updater.auto_checked and not Updater.auto_pending, "Wi-Fi lost during delay leaves retry available")
+assert(not Updater.auto_checking and not Updater.auto_pending, "Wi-Fi lost during delay leaves retry available")
 background(auto)
 assert(launched == 0, "never without a connection")
 connected = true
@@ -929,29 +931,30 @@ assert(automatic:helpMenu().text_func() == "Help · 99.0.0 available", "Help sho
 screenshot("update-notification")
 closeAll()
 background(auto)
-assert(launched == 1, "once per session")
-Updater.auto_checked = nil
+assert(launched == 1 and not Updater.auto_checking, "completed check releases the in-flight guard")
+elapsed = elapsed + Updater.check_interval - 60
 background(auto)
 assert(launched == 1, "at most weekly")
-auto.update_checked = os.time() - Updater.check_interval - 1
+elapsed = elapsed + 61
 background(auto)
-assert(launched == 2 and #UIManager._window_stack == 0, "announced only once per version")
+assert(launched == 2 and #UIManager._window_stack == 0, "weekly recheck in the same session, announced once per version")
 
 -- Disabling while the child is running suppresses its notification and
 -- leaves no saved check date. Re-enabling can check again in this session.
-Updater.auto_checked = nil
 local disabled = { font_size = 16, update_auto = true }
 start(disabled)
 disabled.update_auto = nil
 assert(pump(function() return finished == launched end, 30), "the disabled check finished")
 assert(launched == 3 and disabled.update_checked == nil and #UIManager._window_stack == 0,
     "no notification or saved result after disabling")
-assert(not Updater.auto_checked, "a disabled in-flight result does not block re-enabling")
+assert(not Updater.auto_checking, "a disabled in-flight result does not block re-enabling")
 print("PASS automatic setting, reconnect, resume, and cancellation")
 
 -- A server that stalls past the timeout: UI timers keep running meanwhile.
-Updater.auto_checked = nil
 Updater.api = base .. "/api/stall"
+local retry_interval = Updater.retry_interval
+assert(retry_interval == 3600, "failed requests have a one-hour cooldown")
+Updater.retry_interval = 1
 local stalled = { font_size = 16, update_auto = true }
 local began = time.now()
 start(stalled)
@@ -960,8 +963,24 @@ local ticked
 UIManager:scheduleIn(0.2, function() ticked = time.now() end)
 assert(pump(function() return ticked ~= nil end, 3) and time.to_s(ticked - began) < 1.5, "a UI timer ran on time")
 assert(finished < launched, "the check was still waiting on the server")
+start(stalled)
+assert(launched == 4, "an in-flight check blocks duplicate requests")
 assert(pump(function() return finished == launched end, 30), "the stalled check gave up")
 assert(stalled.update_available == nil and stalled.update_checked == nil, "a failed check changes nothing")
+assert(not Updater.auto_checking and Updater.auto_retry_at > time.now(), "failure releases the guard with a retry cooldown")
+local retry_owner = plugin(stalled)
+assert(not delay(function() retry_owner:onNetworkConnected(); retry_owner:onResume() end),
+    "reconnect and resume respect the failed-request cooldown")
+ffiutil.usleep(1100000)
+Updater.api = base .. "/api/good"
+local retry = assert(delay(function() retry_owner:onNetworkConnected() end), "reconnect after cooldown schedules retry")
+retry()
+assert(pump(function() return finished == launched end, 30), "the retry finished")
+assert(launched == 5 and stalled.update_checked and stalled.update_available == "99.0.0"
+    and not Updater.auto_retry_at, "failed started request can later succeed without restart")
+closeAll()
+Updater.retry_interval = retry_interval
+os.time = real_walltime
 Updater.checkInBackground, Device.canOpenLink = real_background, can_open
 print("PASS background check, in a child process")
 

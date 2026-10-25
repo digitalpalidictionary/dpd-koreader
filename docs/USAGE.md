@@ -333,7 +333,8 @@ week, only when Wi-Fi is already on, without holding up your reading, and
 shows **DPD plugin 99.0.0 is available: see Help.**, for example, when there's
 a new version; the **Help** label keeps showing it. It never turns Wi-Fi on
 or installs anything by itself. Checking contacts GitHub and sends only
-DPD's version.
+DPD's version. After a failed check, it can retry later, on a book opening,
+resume or reconnect.
 
 #### Update by hand
 

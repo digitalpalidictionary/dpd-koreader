@@ -4,7 +4,7 @@
     python3 tools/kindle_check.py [--install] --host root@<device-ip> [--port 2222]
 
 Needs KOReader's SSH server and HTTP inspector running on the device (Tools →
-More tools → HTTP inspector; tick "Start on KOReader startup" once), with DPD
+More tools → HTTP inspector; tick "Auto start HTTP server" once), with DPD
 on word long-press turned on. The SSH server's empty password is answered
 automatically.
 
@@ -123,7 +123,7 @@ def main():
                 break
         else:
             sys.exit("KOReader did not restart with the inspector: restart it by hand, check that the inspector's "
-                     "\"Start on KOReader startup\" is ticked, then run this again without --install.")
+                     "\"Auto start HTTP server\" is ticked, then run this again without --install.")
 
     if not inspector_up():
         sys.exit("The HTTP inspector is not running: Tools → More tools → HTTP inspector.")

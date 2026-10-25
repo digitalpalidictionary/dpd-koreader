@@ -3,12 +3,24 @@
 -- ./luajit <plugin>/tools/check_lifecycle.lua <plugin> <db> "$DPD_BOOK"
 -- Use a fresh temporary EPUB copy with no .sdr for each run; see
 -- docs/KOREADER_RUNBOOK.md for the DPD_BOOK setup.
+assert(os.getenv("KO_MULTIUSER") == "1" and os.getenv("XDG_CONFIG_HOME"), "use an isolated profile")
 require("setupkoenv")
 local root, path, book = assert(arg[1]), assert(arg[2]), assert(arg[3])
 G_defaults = require("luadefaults"):open()
 local DataStorage = require("datastorage")
 G_reader_settings = require("luasettings"):open(DataStorage:getDataDir() .. "/settings.reader.lua")
 local lfs = require("libs/libkoreader-lfs")
+-- Exercise a shipped copy: .git deliberately disables obsolete-folder cleanup.
+local fixture = DataStorage:getDataDir() .. "/dpd-lifecycle"
+assert(lfs.mkdir(fixture), "use a fresh profile for each lifecycle check")
+assert(lfs.mkdir(fixture .. "/plugins"))
+local installed = fixture .. "/plugins/dpd.koplugin"
+assert(lfs.mkdir(installed))
+local function q(value) return "'" .. value:gsub("'", "'\\''") .. "'" end
+for _, name in ipairs({ "main.lua", "_meta.lua", "dpd", "ui" }) do
+    assert(os.execute("cp -R " .. q(root .. "/" .. name) .. " " .. q(installed)) == 0)
+end
+root = installed
 local disabled = {}
 for entry in lfs.dir("plugins") do
     if entry:sub(-9) == ".koplugin" then disabled[entry:sub(1,-10)] = true end
@@ -110,3 +122,33 @@ local reopened = assert(ReaderUI.instance).dpd
 assert(reopened ~= plugin and not reopened.stopped)
 ReaderUI.instance:onClose(false); flush()
 print("PASS: FileManager native connection cleanup, popup/owner lifecycles, retained dictionary wrappers, suspend and reader reopening")
+
+local Updater = require("dpd/updater")
+for _, unreadable in ipairs({ ".previous", ".update" }) do
+    for _, suffix in ipairs({ ".previous", ".update" }) do
+        assert(lfs.mkdir(root .. suffix))
+        local marker = assert(io.open(root .. suffix .. "/marker", "w"))
+        marker:write("disposable obsolete update folder"); marker:close()
+    end
+    assert(os.execute("chmod 000 " .. q(root .. unreadable)) == 0)
+    Updater.cleaned = nil
+    local ok, err = pcall(function()
+        ReaderUI:showReader(book); flush(); flush()
+        local owner = assert(ReaderUI.instance)
+        local plugin = assert(owner.dpd, "obsolete cleanup must not reject plugin initialization")
+        assert(lfs.attributes(root .. unreadable, "mode") == "directory")
+        local other = unreadable == ".previous" and ".update" or ".previous"
+        assert(not lfs.attributes(root .. other), "a failed cleanup must not skip the other folder")
+        owner.dictionary:onLookupWord("pacchima", true, nil, owner.highlight); flush()
+        local viewer, db = assert(plugin.viewer), assert(plugin.db)
+        assert(countConnections() == base_connections + 1)
+        owner:onClose(false); flush()
+        assert(plugin.stopped and viewer.closed and not db.conn and not plugin.db)
+        assert(countConnections() == base_connections, "owner close must retire the popup and native connection")
+    end)
+    assert(os.execute("chmod 755 " .. q(root .. unreadable)) == 0)
+    assert(ok, err)
+    assert(os.remove(root .. unreadable .. "/marker"))
+    assert(lfs.rmdir(root .. unreadable))
+end
+print("PASS: unreadable obsolete backup/staging folders preserve ReaderUI ownership and normal teardown")

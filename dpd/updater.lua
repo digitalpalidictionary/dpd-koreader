@@ -26,6 +26,7 @@ local Updater = {
     -- KOReader's certificate list, relative to its install folder.
     cafile = "data/ca-bundle.crt",
     check_interval = 7 * 24 * 3600,
+    retry_interval = 3600,
     -- Replaced by the native check to make a rename fail or stop at a step.
     rename = os.rename,
     on_stage = nil,
@@ -567,8 +568,14 @@ function Updater.cleanUp(plugin_dir)
     Updater.cleaned = true
     local dir = pluginFolder(plugin_dir)
     if not dir then return end
-    purge(dir .. ".previous")
-    purge(dir .. ".update")
+    -- Obsolete files must not turn a successful startup into partial initialization.
+    for _, suffix in ipairs({ ".previous", ".update" }) do
+        local path = dir .. suffix
+        local ok, removed, err = pcall(purge, path)
+        if not ok or not removed then
+            require("logger").warn("DPD update cleanup:", path, ok and err or removed)
+        end
+    end
 end
 
 return Updater

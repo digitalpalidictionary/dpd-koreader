@@ -1468,8 +1468,9 @@ end
 function DPD:scheduleUpdateCheck()
     local settings = self.settings
     if self.stopped or self.unsupported or Updater.restart_pending or Updater.broken then return end
-    if not settings.update_auto or Updater.auto_checked or Updater.auto_pending then return end
+    if not settings.update_auto or Updater.auto_checking or Updater.auto_pending then return end
     if os.time() - (tonumber(settings.update_checked) or 0) < Updater.check_interval then return end
+    if Updater.auto_retry_at and time.now() < Updater.auto_retry_at then return end
     local NetworkMgr = require("ui/network/manager")
     if not NetworkMgr:isConnected() then return end
     local pending = { owner = self }
@@ -1481,15 +1482,16 @@ function DPD:scheduleUpdateCheck()
         if self.stopped or not settings.update_auto or Updater.restart_pending or Updater.broken
             or not NetworkMgr:isConnected() then return end
         if os.time() - (tonumber(settings.update_checked) or 0) < Updater.check_interval then return end
-        -- Reserve the session only when a request actually starts. Losing
-        -- Wi-Fi or closing a book during the delay must allow a later retry.
-        Updater.auto_checked = true
+        Updater.auto_checking = true
         local launched = Updater.checkInBackground(function(version)
-            if not settings.update_auto then
-                Updater.auto_checked = nil
+            Updater.auto_checking = nil
+            if not settings.update_auto or Updater.restart_pending or Updater.broken then return end
+            if not version then
+                -- Reconnect/resume events must not hammer a failing service.
+                Updater.auto_retry_at = time.now() + time.s(Updater.retry_interval)
                 return
             end
-            if not version or Updater.restart_pending or Updater.broken then return end
+            Updater.auto_retry_at = nil
             settings.update_checked = os.time()
             settings.update_available = Updater.isNewer(version, VERSION) and version or nil
             if settings.update_available and settings.update_notified ~= version then
@@ -1501,7 +1503,7 @@ function DPD:scheduleUpdateCheck()
             end
             G_reader_settings:saveSetting("dpd", settings)
         end)
-        if not launched then Updater.auto_checked = nil end
+        if not launched then Updater.auto_checking = nil end
     end
     UIManager:scheduleIn(15, pending.callback)
 end

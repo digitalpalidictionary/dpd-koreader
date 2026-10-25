@@ -91,7 +91,7 @@ function Viewer:build()
         left_icon = (#self.navigation.stack > 1 or self.parent_viewer) and "chevron.left" or nil,
         left_icon_tap_callback = function() self:back() end,
     }
-    self:addEditButton(title, frame)
+    local edit_button = self:addEditButton(title, frame)
     -- A paradigm section (case label plus two form columns) needs about 19 em.
     local font_px = Screen:scaleBySize(self.font_size)
     self.font_px = font_px
@@ -187,6 +187,7 @@ function Viewer:build()
     -- keep the old view and release the replacement's native HTML resources.
     if self[1] then self[1]:free() end
     self[1], self.window, self.scroll, self._displayed_frame = center, window, scroll, frame
+    self.edit_button = edit_button
     self:setupKeyboardLinks(scroll, actions)
     if frame.restore_page then
         frame.restore_page, frame.restore_anchor = nil, nil
@@ -267,6 +268,10 @@ function Viewer:keyboardTargets()
             end
         end
     end
+    if self.edit_button then
+        targets[#targets + 1] = { uri = "dpd:edit-search", button = self.edit_button,
+            callback = self.edit_button.callback }
+    end
     for _, target in ipairs(self.keyboard_buttons or {}) do
         if target.button.enabled then targets[#targets + 1] = target end
     end
@@ -306,7 +311,8 @@ function Viewer:onActivateLink()
     if self.closed or self._pending_update then return true end
     local focus, box = self.keyboard_focus, self.scroll.htmlbox_widget
     if not focus or focus.box ~= box or focus.page ~= box.page_number then return self:onFocusLink(1) end
-    self:onLink(focus.target.uri)
+    if focus.target.callback then focus.target.callback()
+    else self:onLink(focus.target.uri) end
     return true
 end
 
@@ -386,7 +392,6 @@ local function editable(model)
 end
 
 function Viewer:addEditButton(title, frame)
-    self.edit_button = nil
     local mode = self.edit_callback and editable(frame.model)
     if not mode or not title.right_button then return end
     local model, root = frame.model, #self.navigation.stack == 1
@@ -399,7 +404,6 @@ function Viewer:addEditButton(title, frame)
         hold_callback = function() self:editSearch(model.query, mode, not root) end,
         allow_flash = false, show_parent = self,
     }
-    self.edit_button = pencil
     -- Left of the close button's widened tap zone, so the two never overlap;
     -- the title is shortened to end before it.
     local x = title.width - title.right_button:getSize().w - pencil:getSize().w
@@ -408,6 +412,7 @@ function Viewer:addEditButton(title, frame)
     title.inner_title_group:resetLayout()
     title.title_group:resetLayout()
     table.insert(title, HorizontalGroup:new{ HorizontalSpan:new{ width = x }, pencil })
+    return pencil
 end
 
 -- A view opened from an entry stays open: its edit opens as a child, so Back

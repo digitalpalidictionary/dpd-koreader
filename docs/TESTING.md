@@ -48,10 +48,17 @@ line per popup with lookup, build and total milliseconds.
 This works on a Kindle only (it uses Kindle paths such as `/mnt/us`); on
 other devices, use the [checklist](#checks) below. It needs a clone of the
 [source repository](https://github.com/digitalpalidictionary/dpd-koreader): the plugin
-download has no `tools` folder. With KOReader's SSH server (with **Login
-without password** on) and HTTP inspector running on the device (tick the
-inspector's **Start on KOReader startup** once) and **Open DPD on
-long-press by default** on, from your computer:
+download has no `tools` folder.
+
+**Use a trusted, isolated network whose connected devices you control.**
+Passwordless SSH and HTTP Inspector let other devices on that network control
+your Kindle. Enable them only for the test, and follow the cleanup steps below
+even if it fails.
+
+The script uses an empty SSH password. Start KOReader's SSH server with
+**Login without password** on, start HTTP Inspector and enable its **Auto start
+HTTP server** so it returns after the install restarts KOReader. Turn on
+**Open DPD on long-press by default**, then run from your computer:
 
 ```sh
 python3 tools/kindle_check.py --install --host root@<device-ip>
@@ -82,6 +89,17 @@ Then check by hand only what it can't:
 3. Tap **KOReader dictionary**, close it, and close DPD: the highlight clears.
 4. Type a word in **Look up a word** with the device keyboard.
 5. Sleep and wake with a book open, then look up a word.
+
+After testing, or if any step fails:
+
+1. In HTTP Inspector, choose **Stop HTTP server** and turn off **Auto start
+   HTTP server**.
+2. Stop the SSH server, turn off **Login without password**, and restore your
+   usual SSH authentication. Turn off **Start SSH server with KOReader** if
+   you enabled it for testing.
+
+Sleep or suspend is not cleanup: HTTP Inspector can restart on wake while
+autostart is enabled.
 
 The full checklist below is for devices without SSH and for a release that
 changes the popup or menus.

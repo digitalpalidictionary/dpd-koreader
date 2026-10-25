@@ -31,7 +31,8 @@ local function focusUri(viewer, uri)
 end
 assert(Device:hasKeys(), "desktop keyboard required")
 local viewer = Viewer:new{model=lookup:get("dhamma"),lookup=lookup,
-    font_size=tonumber(os.getenv("DPD_TEST_FONT_SIZE")) or 26,normal_callback=function() end}
+    font_size=tonumber(os.getenv("DPD_TEST_FONT_SIZE")) or 26,normal_callback=function() end,
+    edit_callback=function() end}
 UIManager:show(viewer); flush(); shot("keyboard-before")
 key(viewer,"Tab"); flush(); shot("keyboard-link-focus")
 local first = assert(viewer.keyboard_focus).target.uri
@@ -79,6 +80,10 @@ assert(box.page_number == 1, "native previous page still works")
 -- The shared footer sequence reaches enabled buttons and paints their native focus.
 focusUri(viewer,"dpd:normal"); flush(); shot("keyboard-footer-focus")
 assert(viewer.keyboard_focus.target.button.frame.invert, "visible native footer focus")
+focusUri(viewer,"dpd:edit-search"); flush(); shot("keyboard-pencil-focus")
+local old_pencil = viewer.edit_button
+assert(viewer.keyboard_focus.target.button == old_pencil and old_pencil.image.invert,
+    "visible native pencil focus")
 
 local ffi = require("ffi")
 ffi.cdef[[bool SDL_SetWindowSize(SDL_Window *, int, int);]]
@@ -93,7 +98,95 @@ UIManager:broadcastEvent(Event:new("SetDimensions",size)); flush()
 assert(not viewer.keyboard_focus, "native rotation reflow clears focus")
 key(viewer,"Tab"); flush(); shot("keyboard-landscape-focus")
 assert(viewer.keyboard_focus.box == viewer.scroll.htmlbox_widget, "focus uses reflowed native document")
+focusUri(viewer,"dpd:edit-search"); flush(); shot("keyboard-landscape-pencil-focus")
+assert(viewer.edit_button ~= old_pencil and viewer.keyboard_focus.target.button == viewer.edit_button
+    and viewer.edit_button.image.invert, "pencil focus uses the reflowed title")
+local retained_tree, retained_scroll, visible_pencil = viewer[1], viewer.scroll, viewer.edit_button
+local Scroll = require("ui/widget/scrollhtmlwidget")
+local restore, show_error, reported = Scroll.scrollToRatio, viewer.showError
+Scroll.scrollToRatio = function() error("injected scroll restoration failure") end
+viewer.showError = function(_, err) reported = err end
+viewer:update(true); flush()
+Scroll.scrollToRatio, viewer.showError = restore, show_error
+assert(reported and reported:find("injected scroll restoration failure", 1, true), "failed reflow control ran")
+assert(not viewer.closed and viewer[1] == retained_tree and viewer.scroll == retained_scroll,
+    "failed reflow retains the visible tree")
+viewer:clearKeyboardFocus()
+focusUri(viewer,"dpd:edit-search"); flush(); shot("keyboard-failed-reflow-pencil-focus")
+assert(viewer.edit_button == visible_pencil and viewer.keyboard_focus.target.button == visible_pencil
+    and visible_pencil.image.invert, "failed reflow keeps focus on the visible pencil")
 viewer:close(); flush()
+
+-- Exercise the actual plugin's editor and ownership callbacks, not a counter.
+local DPD = dofile(root .. "/main.lua")
+local editor = setmetatable({db=db,lookup=lookup,settings={font_size=20,dictionaries_off={}},ui={}}, {__index=DPD})
+local function shown(widget)
+    for _, window in ipairs(UIManager._window_stack) do if window.widget == widget then return true end end
+    return false
+end
+local function editPopup(popup, draft, mode, name)
+    if not popup.keyboard_focus or popup.keyboard_focus.target.uri ~= "dpd:edit-search" then
+        focusUri(popup,"dpd:edit-search")
+    end
+    key(popup,"Return"); flush()
+    local input = assert(editor.input_dialog,"keyboard opens the real editor")
+    assert(shown(input) and shown(popup) and not popup.closed, "editor leaves its popup open")
+    assert(input:getInputText() == draft and input.mode == mode, "editor preserves its draft and mode")
+    shot(name)
+    return input
+end
+local function cancelEditor(popup, input)
+    key(input,Device.input.group.Back[1]); flush()
+    assert(not shown(input) and not editor.input_dialog and shown(popup)
+        and editor.viewer == popup and not popup.closed, "keyboard Cancel returns to the edited popup")
+end
+local function submitEditor(input, text)
+    input:setInputText(text)
+    for _, row in ipairs(input.buttons) do
+        for _, button in ipairs(row) do
+            if button.text == "Look up" then button.callback(); flush(); return end
+        end
+    end
+    error("editor Look up button missing")
+end
+for _, trial in ipairs({{"dhamma","pali"},{"good","english"},{"dharma","dictionaries"}}) do
+    local draft = "  " .. trial[1] .. "  "
+    editor:lookupInput(trial[1],trial[2],draft); flush()
+    local popup = assert(editor.viewer)
+    assert(popup.model.found and popup.edit_button, "successful edit-enabled fixture")
+    cancelEditor(popup,editPopup(popup,draft,trial[2],"keyboard-editor-" .. trial[2]))
+    editor:closeViewers(); flush()
+end
+editor:lookupInput("dhamma","pali","  dhamma  "); flush()
+local root_popup = assert(editor.viewer)
+local input = editPopup(root_popup,"  dhamma  ","pali","keyboard-editor-root")
+submitEditor(input,"buddha")
+assert(root_popup.closed and #editor.viewers == 1, "submitted root edit replaces its owner")
+root_popup = assert(editor.viewer)
+root_popup:openView(root_popup:ratio(),lookup.get,"dhamma"); flush()
+assert(#root_popup.navigation.stack == 2, "linked entry fixture")
+cancelEditor(root_popup,editPopup(root_popup,"dhamma","pali","keyboard-editor-linked"))
+input = editPopup(root_popup,"dhamma","pali","keyboard-editor-linked-submit")
+submitEditor(input,"kamma")
+local child = assert(editor.viewer)
+assert(child ~= root_popup and child.parent_viewer == root_popup and #editor.viewers == 2
+    and not root_popup.closed and #root_popup.navigation.stack == 2, "linked edit opens a child")
+cancelEditor(child,editPopup(child,"kamma","pali","keyboard-editor-child"))
+input = editPopup(child,"kamma","pali","keyboard-editor-child-submit")
+submitEditor(input,"dhamma")
+assert(child.closed and #editor.viewers == 2 and editor.viewer.parent_viewer == root_popup,
+    "submitted child edit replaces only that child")
+key(editor.viewer,"Back"); flush()
+assert(editor.viewer == root_popup and not root_popup.closed, "Back returns to the linked parent")
+editor:closeViewers(); flush()
+editor:lookupInput("zzzzzzzzzzz","pali","  zzzzzzzzzzz  "); flush()
+local miss = assert(editor.viewer)
+assert(not miss.model.found, "no-result fixture")
+focusUri(miss,"dpd:edit-search")
+assert(miss.keyboard_focus.target.rects, "existing no-result HTML edit remains reachable")
+cancelEditor(miss,editPopup(miss,"  zzzzzzzzzzz  ","pali","keyboard-editor-miss"))
+editor:closeViewers(); flush()
+print("PASS: visible title-pencil focus survives reflow; keyboard opens real Pali/English/dictionary editors; root, linked and child edits preserve Cancel and replacement ownership; no-result editing remains reachable")
 
 viewer = Viewer:new{model=lookup:otherDictionaries({query="kamma"},{"cpd"}),lookup=lookup,
     font_size=26,dictionaries={"cpd"},normal_callback=function() end}

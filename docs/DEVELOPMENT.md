@@ -418,6 +418,9 @@ an optional SSH run on a Kindle provides device timing evidence.
 
 ## Running the gate on a Kindle
 
+Use a trusted, isolated network for SSH and HTTP Inspector, and follow the
+[setup and cleanup precautions](TESTING.md#quick-check-on-a-kindle-over-ssh).
+
 The plugin folder holds no `tools/`, so copy the scripts to a separate folder
 such as `/mnt/us/dpd-diag/tools`. Over SSH on the device, from KOReader's
 directory:
@@ -440,8 +443,10 @@ on the device. The log's `Popup ready` line gives lookup, build and total
 milliseconds per popup; `Settled memory` lines come after a full collection.
 Do not force a collection on the popup path: it empties KOReader's caches and
 makes the next build several times slower. The inspector has no authentication
-and opens a firewall port, so stop it afterwards; KOReader's auto-suspend also
-stops it. It cannot send touches, so selection, painting and refresh still
+and opens a firewall port. After the run, even if it fails, stop it and disable
+autostart, then stop SSH and restore authentication as described in the linked
+precautions. Suspend is not cleanup: the inspector can restart on wake. It
+cannot send touches, so selection, painting and refresh still
 need hands, and sleep/wake needs the power button (ideally in no-framework
 mode; see the Kindle results in [Testing](TESTING.md#kindle-results)).
 

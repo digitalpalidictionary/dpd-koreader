@@ -1,11 +1,14 @@
 describe("automatic update scheduling", function()
-    local saved, previous_settings, DPD, updater, tasks, state, plugin
+    local saved, previous_settings, previous_time, DPD, updater, tasks, state, plugin
     local names = { "datastorage", "dpd/db", "dpd/updater", "ui/widget/infomessage",
         "ui/widget/pathchooser", "ui/uimanager", "ui/widget/container/widgetcontainer",
         "libs/libkoreader-lfs", "logger", "ui/time", "util", "ui/network/manager",
         "ui/widget/notification", "main" }
     before_each(function()
-        saved, tasks, state = {}, {}, { connected = true, launched = 0, notifications = 0, saves = 0 }
+        saved, tasks, state = {}, {}, { connected = true, launched = 0, notifications = 0, saves = 0,
+            now = 1000000, uptime = 1000000 }
+        previous_time = os.time
+        os.time = function() return state.now end
         for _, name in ipairs(names) do saved[name] = package.loaded[name]; package.loaded[name] = {} end
         package.loaded["ui/widget/container/widgetcontainer"] = { extend = function(_, value) return value end }
         package.loaded["ui/uimanager"] = {
@@ -13,8 +16,9 @@ describe("automatic update scheduling", function()
             unschedule = function(_, callback) tasks[callback] = nil end,
         }
         package.loaded["ui/network/manager"] = { isConnected = function() return state.connected end }
+        package.loaded["ui/time"] = { now = function() return state.uptime end, s = function(seconds) return seconds end }
         package.loaded["ui/widget/notification"] = { notify = function() state.notifications = state.notifications + 1 end }
-        updater = { check_interval = 604800, isNewer = function() return true end,
+        updater = { check_interval = 604800, retry_interval = 3600, isNewer = function() return true end,
             checkInBackground = function(callback)
                 state.launched = state.launched + 1
                 state.complete = callback
@@ -30,6 +34,7 @@ describe("automatic update scheduling", function()
     after_each(function()
         for _, name in ipairs(names) do package.loaded[name] = saved[name] end
         _G.G_reader_settings = previous_settings
+        os.time = previous_time
     end)
     local function delayed()
         local callback = assert(next(tasks))
@@ -50,7 +55,7 @@ describe("automatic update scheduling", function()
         plugin:onNetworkConnected()
         plugin:onResume()
         assert.equal(pending, updater.auto_pending)
-        assert.is_nil(updater.auto_checked)
+        assert.is_nil(updater.auto_checking)
         delayed()
         plugin:onNetworkConnected()
         assert.equal(1, state.launched)
@@ -62,7 +67,7 @@ describe("automatic update scheduling", function()
         state.connected = false
         delayed()
         assert.equal(0, state.launched)
-        assert.is_nil(updater.auto_checked)
+        assert.is_nil(updater.auto_checking)
         state.connected = true
         plugin:onNetworkConnected()
         delayed()
@@ -131,7 +136,7 @@ describe("automatic update scheduling", function()
         plugin.settings.update_checked = os.time()
         delayed()
         assert.equal(0, state.launched)
-        assert.is_nil(updater.auto_checked)
+        assert.is_nil(updater.auto_checking)
     end)
 
     it("preserves another owner's timer except when the setting is disabled globally", function()
@@ -152,7 +157,7 @@ describe("automatic update scheduling", function()
         state.launch_failed = true
         plugin:scheduleUpdateCheck()
         delayed()
-        assert.is_nil(updater.auto_checked)
+        assert.is_nil(updater.auto_checking)
         state.launch_failed = nil
         plugin:onNetworkConnected()
         delayed()
@@ -160,5 +165,49 @@ describe("automatic update scheduling", function()
         state.complete("99.0.0")
         assert.is_number(plugin.settings.update_checked)
         assert.equal(1, state.notifications)
+    end)
+
+    it("retries a failed started request after a cooldown across owners", function()
+        plugin:scheduleUpdateCheck()
+        delayed()
+        assert.is_true(updater.auto_checking)
+        state.complete(nil)
+        assert.is_nil(updater.auto_checking)
+        assert.is_nil(plugin.settings.update_checked)
+        assert.equal(0, state.saves)
+        plugin:onNetworkConnected()
+        plugin:onResume()
+        assert.is_nil(next(tasks))
+        state.now = state.now + 2 * updater.check_interval
+        state.uptime = state.uptime + updater.retry_interval - 1
+        plugin:onResume()
+        assert.is_nil(next(tasks))
+        state.uptime = state.uptime + 1
+        local next_book = setmetatable({ settings = plugin.settings }, { __index = DPD })
+        next_book:onNetworkConnected()
+        plugin:onResume()
+        delayed()
+        assert.equal(2, state.launched)
+        state.complete("99.0.0")
+        assert.is_nil(updater.auto_retry_at)
+        assert.equal(state.now, plugin.settings.update_checked)
+    end)
+
+    it("checks again a week after success without restarting the updater", function()
+        plugin:scheduleUpdateCheck()
+        delayed()
+        state.complete("99.0.0")
+        assert.is_nil(updater.auto_checking)
+        assert.equal(1, state.notifications)
+        state.now = state.now + updater.check_interval - 1
+        plugin:onResume()
+        assert.is_nil(next(tasks))
+        state.now = state.now + 1
+        plugin:onResume()
+        delayed()
+        assert.equal(2, state.launched)
+        state.complete("99.0.0")
+        assert.equal(1, state.notifications)
+        assert.equal(state.now, plugin.settings.update_checked)
     end)
 end)

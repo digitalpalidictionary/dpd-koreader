@@ -76,6 +76,26 @@ describe("keyboard access to rendered popup links", function()
         assert.equal("b",viewer.keyboard_focus.target.uri)
     end)
 
+    it("focuses the title pencil and activates its callback before footer controls", function()
+        local viewer, state = harness({{link("a")}})
+        local edits, pencil = 0, button(true)
+        pencil.callback = function() edits = edits + 1 end
+        viewer.edit_button = pencil
+        viewer.keyboard_buttons = {{uri="footer",button=button(true)}}
+        viewer:onFocusLink(1); viewer:onFocusLink(1)
+        assert.equal("dpd:edit-search",viewer.keyboard_focus.target.uri)
+        assert.is_true(pencil.focused)
+        viewer:onActivateLink()
+        assert.equal(1,edits)
+        assert.same({},state.followed)
+        viewer:onFocusLink(1)
+        assert.is_false(pencil.focused)
+        assert.equal("footer",viewer.keyboard_focus.target.uri)
+        viewer:onFocusLink(-1)
+        viewer:clearKeyboardFocus()
+        assert.is_false(pencil.focused)
+    end)
+
     it("crosses linkless pages and clears focus when native paging changes the page", function()
         local viewer, _, box = harness({{link("a")},{},{link("b")}})
         viewer:onFocusLink(1); viewer:onFocusLink(1)
