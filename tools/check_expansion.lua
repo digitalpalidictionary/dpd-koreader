@@ -61,31 +61,37 @@ local function case(label, run)
 end
 local function record(label, ...) results[#results + 1] = string.format("%s %d/%d -> %d/%d", label, ...) end
 
--- A compound case: expanding a component sense below the first page.
-local compound = show("vajjakammappabhedanti")
-local frame = compound.navigation:current()
--- Only analysis 1 starts open; open the rest to reach a later page.
-for index, analysis in ipairs(frame.model.deconstructions) do
-    if analysis.has_new and not frame.analyses[index] then
-        compound:onLink("dpd:analysis/" .. index); flush()
+-- A compound case: expanding a component sense below the first page. Small
+-- fonts fit the first compound on one page, so longer ones follow.
+local compound, target
+for _, word in ipairs({ "vajjakammappabhedanti", "sīlasamādhipaññāvimuttivimuttiñāṇadassanasampannā",
+        "saddantaratthāpohavasena", "nahetudukanapītittikaṃ" }) do
+    compound = show(word)
+    local frame = compound.navigation:current()
+    -- Only analysis 1 starts open; open the rest to reach a later page.
+    for index, analysis in ipairs(frame.model.deconstructions) do
+        if analysis.has_new and not frame.analyses[index] then
+            compound:onLink("dpd:analysis/" .. index); flush()
+        end
     end
-end
-local target
-for index, analysis in ipairs(compound.navigation:current().model.deconstructions) do
-    if frame.analyses[index] then
-        for part_index, part in ipairs(analysis.parts or {}) do
-            local component = analysis.unique[part_index] and frame.model.components[part]
-            for j, sense in ipairs(component and component.senses or {}) do
-                if j > 2 then break end
-                local uri = "dpd:component-sense/" .. index .. "/" .. part_index .. "/" .. sense.id
-                if (pageOf(compound, uri) or 0) > 1 then target = uri end
+    for index, analysis in ipairs(compound.navigation:current().model.deconstructions) do
+        if frame.analyses[index] then
+            for part_index, part in ipairs(analysis.parts or {}) do
+                local component = analysis.unique[part_index] and frame.model.components[part]
+                for j, sense in ipairs(component and component.senses or {}) do
+                    if j > 2 then break end
+                    local uri = "dpd:component-sense/" .. index .. "/" .. part_index .. "/" .. sense.id
+                    if (pageOf(compound, uri) or 0) > 1 then target = uri end
+                end
             end
         end
     end
+    -- A known regression (the akamma sense of analysis 5) when it is on a later page.
+    if (pageOf(compound, "dpd:component-sense/5/2/102") or 0) > 1 then target = "dpd:component-sense/5/2/102" end
+    if target then break end
+    compound:close(); flush()
 end
--- A known regression (the akamma sense of analysis 5) when it is on a later page.
-if (pageOf(compound, "dpd:component-sense/5/2/102") or 0) > 1 then target = "dpd:component-sense/5/2/102" end
-target = assert(target, "compound needs a component sense below the first page")
+assert(target, "compound needs a component sense below the first page")
 case("compound", function()
     record("compound expand " .. target, tap(compound, target, "compound expand")); screenshot("compound-expanded")
     record("compound collapse", tap(compound, target, "compound collapse"))

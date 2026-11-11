@@ -26,7 +26,7 @@ assert(#rescued.variants == 1 and #rescued.suggestions[1].attestations > 0)
 assert(Lookup.directHit(rescued))
 local context_only = lookup:get("uyyokhajja")
 assert(context_only.found and Lookup.isVariantOnly(context_only) and not Lookup.directHit(context_only))
--- Expectations pinned to official mobile v0.4.20260926, schema 7.
+-- Expectations pinned to official mobile v0.4.20261026, schema 7.
 for _, case in ipairs({
     {"Buddha","buddha"}, {"Sace","sace"}, {"Nārada","nārada"}, {"Kaccāyana","kaccāyana"},
     {"saŋ","saṃ"}, {"dhammā","dhammā"}, {"ānanda","ānanda"},
@@ -68,7 +68,7 @@ assert(not lookup:get("monk",{approximate=false}).found,"EPD is not an automatic
 -- Corrections are content even without target definitions; available targets
 -- still add exact navigation (including abbreviation-only di→dī).
 local spelling_records = db:query("SELECT lookup_key FROM lookup WHERE spelling != ''")
-assert(#spelling_records == 544)
+assert(#spelling_records == 546)
 local resolved, unavailable = 0,0
 for _, row in ipairs(spelling_records) do
     local value = lookup:get(row.lookup_key,{approximate=false})
@@ -83,9 +83,9 @@ for _, row in ipairs(spelling_records) do
         else assert(reference.status);unavailable=unavailable+1 end
     end
 end
--- Pinned to official mobile v0.4.20260926, schema 7.
-assert(resolved == 496 and unavailable == 48, resolved .. " resolved, " .. unavailable .. " unavailable")
-print("PASS: official channels, exact aliases, capitalized aggregation, all 544 spelling records ("
+-- Pinned to official mobile v0.4.20261026, schema 7.
+assert(resolved == 498 and unavailable == 48, resolved .. " resolved, " .. unavailable .. " unavailable")
+print("PASS: official channels, exact aliases, capitalized aggregation, all 546 spelling records ("
     .. resolved .. " resolved, " .. unavailable .. " unavailable), and 29 ranked forms")
 
 G_defaults = require("luadefaults"):open()

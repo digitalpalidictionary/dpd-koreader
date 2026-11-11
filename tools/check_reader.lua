@@ -50,7 +50,7 @@ assert(reader.dictionary._dict_buttons.dpd)
 assert(reader.highlight._highlight_buttons["06_dpd"])
 reader.dictionary:onLookupWord("pacchima",false,nil,reader.highlight)
 flush()
-assert(plugin.viewer and #plugin.viewer.model.senses==8)
+assert(plugin.viewer and #plugin.viewer.model.senses==9)
 assert(plugin.settings.font_size==16 and plugin.viewer.font_size==16,
     "DPD must default to 16 independently of the normal dictionary font")
 assert(plugin.viewer.scroll.default_font_size==Device.screen:scaleBySize(16))

@@ -24,9 +24,9 @@ body:
       label: DPD diagnostic log
       description: |
         The most useful thing to attach, on any device:
-        1. In the DPD menu (**Search → Digital Pāḷi Dictionary**), turn on **Help → Diagnostics → Write diagnostic log**. DPD shows where it writes the log.
+        1. In the DPD menu (**Search → Digital Pāḷi Dictionary**), turn on **Help & updates → Diagnostics → Write diagnostic log**. DPD shows where it writes the log.
         2. Repeat what went wrong. If it happens when KOReader starts, restart KOReader first.
-        3. Attach that `dpd-debug.log` file, or a screenshot of **Help → Diagnostics → Show diagnostic log**.
+        3. Attach that `dpd-debug.log` file, or a screenshot of **Help & updates → Diagnostics → Show diagnostic log**.
         4. Turn the log off again.
 
         Each session in the log starts with the plugin version, KOReader version and device. The log also records the words you looked up and the links you tapped.
@@ -56,7 +56,7 @@ body:
     id: versions
     attributes:
       label: Plugin version, KOReader version and device
-      description: Not needed if you attached the diagnostic log. The plugin's version is in **Help → About & licenses** in the DPD menu; KOReader's version and your device are in KOReader's **Help → Report a bug**.
+      description: Not needed if you attached the diagnostic log. The plugin's version is in **Help & updates → About & licenses** in the DPD menu; KOReader's version and your device are in KOReader's **Help → Report a bug**.
       placeholder: e.g. DPD 0.3.0, KOReader v2026.07.1, Kindle Paperwhite 12th generation
     validations:
       required: false

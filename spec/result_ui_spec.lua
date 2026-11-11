@@ -362,7 +362,7 @@ describe("complete DPD result rendering", function()
         local html = Render.render(value, frame)
         assert.is_falsy(html:find("Commentary:",1,true))
         assert.is_falsy(html:find("Source:",1,true))
-        assert.is_truthy(html:find('<td class="label">Suffix</td><td>ima',1,true))
+        assert.is_truthy(html:find('<i>Suffix:</i> ima',1,true))
         assert.is_truthy(html:find("<i>Notes:</i> a - b",1,true))
     end)
 

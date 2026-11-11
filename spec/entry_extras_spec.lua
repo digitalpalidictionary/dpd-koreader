@@ -79,7 +79,7 @@ describe("expanded-sense additions", function()
             link_line="dpdict.net/7"}}}
         local html = Render.render(value({senses={sense}}), frame)
         local function at(text) return assert(html:find(text, 1, true), text) end
-        assert.is_true(at('class="label">IPA<') < at('class="label">Traditional lemma (grammar-book headword)</td><td>satthu'))
+        assert.is_true(at('<i>IPA:</i>') < at('<i>Traditional lemma (grammar-book headword):</i> satthu'))
         assert.is_true(at("<i>Notes:</i>") < at("✔ complete"))
         assert.is_true(at("✔ complete") < at("dpdict.net/7"))
         assert.is_nil(html:find("Early Buddhist texts", 1, true))
@@ -121,9 +121,20 @@ describe("compact expanded sense", function()
         html = expanded({construction="√kar + a", suffix="ta"})
         assert.is_truthy(html:find('<td class="label">Suffix</td><td>ta', 1, true))
         html = expanded({construction="dhamma + cakka", compound_construction="dhamma + cakka"})
-        assert.is_falsy(html:find('class="label">Compound construction<', 1, true))
+        assert.is_falsy(html:find('Compound construction', 1, true))
         html = expanded({construction="buddha + anussati", compound_construction="buddha + anussati + ti"})
-        assert.is_truthy(html:find('<td class="label">Compound construction</td><td>buddha + anussati + ti', 1, true))
+        assert.is_truthy(html:find('<i>Compound construction:</i> buddha + anussati + ti', 1, true))
+    end)
+
+    it("puts the compound pair after the root's facts, outside the label table", function()
+        -- dukkaṭa 1: Root sign stays under Root; the long label gets a full row.
+        local html = expanded({construction="dur + √kar + ta", root_key="√kar", root_sign="o", derivative="kita",
+            compound_construction="dur + kaṭa", compound_type="kammadhāraya", phonetic="rk > kk"})
+        assert.is_truthy(html:find('<td class="label">Root</td><td>√kar</td></tr>\n</table>', 1, true))
+        assert.is_truthy(html:find('<tr><td><i>Root sign:</i> o</td><td><i>Derivative:</i> kita</td></tr>\n'
+            .. '<tr><td class="wide" colspan="2"><i>Compound construction:</i> dur + kaṭa</td></tr>\n'
+            .. '<tr><td class="wide" colspan="2"><i>Compound type:</i> kammadhāraya</td></tr>\n'
+            .. '<tr><td class="wide" colspan="2"><i>Phonetic change:</i> rk &gt; kk</td></tr>', 1, true))
     end)
 
     it("names a family button only when the entry does not already", function()
@@ -144,14 +155,14 @@ describe("compact expanded sense", function()
         assert.is_truthy(html:find(">Compounds: cakka · 41</a>", 1, true))
     end)
 
-    it("groups synonyms, antonyms and variants between the field table and buttons", function()
+    it("bundles synonyms, antonyms and variants in pairs between the origin table and buttons", function()
         local html = expanded({construction="√dhar + ma", synonym="sabhāva", antonym="adhamma",
             variant="dhammo", var_phonetic="dhammaṃ", var_text="dhammā", paradigm_kind="Declension",
             commentary="a comment", example_1="an example", notes="a note", web_line="https://x.org",
             status_line="✔ complete", link_line="dpdict.net/7"})
-        local related = assert(html:match('</table>%s*(<p>.-</p>)%s*<table class="actions"'))
-        local _, paragraphs = related:gsub("<p>", "")
-        assert.equal(1, paragraphs)
+        local related = assert(html:match('</table>%s*(<table class="pairs">.-</table>)%s*<table class="actions"'))
+        assert.is_truthy(related:find('<tr><td><i>Synonym:</i> sabhāva</td><td><i>Antonym:</i> adhamma</td></tr>', 1, true))
+        assert.is_truthy(related:find('<tr><td class="wide" colspan="2"><i>Textual variant:</i> dhammā</td></tr>', 1, true))
         local previous = 0
         for _, text in ipairs({"Synonym:</i> sabhāva", "Antonym:</i> adhamma", "Variant:</i> dhammo",
                 "Phonetic variant:</i> dhammaṃ", "Textual variant:</i> dhammā"}) do
@@ -160,7 +171,7 @@ describe("compact expanded sense", function()
             previous = position
         end
         local function at(text) return assert(html:find(text, 1, true), text) end
-        assert.is_true(at("Declension</a>") < at("<i>Commentary:</i>"))
+        assert.is_true(at("Declension</a>") < at('<p class="commentary"><i>Commentary:</i>'))
         assert.is_true(at("<i>Commentary:</i>") < at("an example"))
         assert.is_true(at("an example") < at("<i>Notes:</i>"))
         assert.is_true(at("<i>Notes:</i>") < at("<i>Web link:</i>"))
@@ -177,14 +188,46 @@ describe("compact expanded sense", function()
         assert.is_falsy(html:find("Example 1:", 1, true))
     end)
 
-    it("gives each short origin field a labelled row", function()
+    it("keeps origin fields in the label table and pairs the short ones by bundle", function()
         local html = expanded({construction="√dhar + ma", derived_from="dharati", ipa_line="/d̪ʰəmmə/",
-            sanskrit="dharma", derivative="kita"})
-        assert.is_truthy(html:find('<td class="label">Construction</td><td>√dhar + ma · <i>from</i> dharati</td>', 1, true))
-        assert.is_truthy(html:find('<td class="label">IPA</td><td>/d̪ʰəmmə/</td>', 1, true))
-        assert.is_truthy(html:find('<td class="label">Derivative</td><td>kita</td>', 1, true))
+            sanskrit="dharma", derivative="kita", root_sign="a", phonetic="rm > mm", root_base="√dhar + a",
+            synonym="suttanta"})
+        assert.is_truthy(html:find('<td class="label">Construction</td><td>√dhar + ma · <i>from</i> dharati</td></tr>\n'
+            .. '<tr><td class="label">Root base</td><td>√dhar + a</td></tr>\n</table>', 1, true))
+        -- A bundle starts a new row: Phonetic change does not pair with Sanskrit.
+        assert.is_truthy(html:find('<tr><td><i>Root sign:</i> a</td><td><i>Derivative:</i> kita</td></tr>\n'
+            .. '<tr><td class="wide" colspan="2"><i>Phonetic change:</i> rm &gt; mm</td></tr>\n'
+            .. '<tr><td><i>Sanskrit:</i> dharma</td><td><i>IPA:</i> /d̪ʰəmmə/</td></tr>\n'
+            .. '<tr><td class="wide" colspan="2"><i>Synonym:</i> suttanta</td></tr>\n</table>', 1, true))
+    end)
+
+    it("spans a field wider than half the row", function()
+        local html = expanded({sanskrit="dharma", ipa_line="/d̪ʰəmmə/",
+            synonym="atthakara, atthika, atthiya, upakāra, kalyāṇa", antonym="akusala"})
+        assert.is_truthy(html:find('<tr><td class="wide" colspan="2"><i>Synonym:</i> atthakara, atthika, atthiya, '
+            .. 'upakāra, kalyāṇa</td></tr>\n<tr><td class="wide" colspan="2"><i>Antonym:</i> akusala</td></tr>', 1, true))
+    end)
+
+    it("moves a lone short field under the origin table into it", function()
+        -- gacchati: Root sign is the only field about how the word is built.
+        local html = expanded({construction="gaccha + ti", root_key="√gam", root_sign="a", root_base="√gam + a",
+            sanskrit="gacchati", ipa_line="/gət͡ʃt͡ʃʰət̪ɪ/"})
+        assert.is_truthy(html:find('<td class="label">Root</td><td>√gam</td></tr>\n'
+            .. '<tr><td class="label">Root sign</td><td>a</td></tr>\n<tr><td class="label">Root base</td>', 1, true))
+        assert.is_falsy(html:find("<i>Root sign:</i>", 1, true))
+        -- A label wider than the table's column stays out of it.
+        html = expanded({construction="a + b", phonetic="rm > mm"})
+        assert.is_truthy(html:find('colspan="2"><i>Phonetic change:</i> rm &gt; mm', 1, true))
+    end)
+
+    it("falls back to one row per field and a related line when half a row is narrow", function()
+        local sense = {id=7, lemma_1="dhamma 1.01", pos="masc", meaning_combo="nature"}
+        local html = Render.render(value({senses={sense}}), {content_em=21, expanded={[7]=true}, details={[7]={
+            construction="√dhar + ma", root_sign="a", sanskrit="dharma", synonym="suttanta", antonym="adhamma"}}})
+        assert.is_falsy(html:find('class="pairs"', 1, true))
+        assert.is_truthy(html:find('<td class="label">Root sign</td><td>a</td>', 1, true))
         assert.is_truthy(html:find('<td class="label">Sanskrit</td><td>dharma</td>', 1, true))
-        assert.is_truthy(html:find("Construction</td>.-Sanskrit</td>.-Derivative</td>.-IPA</td>"))
+        assert.is_truthy(html:find('<i>Synonym:</i> suttanta</span> · <span class="item"><i>Antonym:</i> adhamma', 1, true))
     end)
 
     it("keeps long field words intact in paragraphs that MuPDF can wrap", function()

@@ -63,8 +63,9 @@ for index, case in ipairs(cases) do
     UIManager:show(viewer)
     flush()
     if index == 9 then
-        -- samādhipaññāvimutti follows sīla's senses; its own heading must
+        -- samādhipaññāvimutti follows sīla's senses; its own name must
         -- separate them (it once dropped out and read as a third sīla sense).
+        -- It has one sense, which follows the name on the same line.
         local box = viewer.scroll.htmlbox_widget
         local headings, senses = {}, {}
         for page_number = 1, box.page_count do
@@ -81,10 +82,11 @@ for index, case in ipairs(cases) do
             end
             page:close()
         end
-        assert(headings["2"], "samādhipaññāvimutti needs its own heading")
-        assert(math.abs(headings["2"].x0 - headings["1"].x0) < viewer.font_px * .25
-            and math.abs(senses["2"] - senses["1"]) < viewer.font_px * .25,
-            "every part's heading and senses should line up with sīla's")
+        assert(headings["2"], "samādhipaññāvimutti needs its own name at the start of a line")
+        assert(math.abs(headings["2"].x0 - headings["1"].x0) < viewer.font_px * .25,
+            "every part's name should line up with sīla's")
+        assert(senses["2"] > headings["2"].x0 + viewer.font_px * .25,
+            "samādhipaññāvimutti's sense should follow its name, not start a line under sīla's senses")
     end
     local pages = viewer.scroll.htmlbox_widget.page_count
     for page = 1, pages do

@@ -1,5 +1,6 @@
--- English→Pāḷi from lookup.epd, for the lookup dialog's English mode only
--- (never long-press: English book words also have epd rows). Each item is
+-- English→Pāḷi from lookup.epd, for the lookup dialog's English mode and,
+-- for a word with no Pāḷi entry, the DPD buttons (never long-press: English
+-- book words also have epd rows). Each item is
 -- [clean lemma, pos, meaning]; a lemma opens all its senses. A key holds at
 -- most a few hundred items (27 KB of JSON), decoded once and paged.
 local Json = require("json")

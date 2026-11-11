@@ -4,7 +4,7 @@
 -- same core columns are expected to work, and optional views degrade on their own.
 local Compat = {
     schema = "7",
-    release = "v0.4.20260926",
+    release = "v0.4.20261026",
 }
 
 function Compat.tested()

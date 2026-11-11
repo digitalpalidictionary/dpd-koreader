@@ -22,7 +22,7 @@ local settings = { dictionaries = Dictionaries.enabled(Dictionaries.order), nigg
 -- Expectations are independent of the recorded ceilings. Updating a baseline
 -- cannot bless a miss, missing sense or wrong route for one of these cases.
 local cases = {
-    {word="pacchima", senses=8, grammar=4},
+    {word="pacchima", senses=9, grammar=4},
     {word="dhammassa", senses=16, grammar=8, variants=1},
     {word="vajjakammappabhedanti", analyses=5},
     {word="pacchimakattikapuṇṇamā", analyses=1},

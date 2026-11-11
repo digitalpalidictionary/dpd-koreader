@@ -81,7 +81,8 @@ and Linux; KOReader also runs on Kobo and PocketBook.
 - **Look up a word:** type a search from the DPD menu. Drag across a
   phrase in your book to use the selection menu's **DPD** button.
 - **English books:** turn off **Open DPD on long-press in this book** if
-  English words open DPD. Your normal dictionary still offers a **DPD** button.
+  English words open DPD. Your normal dictionary still offers a **DPD** button,
+  which also finds the Pāḷi for an English word such as `happiness`.
 
 For Pāḷi searches, diacritics and capitals are optional: `Buddha` finds `buddha`,
 `nana` suggests ñāṇa, and `saṁ`, `saŋ` and `saṃ` all match. See
@@ -92,7 +93,7 @@ For Pāḷi searches, diacritics and capitals are optional: `Buddha` finds `budd
 **From 0.3.0 or earlier:** update manually once, using the steps below.
 The in-app updater is new in 0.3.1.
 
-- **Plugin:** open **Help → Check for updates** in the DPD menu, choose
+- **Plugin:** open **Help & updates → Check for updates** in the DPD menu, choose
   **Install**, then restart KOReader. To update manually, exit KOReader,
   delete `koreader/plugins/dpd.koplugin`, extract the new plugin folder in
   its place and restart. Settings and recent lookups are kept.

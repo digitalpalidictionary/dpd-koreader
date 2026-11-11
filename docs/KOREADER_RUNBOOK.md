@@ -47,7 +47,7 @@ libraries, fonts and frontend modules.
 ## 2. Get the database and the plugin
 
 Point `DPD_DB` at a `dpd-mobile.db`. The lookup budget gate is pinned to the
-official mobile release v0.4.20260926 (schema 7); other releases are fine for
+official mobile release v0.4.20261026 (schema 7); other releases are fine for
 smoke tests but won't pass that gate. Check a file's release with:
 
 ```sh
@@ -140,8 +140,9 @@ with DPI, so the Paperwhite popup holds about as many characters per line as
 In order of value per minute:
 
 1. `check_ux.lua`: database recovery, the Database status detour, Help,
-   suggestion states, pager hit areas, similar-form disclosure and dense
-   links.
+   suggestion states, pager hit areas, similar-form disclosure, dense
+   links, and the DPD button on English words (`happiness`, `damage`) and
+   on a Pāḷi form that is an English word too (`time`).
 2. `check_learning.lua` with the test book: entry views, other dictionaries
    (including table clipping and article page counts), frequency, sutta
    information and selection inside popups.
@@ -210,17 +211,19 @@ Pass `"$DPD_BOOK"` as the book argument to `capture_screens.lua`.
   reverted, turns a guess into a proven fix. After implementing, rerun the
   same captures, compare pairwise and rerun `check_budget.lua`.
 
-Known worst cases in DPD mobile v0.4.20260926:
+Known worst cases in DPD mobile v0.4.20261026:
 
 | Record | Why it is useful |
 |---|---|
 | `ca` | Largest variant list: 1,679 readings |
-| `dhamma 1.01` | Compound family with 578 members |
-| `pacchima` | Eight ordered senses |
+| `dhamma 1.01` | Compound family with 583 members |
+| `pacchima` | Nine ordered senses |
 | `nnāṭṭā` | 29 similar forms |
 | `sabba` | Wide three-gender declension |
 | `akkandati` | Verb conjugation |
 | `good` | 38 English→Pāḷi results |
+| `happiness`, `damage` on a DPD button | English→Pāḷi before the rescues; `damage` must not open `dama` |
+| `time` | A Pāḷi form that is an English word too: the entry ends with the English link |
 | `tissa` | Proper-names group with 47 entries |
 | `paticcasamuppāda` (Nyanatiloka) | Widest imported table |
 | Longest CPD article (the bibliography) | 432,776 bytes in 27 parts |

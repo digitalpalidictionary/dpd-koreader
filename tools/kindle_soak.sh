@@ -2,7 +2,7 @@
 # On-device soak for a Kindle, run over SSH on the device itself:
 #   CYCLES=5 sh kindle_soak.sh
 # Needs KOReader running with More tools -> HTTP Inspector started and DPD's
-# Help -> Diagnostics -> "Write diagnostic log" on. Each word is opened as a popup
+# Help & updates -> Diagnostics -> "Write diagnostic log" on. Each word is opened as a popup
 # through the inspector (it skips word selection, so it exercises lookup,
 # build and paint only), then closed; between cycles it logs the Lua heap
 # after a full collection and samples the process from /proc.

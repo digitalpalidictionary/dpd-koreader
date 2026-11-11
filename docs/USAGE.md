@@ -6,7 +6,8 @@ plugin and how to read what it shows. To install it, see the
 
 The plugin's menu is **Search → Digital Pāḷi Dictionary**, on the first page
 of Search after KOReader's own dictionary items. This guide calls it the DPD
-menu. For a short reminder on the device, open **Help → DPD help** there.
+menu. For a short reminder on the device, open **Help & updates → DPD help**
+there.
 
 Choose the section you need:
 
@@ -45,7 +46,9 @@ The selection menu has a **DPD** button.
 - **English** switches to English → Pāḷi. Type an English word such as
   *good* to list the Pāḷi words whose meaning includes it, then tap one to
   open all its senses. **Pāḷi** switches back, and the dialog remembers your
-  choice. English search works only here, never on long-press.
+  choice. Long-press never searches in English. A **DPD** button does,
+  for a word with no Pāḷi entry: see
+  [Words in English books](#words-in-english-books).
 - **Recent** lists your last 50 lookups. Tap one to look it up again.
 
 **Search other dictionaries**, just below **Look up a word**, searches the
@@ -73,9 +76,13 @@ An expanded sense shows, when DPD has them:
 
 1. A table of **Grammar**, when it adds to the part of speech, and the word's
    origin: its construction, the word it derives from, its root (√ marks a
-   root) and the other origin fields, as in `√dhar + ma · from dharati`.
-2. Synonym, antonym, variant, phonetic variant and textual variant, together
-   on one line that wraps when needed.
+   root) and root base, as in `√dhar + ma · from dharati`.
+2. The shorter fields, two to a row and grouped by what they describe: how
+   the word is built (root sign, derivative, suffix, compound construction
+   and type, phonetic change), its Sanskrit, IPA and cognates, then synonym, antonym and
+   variants. A long value takes a row of its own. At large font sizes the
+   other fields get a row each instead, and synonyms, antonyms and variants
+   share one line.
 3. A row of buttons for the views it has: **Declension** or **Conjugation**,
    **Frequency**, **Sutta information**, and its word families.
 4. Commentary, examples with their sources, notes and the web link.
@@ -105,6 +112,10 @@ way, and each way is an analysis.
 - Each part shows up to two brief senses. A name such as
   **khippaṃ · 3 senses ›** has more: tap it to open them all. Tap a sense line
   to expand it in place.
+- A part with a single sense shows it on the part's own line, as in
+  **danti** ▸ **dantī** · *adj* · having teeth: first the form in your text,
+  then DPD's headword. When the two are spelled alike, the headword isn't
+  repeated.
 
 **Variant readings** list where a form is found, by source, book and
 context. They are for information and never take you to another word.
@@ -281,11 +292,11 @@ All settings are in the DPD menu.
 - **Database**, labelled with its state, has **Database status** and
   **Choose database file**: see
   [Updating and the database](#updating-and-the-database).
-- **Help** has **DPD help**, **About & licenses**, **Check for updates**,
-  **Check for updates automatically** (off by default) and **Diagnostics**.
-  It reads **Help · 99.0.0 available**, for example, when a newer plugin has
-  been found.
-  See [Updating and the database](#updating-and-the-database).
+- **Help & updates** has **DPD help**, **About & licenses**, **Check for
+  updates**, **Check for updates automatically** (off by default) and
+  **Diagnostics**. It reads **Help & updates · 99.0.0 available**, for
+  example, when a newer plugin has been found. See [Updating and the
+  database](#updating-and-the-database).
 
 KOReader's **Vocabulary builder** saves the words you look up in DPD in a
 book, with their sentence, when its own setting is on, as it does for
@@ -305,6 +316,19 @@ turn off **Open DPD on long-press in this book**. Pāḷi terms there
 are still one tap away, through the **DPD** button in your normal
 dictionary.
 
+That button, and the one in the selection menu, also find the Pāḷi for an
+English word. A word with no Pāḷi entry that is in DPD's English index opens
+English → Pāḷi: `happiness` lists *ānanda*, *pāmojja* and the other words
+whose meaning includes it. DPD checks this before it tries shortened and
+similar words, so `damage` opens its English entries, not `dama`. The
+index holds the words of DPD's meanings as they are written, so `monk` finds
+more than `monks`, and a word DPD's meanings don't use isn't found.
+
+An exact Pāḷi form still wins. `time` opens the Pāḷi `time`, a form of
+*timi*, and the entry ends with **English → Pāḷi: time**, which opens the
+English entries; **Back** returns. The same link is under every Pāḷi form
+that is an English word too, however you opened it.
+
 ## Updates and recovery
 
 ### Updating and the database
@@ -314,27 +338,26 @@ dictionary.
 **From 0.3.0 or earlier:** [update by hand](#update-by-hand) once. The in-app
 updater is new in 0.3.1.
 
-**Plugin.** Open **Help → Check for updates** in the DPD menu. It asks to
-turn on Wi-Fi if needed, then says whether there's a new version and shows
-what changed. When the plugin is current, the result starts with a bold
+**Plugin.** Open **Help & updates → Check for updates** in the DPD menu. It
+asks to turn on Wi-Fi if needed, then says whether there's a new version and
+shows what changed. When the plugin is current, the result starts with a bold
 verdict and separate **Plugin** and **Database** status lines. An available
-plugin opens its release notes, with release-page buttons above **Close**
-and **Install**.
-**Install** downloads the new version over a verified
-connection to GitHub, checks it against the release's checksum, unpacks it beside the current one and swaps the two;
-restart KOReader to use it (on Android, close KOReader and open it again).
-Until then DPD stays off and long-press opens your normal dictionary. If
-installation fails, the message says whether the current plugin is unchanged
-or gives instructions to restore it. The previous version is kept as
-`dpd.koplugin.previous` until the new one has started.
+plugin opens its release notes, with release-page buttons above **Close** and
+**Install**. **Install** downloads the new version over a verified connection
+to GitHub, checks it against the release's checksum, unpacks it beside the
+current one and swaps the two; restart KOReader to use it (on Android, close
+KOReader and open it again). Until then DPD stays off and long-press opens
+your normal dictionary. If installation fails, the message says whether the
+current plugin is unchanged or gives instructions to restore it. The previous
+version is kept as `dpd.koplugin.previous` until the new one has started.
 
-**Check for updates automatically** (off by default) checks about once a
-week, only when Wi-Fi is already on, without holding up your reading, and
-shows **DPD plugin 99.0.0 is available: see Help.**, for example, when there's
-a new version; the **Help** label keeps showing it. It never turns Wi-Fi on
-or installs anything by itself. Checking contacts GitHub and sends only
-DPD's version. After a failed check, it can retry later, on a book opening,
-resume or reconnect.
+**Check for updates automatically** (off by default) checks about once a week,
+only when Wi-Fi is already on, without holding up your reading, and shows
+**DPD plugin 99.0.0 is available: see Help & updates.**, for example, when
+there's a new version; the **Help & updates** label keeps showing it. It never
+turns Wi-Fi on or installs anything by itself. Checking contacts GitHub and
+sends only DPD's version. After a failed check, it can retry later, on a book
+opening, resume or reconnect.
 
 #### Update by hand
 
@@ -372,7 +395,7 @@ checked** until DPD first opens the file. Drawing the menu never opens it.
 
 **Database status** starts with the same verdict in bold, such as **Database
 ready** or **Newer release, should work**, then the DPD release and the one
-this plugin was tested with (currently DPD v0.4.20260926, schema 7), the file
+this plugin was tested with (currently DPD v0.4.20261026, schema 7), the file
 and its folder, and the checks behind
 the verdict (core columns, journal mode). Other releases work as long as the
 core columns are OK.
@@ -407,15 +430,15 @@ core columns are OK.
 - **The DPD menu says "Needs a newer KOReader":** update KOReader to
   v2026.07 or newer. Until then DPD stays off and long-presses open your
   normal dictionary.
-- **KOReader closes unexpectedly, or something looks wrong:** turn on
-  **Help → Diagnostics → Write diagnostic log** in the DPD menu and repeat
-  what you did (restart KOReader first if the problem happens at startup). Then send
-  `koreader/data/dpd/dpd-debug.log`, or open **Help → Diagnostics → Show
-  diagnostic log** and take a screenshot. The log records the words you look
-  up, links you tap, errors and the lookup, build and total time of each
-  popup, so turn it off afterwards. If KOReader itself closed, send its
-  `crash.log` too. On Android, KOReader writes none as it runs: open its
-  **Help → Report a bug** soon after the problem to save one. See
+- **KOReader closes unexpectedly, or something looks wrong:** turn on **Help &
+  updates → Diagnostics → Write diagnostic log** in the DPD menu and repeat
+  what you did (restart KOReader first if the problem happens at startup).
+  Then send `koreader/data/dpd/dpd-debug.log`, or open **Help & updates →
+  Diagnostics → Show diagnostic log** and take a screenshot. The log records
+  the words you look up, links you tap, errors and the lookup, build and total
+  time of each popup, so turn it off afterwards. If KOReader itself closed,
+  send its `crash.log` too. On Android, KOReader writes none as it runs: open
+  its **Help → Report a bug** soon after the problem to save one. See
   [reporting feedback](TESTING.md#reporting-feedback) for where it is.
 - **Reporting a problem:** see [reporting feedback](TESTING.md#reporting-feedback).
 
@@ -757,6 +780,6 @@ sections above, in the same order.
   resumes the search if the database now opens. **Recent** stays
   available, and a saved lookup you choose is retried once you select a
   valid file.
-- **Help → About & licenses** shows the plugin and dictionary licenses and
-  the open database's version. It works without a database too. The plugin
-  download includes the full licenses and attribution notices.
+- **Help & updates → About & licenses** shows the plugin and dictionary
+  licenses and the open database's version. It works without a database too.
+  The plugin download includes the full licenses and attribution notices.

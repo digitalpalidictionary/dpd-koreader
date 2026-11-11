@@ -8,7 +8,7 @@ local Lookup = require("dpd/lookup")
 local db = DB.new(path)
 local lookup = Lookup.new(db)
 local pacchima = lookup:get("pacchima")
-assert(pacchima.found and #pacchima.senses == 8)
+assert(pacchima.found and #pacchima.senses == 9)
 for i, sense in ipairs(pacchima.senses) do assert(sense.lemma_1 == "pacchima " .. i) end
 local count = db.query_count
 assert(lookup:get("“pacchima,”").original == "“pacchima,”")
@@ -23,7 +23,7 @@ assert(detail.grammar_line ~= "" and detail.construction ~= "")
 local compound_count = db.query_count
 local compound = lookup:get("vajjakammappabhedanti")
 assert(compound.found and #compound.deconstructions == 5)
-assert(db.query_count - compound_count == 3, "compound should use three batched queries")
+assert(db.query_count - compound_count == 4, "compound should use three batched queries plus the English link check")
 assert(compound.components.kammi.total == 1)
 assert(compound.deconstructions[2].parts[2] == "kammi" and compound.deconstructions[2].unique[2])
 assert(compound.deconstructions[3].parts[2] == "kammā" and compound.deconstructions[3].unique[2])

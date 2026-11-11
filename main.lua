@@ -224,7 +224,7 @@ end
 function DPD:showError(err, message, dismiss_callback)
     logger.warn("DPD:", err)
     Diag.log("Error:", err)
-    self:message(message .. "\n\nIf it keeps failing, turn on Help → Diagnostics → Write diagnostic log in the DPD menu and include the log in a bug report.",
+    self:message(message .. "\n\nIf it keeps failing, turn on Help & updates → Diagnostics → Write diagnostic log in the DPD menu and include the log in a bug report.",
         dismiss_callback)
 end
 
@@ -546,13 +546,15 @@ function DPD:showLookup(word, options)
     -- A popup or selection menu opened before the plugin stopped can still call this.
     if self.stopped then return self:stoppedMessage() end
     local ok, result = pcall(function()
-        local model = self:getModel(word, options and options.spelling and { spelling = true } or nil)
+        local model = self:getModel(word, options and (options.spelling and { spelling = true }
+            or options.english and { english = true }) or nil)
         -- A typed number that is not a headword ID says so instead of "No DPD entry".
         model.id_query = options and options.id_query or nil
         local shown = self:showModel(model, options)
         -- A mistyped word with only did-you-mean offers is a miss, not history.
         if shown and model.found and not Lookup.isSpellingOnly(model) then
-            self:getHistory():add(model.original_clean or word)
+            -- Recent reopens an English result in English mode.
+            self:getHistory():add(model.original_clean or word, model.english and "english" or nil)
         end
         return shown
     end)
@@ -625,7 +627,8 @@ function DPD:showDictionarySearch(word, options)
     return ok and result
 end
 
--- English→Pāḷi, from the lookup dialog only.
+-- English→Pāḷi from the lookup dialog. The DPD buttons reach it through
+-- showLookup, for a word with no Pāḷi entry.
 function DPD:showEnglish(word, options)
     if self.stopped then return self:stoppedMessage() end
     options = options or {}
@@ -905,7 +908,7 @@ function DPD:registerEntryPoints()
                 -- Close the selection menu, keeping the selection until DPD closes.
                 highlight:onClose(true)
                 local shown = self:showLookup(word, {
-                    highlight = highlight,
+                    highlight = highlight, english = true,
                     normal_callback = function(current) self:normalLookup(current, true, nil, highlight) end,
                 })
                 if not shown then self:clearSelection(highlight) end
@@ -923,7 +926,7 @@ function DPD:fromDictionary(popup)
     if parent then
         if parent.closed or self.viewer ~= parent then return false end
         return self:showLookup(popup.word, {
-            parent = parent,
+            parent = parent, english = true,
             -- The fallback beneath DPD owns the selection cleanup.
             normal_callback = function(word)
                 if word ~= popup.word then self:normalFromPopup(parent, word) end
@@ -931,6 +934,7 @@ function DPD:fromDictionary(popup)
         })
     end
     self:showLookup(popup.word, {
+        english = true,
         -- The dictionary beneath DPD owns the selection cleanup.
         normal_callback = function(word)
             if word ~= popup.word then self:normalLookup(word, true) end
@@ -1186,7 +1190,7 @@ end
 
 function DPD:showDiagnosticLog()
     local text = Diag.tail(200)
-    if not text or text == "" then return self:message("No DPD diagnostic log yet. Turn on Help → Diagnostics → Write diagnostic log first.") end
+    if not text or text == "" then return self:message("No DPD diagnostic log yet. Turn on Help & updates → Diagnostics → Write diagnostic log first.") end
     local TextViewer = require("ui/widget/textviewer")
     UIManager:show(TextViewer:new{ title = "DPD diagnostic log", text = Diag.path() .. "\n\n" .. text })
 end
@@ -1220,7 +1224,7 @@ Setup
 Database → Choose database file selects the extracted dpd-mobile.db, and Database → Database status checks it. Display and input holds the popup font size, which applies to the next popup. Open DPD on long-press by default turns DPD lookup on long-press on or off; Open DPD on long-press in this book overrides it for one book, such as an English one.
 
 Updates
-Help → Check for updates installs a new version of the plugin over Wi-Fi, keeping your settings. The database is replaced by hand.]] })
+Help & updates → Check for updates installs a new version of the plugin over Wi-Fi, keeping your settings. The database is replaced by hand.]] })
 end
 
 function DPD:diagnosticsMenu()
@@ -1251,7 +1255,7 @@ end
 function DPD:helpMenu()
     return { text_func = function()
             local available = self.settings.update_available
-            return Updater.isNewer(available, VERSION) and ("Help · " .. available .. " available") or "Help"
+            return Updater.isNewer(available, VERSION) and ("Help & updates · " .. available .. " available") or "Help & updates"
         end, sub_item_table = {
         { text = "DPD help", callback = function() self:showHelp() end },
         { text = "About & licenses", callback = function() self:aboutLicenses() end, separator = true },
@@ -1416,7 +1420,7 @@ function DPD:showUpdate(release, database)
     viewer = TextViewer:new{
         title = "Plugin " .. release.version .. " is available",
         text = "Plugin " .. VERSION .. " → " .. release.version .. "\n" .. database.line
-            .. (database.newer and ", installed by hand" or "")
+            .. (database.newer and " (install it by hand)" or "")
             .. (database.advice and ("\n\n" .. database.advice) or "")
             .. (release.notes and ("\n\n" .. release.notes) or "")
             .. (install and "\n\nInstall keeps your settings and database. KOReader then needs a restart." or "")
@@ -1464,7 +1468,7 @@ end
 -- Opt-in, at most weekly and only on an existing connection: never turns
 -- Wi-Fi on, prompts or installs, and runs in a child process so a slow
 -- network never holds up reading. A newer version is announced once, and the
--- Help menu keeps showing it.
+-- Help & updates menu keeps showing it.
 function DPD:scheduleUpdateCheck()
     local settings = self.settings
     if self.stopped or self.unsupported or Updater.restart_pending or Updater.broken then return end
@@ -1498,7 +1502,7 @@ function DPD:scheduleUpdateCheck()
                 settings.update_notified = version
                 local Notification = require("ui/widget/notification")
                 -- One line: a notification cuts longer text.
-                Notification:notify("DPD plugin " .. version .. " is available: see Help.",
+                Notification:notify("DPD plugin " .. version .. " is available: see Help & updates.",
                     Notification.SOURCE_ALWAYS_SHOW)
             end
             G_reader_settings:saveSetting("dpd", settings)

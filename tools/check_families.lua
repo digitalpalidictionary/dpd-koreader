@@ -7,7 +7,7 @@ local DB=require("dpd/db")
 local Families=require("dpd/families")
 local db=DB.new(path)
 local families=Families.new(db)
--- Counts/identities pinned to official mobile v0.4.20260926, schema 7.
+-- Counts/identities pinned to official mobile v0.4.20261026, schema 7.
 local dhamma=db:sensesByLemma({"dhamma 1.01"})[1]
 assert(dhamma and dhamma.id==34626)
 local detail=db:query("SELECT root_key,family_root,family_word,family_compound,family_idioms"
@@ -19,19 +19,19 @@ for _,group in ipairs(groups) do
     if group.kind=="root" then root_family=group end
     if group.kind=="idiom" then idiom=group end
 end
-assert(compound and compound.count==578,"dhamma compound metadata")
+assert(compound and compound.count==583,"dhamma compound metadata")
 assert(root_family and root_family.key=="√dhar 1 √dhar","numbered root identity")
 assert(idiom and idiom.key=="dhamma")
 local before=db.query_count
 families:groupsForDetail(detail)
 assert(db.query_count==before,"metadata discovery should be cached")
 local first=families:page("compound","dhamma")
-assert(first.total==578 and #first.items==20 and first.has_more and first.next_offset==20)
+assert(first.total==583 and #first.items==20 and first.has_more and first.next_offset==20)
 assert(db.query_count-before==2,"one opened payload and one exact batch for twenty members")
 local all,offset={},0
 repeat
     local page=families:page("compound","dhamma",offset)
-    assert(#page.items<=20 and page.total==578 and not page.error)
+    assert(#page.items<=20 and page.total==583 and not page.error)
     for _,item in ipairs(page.items) do
         all[#all+1]=item
         if item.available then
@@ -40,7 +40,7 @@ repeat
     end
     offset=page.next_offset
 until not page.has_more
-assert(#all==578)
+assert(#all==583)
 local root_groups=families:groupsForRoot({root="√har 2"})
 assert(#root_groups==6,"numbered root cards discover all their families")
 for _,group in ipairs(root_groups) do assert(group.kind=="root" and group.key:sub(1,#"√har 2 ")=="√har 2 ") end
@@ -62,6 +62,6 @@ for _,group in ipairs(families:groupsForDetail(sariputta)) do
 end
 assert(table.concat(sets,"|")=="great disciples|names of arahants|names of monks","sāriputta's thematic sets")
 local disciples=families:page("set","great disciples")
-assert(disciples.total==118 and #disciples.items==20 and disciples.has_more and disciples.items[1].available)
+assert(disciples.total==119 and #disciples.items==20 and disciples.has_more and disciples.items[1].available)
 db:close()
-print("PASS: optional-family metadata, 578 paged compounds, exact numbered members, root/word groups, thematic sets, and bound SQL")
+print("PASS: optional-family metadata, 583 paged compounds, exact numbered members, root/word groups, thematic sets, and bound SQL")

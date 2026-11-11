@@ -35,7 +35,7 @@ describe("popup refinements", function()
         assert.is_truthy(html:find("diṭṭhe dhamme", 1, true))
     end)
 
-    it("labels compound splits plainly and heads every part, even one that repeats its rows", function()
+    it("labels compound splits plainly and keeps every part at one edge, even one that repeats its rows", function()
         local value = model("vissajjiyavebhaṅgiyaṃ", {
             deconstructions={{parts={"vissajjiya", "vebhaṅgiyaṃ"}, unique={true, true}, has_new=true, starts_open=true}},
             components={vissajjiya={senses={sense(1, "vissajjiya 1"), sense(2, "vissajjiya 2")}, total=2},
@@ -49,7 +49,48 @@ describe("popup refinements", function()
         -- Without its heading, vissajjiya's rows would read as part of whatever came before.
         assert.is_falsy(html:find("bare", 1, true))
         assert.is_truthy(html:find('<div class="component"><p><a href="dpd:component/1/1"><b>vissajjiya</b></a>', 1, true))
-        assert.is_truthy(html:find('<div class="component"><p><a href="dpd:component/1/2"><b>vebhaṅgiyaṃ</b></a>', 1, true))
+        -- vebhaṅgiyaṃ has one sense: it leads that sense's row at the same edge.
+        assert.is_truthy(html:find('<div class="component">\n<p class="row"><a href="dpd:component/1/2"><b>vebhaṅgiyaṃ</b></a>'
+            .. ' &nbsp;<a href="dpd:component-sense/1/2/3" class="toggle">▸\194\160\194\160<b>vebhaṅgiya</b> · ', 1, true))
+    end)
+
+    it("puts a one-sense part's sense on the part's own line", function()
+        local function split(parts, components, content_em)
+            local unique = {}
+            for i = 1, #parts do unique[i] = true end
+            local value = model("x", {deconstructions={{parts=parts, unique=unique, has_new=true, starts_open=true}},
+                components=components})
+            return Render.render(value, Navigation.new(value):current(), nil, nil,
+                {content_em=content_em or 30, target_em=2.5, buttons={}})
+        end
+        -- Spelled like its lemma: the lemma is not printed twice.
+        local html = split({"sīla", "iti"}, {["sīla"]={senses={sense(1, "sīla 1"), sense(2, "sīla 2")}, total=5},
+            iti={senses={sense(3, "iti")}, total=1}})
+        local row = assert(html:match('<div class="component">\n<p class="row"><a href="dpd:component/1/2"><b>iti</b></a>'
+            .. ' &nbsp;<a href="dpd:component%-sense/1/2/3" class="toggle">(.-)</a></p>'))
+        assert.is_falsy(row:find("<b>iti</b>", 1, true))
+        assert.is_truthy(row:find("^▸\194\160\194\160<i>"))
+        -- A part with more senses than it shows keeps its heading and rows.
+        assert.is_truthy(html:find('<div class="component"><p><a href="dpd:component/1/1"><b>sīla</b>', 1, true))
+        -- Opened, the row keeps the part in front and turns its toggle.
+        local value = model("x", {deconstructions={{parts={"danti"}, unique={true}, has_new=true, starts_open=true}},
+            components={danti={senses={sense(4, "dantī")}, total=1}}})
+        local frame = Navigation.new(value):current()
+        frame.component_expanded = {{{[4]=true}}}
+        frame.component_details = {{{[4]={sanskrit="dantin"}}}}
+        html = Render.render(value, frame)
+        assert.is_truthy(html:find('<b>danti</b></a> &nbsp;<a href="dpd:component-sense/1/1/4" class="toggle">▾'
+            .. '\194\160\194\160<b>dantī</b>', 1, true))
+        assert.is_truthy(html:find("<i>Sanskrit:</i> dantin", 1, true))
+        -- Too long to share a line: the part stays a heading above its row.
+        html = split({"vimuttiñāṇadassanasampannā"},
+            {["vimuttiñāṇadassanasampannā"]={senses={sense(5, "vimuttiñāṇadassanasampanna")}, total=1}}, 24)
+        assert.is_truthy(html:find('<div class="component"><p><a href="dpd:component/1/1"><b>vimuttiñāṇadassanasampannā</b></a></p>',
+            1, true))
+        -- A part with a cross-reference keeps its heading too.
+        html = split({"hotī"}, {["hotī"]={senses={sense(6, "hoti")}, total=1,
+            reference_targets={{kind="spelling", target="hoti"}}}})
+        assert.is_truthy(html:find('<div class="component"><p><a href="dpd:component/1/1"><b>hotī</b></a></p>', 1, true))
     end)
 
 end)

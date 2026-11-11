@@ -519,7 +519,7 @@ fresh()
 Updater.api = base .. "/api/uptodate"
 local settings = { font_size = 16, db_path = db_path }
 local instance = plugin(settings)
-assert(instance:helpMenu().text_func() == "Help", "Help has no update marker before a check")
+assert(instance:helpMenu().text_func() == "Help & updates", "Help has no update marker before a check")
 instance:runUpdateCheck(); waitUpdate()
 local box = top()
 local installed = db_path and instance.db.info.dpd_release_version
@@ -592,7 +592,7 @@ print("PASS plugin update retains database repair advice")
 Updater.api = base .. "/api/badhash"
 instance:runUpdateCheck(); waitUpdate()
 assert(settings.update_available == "99.0.0")
-assert(instance:helpMenu().text_func() == "Help · 99.0.0 available", "Help shows a pending update")
+assert(instance:helpMenu().text_func() == "Help & updates · 99.0.0 available", "Help shows a pending update")
 local viewer = top()
 assert(viewer.title == "Plugin 99.0.0 is available", tostring(viewer.title))
 assert(button(viewer, "Install") and button(viewer, "Plugin QR code") and button(viewer, "Database QR code")
@@ -602,7 +602,7 @@ assert(#viewer.buttons_table == 2 and #viewer.buttons_table[1] == 2 and #viewer.
     and viewer.buttons_table[2][1].text == "Close" and viewer.buttons_table[2][2].text == "Install",
     "release links occupy the first row; Close and Install occupy the second")
 assert(textOf(viewer):find("Plugin " .. VERSION .. " → 99.0.0\n" .. database_line
-    .. (installed and ", installed by hand" or "") .. "\n\n" .. database_advice
+    .. (installed and " (install it by hand)" or "") .. "\n\n" .. database_advice
     .. "\n\nWhat's new\n\n• Fixture release for the check.",
     1, true) == 1, textOf(viewer))
 assert(textOf(viewer):find("Install keeps your settings and database. KOReader then needs a restart.\n\n"
@@ -645,7 +645,7 @@ if db_path then
     assert(#viewer.buttons_table == 2 and #viewer.buttons_table[1] == 1
         and viewer.buttons_table[1][1].text == "Plugin QR code"
         and viewer.buttons_table[2][1].text == "Close" and viewer.buttons_table[2][2].text == "Install")
-    assert(not button(viewer, "Database QR code") and not textOf(viewer):find("installed by hand", 1, true))
+    assert(not button(viewer, "Database QR code") and not textOf(viewer):find("install it by hand", 1, true))
     closeAll()
     configure(base)
 end
@@ -662,7 +662,7 @@ assert(textOf(top()):find(verdict("Plugin 99.0.0 installed") .. "\n", 1, true) =
 assert(textOf(top()):find(Device:canRestart() and "DPD lookups are off until KOReader restarts."
     or "Close KOReader and open it again to use it. DPD lookups are off until then.", 1, true), textOf(top()))
 assert(settings.update_available == nil)
-assert(instance:helpMenu().text_func() == "Help", "Help clears its update marker after installing")
+assert(instance:helpMenu().text_func() == "Help & updates", "Help clears its update marker after installing")
 screenshot("update-installed")
 closeAll()
 local items = {}
@@ -926,8 +926,8 @@ local enabled = assert(delay(toggle), "re-enabling still schedules a check")
 enabled()
 assert(pump(function() return finished == launched end, 30), "the automatic check finished")
 assert(launched == 1 and auto.update_available == "99.0.0" and auto.update_notified == "99.0.0")
-assert(textOf(top()) == "DPD plugin 99.0.0 is available: see Help.", "announced as a one-line notification")
-assert(automatic:helpMenu().text_func() == "Help · 99.0.0 available", "Help shows the background result")
+assert(textOf(top()) == "DPD plugin 99.0.0 is available: see Help & updates.", "announced as a one-line notification")
+assert(automatic:helpMenu().text_func() == "Help & updates · 99.0.0 available", "Help shows the background result")
 screenshot("update-notification")
 closeAll()
 background(auto)

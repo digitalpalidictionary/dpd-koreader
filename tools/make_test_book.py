@@ -12,14 +12,14 @@ import zipfile
 from package import put
 
 INTRO = ("Long-press each word to test the plugin. The line below it says what "
-         "should happen. Checked with DPD mobile v0.4.20260926.")
+         "should happen. Checked with DPD mobile v0.4.20261026.")
 
 # Each case is the words to long-press and what should happen. The checks
 # hold the first match of some words (pacchima, saṁ, ’ti, in, plugin…), so
 # an expectation never names a word that appears later in the book.
 SECTIONS = [
     ("Everyday lookups", [
-        ("pacchima", "DPD opens at once with eight senses. Expand one: its grammar and "
+        ("pacchima", "DPD opens at once with nine senses. Expand one: its grammar and "
          "construction appear. With sense 1 open, tap a sense further down: sense 1 "
          "closes and the one you tapped stays on screen."),
         ("pacchimassa", "A grammar header shows how this form is parsed, above its senses."),
@@ -28,6 +28,9 @@ SECTIONS = [
         ("acceka", "Expand it: the construction and example show bold text, not HTML tags."),
         ("saṃvidāvahāro", "Expand saṃvidāvahāra: Construction reads saṃvida + avahāra, "
          "and the commentary is from VINa."),
+        ("sāriputta", "Expand it at font 16 or 20: Compound construction and Compound type each take a "
+         "full line below Construction, and Sanskrit and IPA share a line. At font 26 every field "
+         "has its own row."),
         ("Buddha Sace Nārada", "Each opens the lowercase entry, with any abbreviation spelled the same."),
         ("dhammaṃ dhammā kā", "Expand all parses: 9, 28 and 19. Tap a grammar headword, then Back. "
          "For kā, expand Variant readings."),
@@ -35,7 +38,12 @@ SECTIONS = [
     ("Compounds", [
         ("vajjakammappabhedanti", "Five analyses; only the first is open. Bold in the others marks "
          "the words each adds. Open them all: 3 and 4 say only kamma 1, 2, 5, 6, 7, 8 instead of "
-         "repeating kamma. Tap kammi, then Back: your place returns."),
+         "repeating kamma. In analysis 1, appabhe and danti each show their one sense on the same "
+         "line as the part's name. Tap kammi, then Back: your place returns."),
+        ("sīlasamādhipaññāvimuttivimuttiñāṇadassanasampannā", "In analysis 1, samādhipaññāvimutti "
+         "starts its own line, level with sīla, with its sense after it on that line and not under "
+         "sīla's two senses. The last part is too long for that and keeps its sense on the "
+         "line below."),
         ("aññabhāgiyasikkhāpadavaṇṇanā", "Open analyses 3, 4 and 5 in any order: each shows asikkhā, "
          "and aññabhāgiyo and aññabhāgiyaṃ say same as aññabhāgiya above. Close analysis 1: the "
          "others don't change."),
@@ -48,8 +56,9 @@ SECTIONS = [
         ("suññasuññaṃ", "In analysis 1, suññaṃ says same as suñña above: the part just before it."),
         ("rakkhatiyeva asītīti chāyāti", "Open every analysis. A part that takes only some of a word's "
          "senses names them: rakkhatiyā shows only rakkhanta, rakkhati only rakkhati 1, 2, 3, "
-         "and asītī only asīti 1.1. Tap rakkhati's name: all its senses open, and Back returns "
-         "your place."),
+         "and asītī only asīti 1.1. In asītīti's first analysis, iti is printed once, with its "
+         "sense after it on the same line. Tap rakkhati's name: all its senses open, and Back "
+         "returns your place."),
         ("kiṃkī bhātime", "Open every analysis. kiṃkī keeps both leading kī definitions; bhātime's "
          "analysis 3 keeps bhātar and bhāti 1.1."),
         ("rūpiyappaṭiggahaṇāpatti middhīti", "Open every analysis. paṭiggahaṇā and paṭiggahaṇa are "

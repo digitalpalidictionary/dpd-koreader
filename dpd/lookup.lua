@@ -5,6 +5,7 @@ local SortKey = require("dpd/sortkey")
 local Variant = require("dpd/variant")
 local Inflection = require("dpd/inflection")
 local Traditional = require("dpd/traditional")
+local Dictionaries = require("dpd/dictionaries")
 local Lookup = { detail_limit = 100 }
 Lookup.__index = Lookup
 
@@ -658,11 +659,30 @@ function Lookup:_suggestions(result)
     result.found = found(result)
 end
 
--- Whether DPD's English index has the word, as typed or lowercased.
-function Lookup:_english(query)
+-- Whether DPD's English index has any of the words as given, lowercased or
+-- capitalized (buddha finds Buddha): the forms the English reader tries
+-- first, so a word found here opens there. One query.
+function Lookup:_english(...)
     if not self.db.english then return false end
-    local lower = Normalize.lower(query)
-    return self.db:english(lower == query and { query } or { query, lower })
+    local keys, seen = {}, {}
+    for _, word in ipairs({ ... }) do
+        local lower = Normalize.lower(word)
+        for _, key in ipairs({ word, lower, Dictionaries.capitalized(lower) }) do
+            if key ~= "" and not seen[key] then seen[key] = true; keys[#keys + 1] = key end
+        end
+    end
+    return #keys > 0 and self.db:english(keys)
+end
+
+-- The form of a selection that DPD's English index has: as selected, so
+-- keys such as un- and -er keep their dashes, else without the quotes and
+-- dashes around it (“time”, time—). A second query only for a hit that
+-- needs telling apart.
+function Lookup:_englishWord(typed)
+    local word = Normalize.selection(typed)
+    if word == typed then return self:_english(typed) and typed or nil end
+    if not self:_english(typed, word) then return nil end
+    return self:_english(typed) and typed or word
 end
 
 -- After a closing quote, "ti" is often printed fused to the next word
@@ -821,8 +841,11 @@ function Lookup:get(original, options)
     local prefix = approximate and (not options or options.prefix ~= false)
     local literal = Normalize.literal(original)
     local spelling = approximate and options and options.spelling
+    local english = options and options.english
     local cache_key = query .. (literal and "\0literal:" .. literal or "")
         .. (prefix and "\0prefix" or approximate and "\0fuzzy" or "\0exact") .. (spelling and "\0spelling" or "")
+        -- English keeps apostrophes that the Pāḷi query drops (don't).
+        .. (english and "\0english:" .. Normalize.selection(tostring(original or "")) or "")
     local cached = self.cache[cache_key]
     if cached then
         local result = fresh(cached)
@@ -836,7 +859,22 @@ function Lookup:get(original, options)
         local headword = self:headword(query)
         if headword.found then headword.original = original; result = headword end
     end
-    if (not result.found or Lookup.isVariantOnly(result)) and query ~= "" and approximate then
+    local typed = Normalize.trim(Normalize.nfc(tostring(original or "")))
+    local miss = not result.found or Lookup.isVariantOnly(result)
+    -- The DPD buttons only: a word with no Pāḷi entry that DPD's English
+    -- index has opens English→Pāḷi. Before the rescues, which would open
+    -- dama for damage. The English reader keeps its own one-word cache.
+    if english and miss and query ~= "" then
+        -- As selected first (un-, -er), then without quotes and dashes.
+        local found_english = self:english(typed)
+        local word = Normalize.selection(typed)
+        if not found_english.found and word ~= typed and word ~= "" then found_english = self:english(word) end
+        if found_english.found then return found_english end
+    end
+    -- A Pāḷi form that is an English word too (time, path): the popup
+    -- links to its English→Pāḷi entries.
+    if not miss then result.english_word = self:_englishWord(typed) end
+    if miss and query ~= "" and approximate then
         result.variant_rescue = Lookup.isVariantOnly(result)
         result.fuzzy_key = Normalize.fuzzy(query)
         self:_suggestions(result)
@@ -1086,7 +1124,7 @@ function Lookup:otherDictionaries(previous, enabled)
     local ids, sanskrit, seen_word = {}, {}, {}
     for _, sense in ipairs(shown.senses or {}) do ids[#ids + 1] = sense.id end
     if #ids > 0 and self.db.sanskrit then
-        local Dictionaries, fields = require("dpd/dictionaries"), {}
+        local fields = {}
         for _, row in ipairs(self.db:sanskrit(ids)) do fields[row.id] = row.sanskrit end
         for _, id in ipairs(ids) do
             for _, word in ipairs(Dictionaries.sanskritWords(fields[id])) do

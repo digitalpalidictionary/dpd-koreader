@@ -230,10 +230,10 @@ local group_index
 for i, group in ipairs(groups) do
     if group.kind == "compound" and group.key == "dhamma" then group_index=i end
 end
-assert(group_index and groups[group_index].count == 578)
+assert(group_index and groups[group_index].count == 583)
 tapRendered(viewer, "dpd:detail-family/34626/" .. group_index)
 local family_frame = viewer.navigation:current()
-assert(family_frame.model.family.total == 578 and #family_frame.model.family.items == 20)
+assert(family_frame.model.family.total == 583 and #family_frame.model.family.items == 20)
 tapRendered(viewer, "dpd:family-more")
 assert(#family_frame.model.family.items == 40)
 local member_index
@@ -255,7 +255,9 @@ viewer = popup(lookup:get("dhammassa"))
 frame = viewer.navigation:current()
 tapRendered(viewer, "dpd:sense/34626")
 assert(frame.details[34626].paradigm_kind == "Declension" and frame.details[34626].ipa_line)
-assert(viewer.scroll.html_body:find('<td class="label">IPA</td>', 1, true))
+-- IPA pairs with Sanskrit as "IPA: …"; a narrow popup keeps it as a table row.
+assert(viewer.scroll.html_body:find('<i>IPA:</i>', 1, true)
+    or viewer.scroll.html_body:find('<td class="label">IPA</td>', 1, true))
 tapRendered(viewer, "dpd:detail-paradigm/34626")
 local paradigm_frame = viewer.navigation:current()
 local paradigm = paradigm_frame.model.paradigm

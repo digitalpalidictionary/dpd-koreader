@@ -33,11 +33,12 @@ local Screen = Device.screen
 -- dictionaries" was).
 -- Not modal: KOReader stacks non-modal windows, such as its dictionary popup
 -- opened from a selection in this one, beneath every modal window.
-local Viewer = InputContainer:extend{ font_size = 16, anchor_search_pages = 8, link_guard_s = 0.5 }
+local Viewer = InputContainer:extend{ font_size = 16, anchor_search_pages = 8, link_guard_s = 0.5,
+    measure_font = "./fonts/noto/NotoSans-Regular.ttf" }
 
 -- Footer links are drawn as full-width buttons; a tap anywhere on the
 -- button follows them, not only on its text.
-local button_links = { ["dpd:edit-search"] = true }
+local button_links = { ["dpd:edit-search"] = true, ["dpd:english-word"] = true }
 local function isButtonLink(uri)
     return button_links[uri] or (type(uri) == "string" and
         (uri:match("^dpd:dict%-prev/%d+/%d+$") or uri:match("^dpd:dict%-next/%d+/%d+$")
@@ -104,8 +105,11 @@ function Viewer:build()
         measure_text = function(text, factor)
             local key = factor .. ":" .. text
             if not measured[key] then
+                -- Measure with the file MuPDF draws 'Noto Sans' from: "cfont"
+                -- can resolve to another font (a Paperwhite 12 drew FreeSans),
+                -- and a narrower one wraps every button label.
                 local widget = TextWidget:new{ text = text,
-                    face = Font:getFace("cfont", self.font_size * factor) }
+                    face = Font:getFace(Viewer.measure_font, self.font_size * factor) }
                 measured[key] = widget:getSize().w / font_px
                 widget:free()
             end
@@ -718,7 +722,7 @@ function Viewer:showError(err)
     logger.warn("DPD:", err)
     Diag.log("Popup error:", err)
     UIManager:show(InfoMessage:new{ text = "DPD could not open this view. Try again.\n\n"
-        .. "If it keeps failing, turn on Help → Diagnostics → Write diagnostic log in the DPD menu and include the log in a bug report." })
+        .. "If it keeps failing, turn on Help & updates → Diagnostics → Write diagnostic log in the DPD menu and include the log in a bug report." })
 end
 
 function Viewer:clearTextSelection()
@@ -874,6 +878,14 @@ function Viewer:followLink(uri)
         -- The searched text in DPD, over the search; Back returns to it.
         if not frame.model.dictionary_search then return end
         self:openView(ratio, self.lookup.get, frame.model.query, { spelling = true })
+    elseif uri == "dpd:english-word" then
+        -- The same word in English→Pāḷi, over the Pāḷi entry; Back returns to it.
+        local word = frame.model.english_word
+        if not word then return end
+        self:openView(ratio, function(lookup)
+            local model = lookup:english(word)
+            return model.found and model or nil
+        end)
     elseif uri == "dpd:dictionaries" then
         if not frame.other_dictionaries then return end
         self:openView(ratio, self.lookup.otherDictionaries, frame.model, self.dictionaries)

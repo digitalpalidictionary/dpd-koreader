@@ -46,12 +46,16 @@ h3 .quiet { font-weight: normal; }
    so expanded senses space their paragraphs with top margins only. */
 .detail p { margin: .18em 0 0; }
 .detail p.meta, .detail .cite { font-size: .9em; }
-.detail p.example { margin-top: .5em; }
+.detail p.example, .detail p.commentary { margin-top: .5em; }
 .detail .item { white-space: nowrap; }
 table.fields { border-collapse: collapse; table-layout: fixed; width: 100%; margin: .18em 0 0; }
 /* Baselines keep MuPDF's linked words level with plain text and labels. */
 table.fields td { vertical-align: baseline; padding: .18em .3em 0 0; }
 table.fields td.label { font-style: italic; padding-right: .6em; }
+/* Short fields two to a row; a longer one spans the row and hangs its wrapped lines. */
+table.pairs { border-collapse: collapse; table-layout: fixed; width: 100%; margin: 0; }
+table.pairs td { vertical-align: baseline; padding: .18em .4em 0 0; }
+table.pairs td.wide { padding-left: 1.2em; text-indent: -1.2em; }
 .provenance { margin: .2em 0 .5em .95em; font-size: .85em; }
 .similar { margin: .4em 0 .8em; border-top: 1px solid #000; padding-top: .4em; }
 .similar-body { margin-left: .8em; }
@@ -374,16 +378,21 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
     -- label up to 7em, or its widest word, so a longer label wraps. When that
     -- leaves the values under 10em, or a field has a long word, use paragraphs:
     -- MuPDF wraps them without inserting separators that break word selection.
+    local function longWord(rows)
+        for _, row in ipairs(rows) do
+            for word in row[2]:gsub("<[^>]*>", ""):gmatch("%S+") do
+                local _, length = word:gsub("[^\128-\191]", "")
+                if length > 20 then return true end
+            end
+        end
+        return false
+    end
     local function fieldTable(rows, factor)
         if #rows == 0 then return end
-        local width, widest_word, long_word = 0, 0, false
+        local width, widest_word, long_word = 0, 0, longWord(rows)
         for _, row in ipairs(rows) do
             width = math.max(width, labelWidth(row[1], factor))
             for word in row[1]:gmatch("%S+") do widest_word = math.max(widest_word, labelWidth(word, factor)) end
-            for word in row[2]:gsub("<[^>]*>", ""):gmatch("%S+") do
-                local _, length = word:gsub("[^\128-\191]", "")
-                if length > 20 then long_word = true; break end
-            end
         end
         width = math.min(width, math.max(7, widest_word)) + .6
         -- The detail sits about 1em in; its cells pad .6em after a label.
@@ -398,6 +407,58 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
             end
             add('</table>')
         end
+    end
+    -- An expanded sense's fields in bundles. The origin rows keep the label
+    -- table; each later bundle follows two fields to a row as "Label: value",
+    -- starting on a new row, and a field wider than half the row spans it.
+    -- Returns false, drawing nothing, when half a row is under 10.5em (font 26
+    -- on a Paperwhite, where pairing made entries taller) or a word is too
+    -- long for a table cell, which MuPDF cannot wrap.
+    local function fieldBundles(origin, groups, factor)
+        local cell = ((layout.content_em - indent_em - 1.6) / factor - .3) / 2 - .4
+        if cell < 10.5 or longWord(origin) then return false end
+        local label_em, kept = 0, {}
+        for _, row in ipairs(origin) do label_em = math.max(label_em, labelWidth(row[1], factor)) end
+        for _, group in ipairs(groups) do
+            if longWord(group) then return false end
+            for _, row in ipairs(group) do
+                local plain = row[2]:gsub("<[^>]*>", ""):gsub("&#?%w+;", "x")
+                row.wide = labelWidth(row[1] .. ": " .. plain, factor) > cell
+            end
+            if #group > 0 then kept[#kept + 1] = group end
+        end
+        -- One short field alone under the table reads as a row that lost its
+        -- column, so it joins the table unless its label would widen it.
+        local first = kept[1]
+        if first and #first == 1 and #origin > 0 and not first[1].wide
+                and labelWidth(first[1][1], factor) <= label_em then
+            local at = #origin + 1
+            for i, row in ipairs(origin) do
+                if first[1][1] == "Root sign" and row[1] == "Root" then at = i + 1 end
+            end
+            origin = { unpack(origin) }
+            table.insert(origin, at, first[1])
+            table.remove(kept, 1)
+        end
+        fieldTable(origin, factor)
+        if #kept == 0 then return true end
+        local function cellHtml(row) return '<i>' .. row[1] .. ':</i> ' .. row[2] end
+        add('<table class="pairs"><col style="width:50%"><col style="width:50%">')
+        for _, group in ipairs(kept) do
+            local i = 1
+            while i <= #group do
+                local a, b = group[i], group[i + 1]
+                if not a.wide and b and not b.wide then
+                    add('<tr><td>' .. cellHtml(a) .. '</td><td>' .. cellHtml(b) .. '</td></tr>')
+                    i = i + 2
+                else
+                    add('<tr><td class="wide" colspan="2">' .. cellHtml(a) .. '</td></tr>')
+                    i = i + 1
+                end
+            end
+        end
+        add('</table>')
+        return true
     end
     local function fields(values, names)
         for _, field in ipairs(names) do
@@ -460,38 +521,53 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
             add("<p" .. (class and (' class="' .. class .. '"') or "") .. ">" .. table.concat(kept, " · ") .. "</p>")
         end
         add('<div class="detail">')
-        -- Grammar and origin, one labelled row per field in a label column.
-        local rows = {}
-        local function field(label, text) if text then rows[#rows + 1] = { label, text } end end
+        -- Fields in four bundles: origin, how the word is built, its
+        -- cognates and sound, and related words.
+        local origin, build, sound, related = {}, {}, {}, {}
+        local function field(rows, label, text) if text then rows[#rows + 1] = { label, text } end end
         local grammar = grammarNote(values.grammar_line, pos, values.derived_from)
-        field("Grammar", present(grammar) and M.inline(grammar) or nil)
+        field(origin, "Grammar", present(grammar) and M.inline(grammar) or nil)
         local from = value("derived_from") and ("<i>from</i> " .. value("derived_from"))
-        if value("construction") then field("Construction", value("construction") .. (from and (" · " .. from) or ""))
-        else field("From", value("derived_from")) end
+        if value("construction") then
+            field(origin, "Construction", value("construction") .. (from and (" · " .. from) or ""))
+        else field(origin, "From", value("derived_from")) end
         local root = value("root_key")
         if root and present(values.root_meaning) then root = root .. " (" .. M.inline(values.root_meaning) .. ")" end
-        field("Root", root)
-        field("Root sign", value("root_sign"))
-        field("Root base", value("root_base"))
-        field("Sanskrit", value("sanskrit"))
-        field("Cognates", value("cognate"))
-        field("Derivative", value("derivative"))
+        field(origin, "Root", root)
+        field(origin, "Root base", value("root_base"))
+        field(build, "Root sign", value("root_sign"))
+        field(build, "Derivative", value("derivative"))
         -- A suffix that ends the construction ("√dhar + ma") is already shown there.
         if not tostring(values.construction or ""):find("%+%s*" .. literal(values.suffix or "") .. "%s*$") then
-            field("Suffix", value("suffix"))
+            field(build, "Suffix", value("suffix"))
         end
-        field("Phonetic change", value("phonetic"))
-        field("IPA", value("ipa_line"))
-        field("Traditional lemma (grammar-book headword)", value("traditional_line"))
-        field("Non-Indo-Aryan origin", value("non_ia"))
-        field("Compound type", value("compound_type"))
+        -- The compound pair follows the root's own facts. Its long label
+        -- would wrap in the table's label column.
         if values.compound_construction ~= values.construction then
-            field("Compound construction", value("compound_construction"))
+            field(build, "Compound construction", value("compound_construction"))
         end
-        fieldTable(rows, .9)
-        line(nil, labelled("Synonym", value("synonym")), labelled("Antonym", value("antonym")),
-            labelled("Variant", value("variant")), labelled("Phonetic variant", value("var_phonetic")),
-            labelled("Textual variant", value("var_text")))
+        field(build, "Compound type", value("compound_type"))
+        field(build, "Phonetic change", value("phonetic"))
+        field(sound, "Sanskrit", value("sanskrit"))
+        field(sound, "IPA", value("ipa_line"))
+        field(sound, "Cognates", value("cognate"))
+        field(sound, "Non-Indo-Aryan origin", value("non_ia"))
+        field(sound, "Traditional lemma (grammar-book headword)", value("traditional_line"))
+        field(related, "Synonym", value("synonym"))
+        field(related, "Antonym", value("antonym"))
+        field(related, "Variant", value("variant"))
+        field(related, "Phonetic variant", value("var_phonetic"))
+        field(related, "Textual variant", value("var_text"))
+        -- Too narrow to pair: one labelled row per field, related words on a line.
+        if not fieldBundles(origin, { build, sound, related }, .9) then
+            local rows, items = {}, {}
+            for _, group in ipairs({ origin, build, sound }) do
+                for _, row in ipairs(group) do rows[#rows + 1] = row end
+            end
+            fieldTable(rows, .9)
+            for i, row in ipairs(related) do items[i] = labelled(row[1], row[2]) end
+            line(nil, unpack(items))
+        end
         local actions = {}
         if values.paradigm_kind then
             actions[#actions + 1] = { "dpd:detail-paradigm/" .. sense_id, values.paradigm_kind }
@@ -521,7 +597,7 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
                 title .. (group.count and (" · " .. group.count) or "") }
         end
         buttons(actions, owner_control, .9, 2.4, true)
-        line(nil, labelled("Commentary", value("commentary")))
+        line("commentary", labelled("Commentary", value("commentary")))
         -- An example carries its citation in its own paragraph; verse keeps its
         -- line breaks. A sutta name can put its vagga on a second line.
         for n = 1, 2 do
@@ -1224,19 +1300,42 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
                         local compact = (analysis.compact or {})[i]
                         -- Its rows repeat headwords or an earlier part: name which senses instead.
                         local only = compact and ' <span class="count">· only ' .. M.escape(senseNames(senses)) .. '</span>' or ""
-                        -- Every part keeps its heading, even one that repeats its rows
-                        -- (vissajjiya above vissajjiya 1 and 2): it alone marks where
-                        -- the previous part's senses end.
-                        add('<div class="component"><p>' .. control("dpd:component/" .. index .. "/" .. i, name) .. only .. '</p>')
+                        -- Every part keeps its name at the same left edge, even one that
+                        -- repeats its rows (vissajjiya above vissajjiya 1 and 2): it alone
+                        -- marks where the previous part's senses end. A part with one
+                        -- sense and nothing else to say leads that sense's row instead of
+                        -- heading it ("danti ▸ dantī · adj · having teeth"), without the
+                        -- lemma when it is spelled like the part ("iti ▸ ind · thus").
+                        local heading = control("dpd:component/" .. index .. "/" .. i, name)
+                        local only_sense = not compact and #senses == 1 and total == 1
+                            and #(component.reference_targets or {}) == 0 and senses[1]
+                        local same_name = only_sense
+                            and tostring(only_sense.lemma_1 or ""):gsub(" %d[%d.]*$", "") == part
+                        if only_sense then
+                            -- The part, the toggle and the lemma must share the first
+                            -- line; otherwise the part stays a heading above its row.
+                            local head = part .. "   ▸  " .. (same_name and ""
+                                or (tostring(only_sense.lemma_1) .. " · ")) .. tostring(only_sense.pos) .. " · "
+                            if labelWidth(head, 1) + 3 > layout.content_em - indent_em - 1.2 then only_sense = false end
+                        end
+                        add('<div class="component">' .. (only_sense and "" or ('<p>' .. heading .. only .. '</p>')))
                         for j = 1, compact and 0 or math.min(2, #senses) do
                             local sense = senses[j]
                             local expansions = ((state.component_expanded or {})[index] or {})[i] or {}
                             local open_sense = expansions[sense.id]
                             local label = brief(sense)
+                            if only_sense and same_name then
+                                local meaning = sense.meaning_combo or ""
+                                label = "<i>" .. M.escape(sense.pos) .. "</i>"
+                                    .. (meaning ~= "" and (" · " .. M.inline(meaning)) or "")
+                            end
                             if sense.id then
                                 label = toggle("dpd:component-sense/" .. index .. "/" .. i .. "/" .. sense.id,
                                     open_sense, label, control)
+                                -- A wrap comes before the toggle, never between it and its row.
+                                if only_sense then label = label:gsub("\194\160 ", "\194\160\194\160", 1) end
                             end
+                            if only_sense then label = heading .. " &nbsp;" .. label end
                             add('<p class="row">' .. label .. '</p>')
                             if open_sense then
                                 local values = (((state.component_details or {})[index] or {})[i] or {})[sense.id] or {}
@@ -1277,6 +1376,11 @@ function M.render(model, state, scope, edit_search, layout, indent_em)
         end
     end
     damaged()
+    -- A Pāḷi form that is an English word too, in the reader's own lookup
+    -- only: not in the cards and entries nested in it.
+    if not scope and model.english_word and isResult(model) then
+        add('<p class="footer">' .. link("dpd:english-word", "English → Pāḷi: " .. M.escape(model.english_word)) .. '</p>')
+    end
     return table.concat(html, "\n")
 end
 

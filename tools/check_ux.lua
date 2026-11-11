@@ -231,5 +231,36 @@ assert(viewer.scroll.html_body:find('<p><a href="dpd:matrix-item/',1,true))
 print("LAYOUT matrix row: " .. viewer.scroll.htmlbox_widget.page_count .. " pages")
 screenshot("matrix-spacing")
 viewer:close();flush()
+-- The DPD button in KOReader's dictionary: an English word with no Pāḷi entry
+-- opens English→Pāḷi, before the rescues (damage is not dama).
+for _, word in ipairs({"happiness","damage"}) do
+    plugin:fromDictionary({word=word});flush()
+    viewer=plugin.viewer
+    frame=viewer.navigation:current()
+    assert(shown(viewer) and frame.model.english and frame.model.english.total > 0, word)
+    assert(viewer.scroll.html_body:find('href="dpd:english-item/1"',1,true), word)
+    screenshot("button-english-" .. word)
+    viewer:close();flush()
+end
+-- A Pāḷi form that is an English word too stays Pāḷi and links to English.
+plugin:fromDictionary({word="time"});flush()
+viewer=plugin.viewer
+frame=viewer.navigation:current()
+assert(not frame.model.english and #frame.model.senses > 0 and frame.model.english_word == "time")
+assert(viewer.scroll.html_body:find('href="dpd:english-word"',1,true))
+screenshot("button-english-link")
+viewer:followLink("dpd:english-word");flush()
+frame=viewer.navigation:current()
+assert(frame.model.english and frame.model.english.total > 0 and #viewer.navigation.stack == 2)
+screenshot("button-english-linked")
+viewer:back();flush()
+assert(#viewer.navigation.stack == 1 and not viewer.navigation:current().model.english)
+viewer:close();flush()
+-- An ordinary Pāḷi word has no such link.
+plugin:fromDictionary({word="dhamma"});flush()
+viewer=plugin.viewer
+assert(not viewer.scroll.html_body:find("dpd:english-word",1,true))
+viewer:close();flush()
+print("PASS DPD button opens English before the rescues and links a shared word to English")
 plugin:closeDatabase()
 print("PASS: native recovery/retry, help, fixed-height suggestion states, pager padding/part replacement, article switching/resuming, candidate disclosure and dense-link renders at font " .. font_size)

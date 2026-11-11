@@ -222,7 +222,7 @@ describe("plugin on an unsupported KOReader", function()
         second:addToMainMenu(items)
         local entries = items.dpd.sub_item_table
         assert.equal("Needs a newer KOReader", entries[1].text)
-        assert.equal("Help", entries[2].text_func())
+        assert.equal("Help & updates", entries[2].text_func())
         assert.equal("DPD help", entries[2].sub_item_table[1].text)
         assert.equal("Check for updates", entries[2].sub_item_table[3].text_func())
         assert.equal("Diagnostics", entries[2].sub_item_table[5].text)
@@ -266,14 +266,14 @@ describe("plugin on an unsupported KOReader", function()
         instance:addToMainMenu(items)
         local entries = items.dpd.sub_item_table
         assert.equal("Look up a word", entries[1].text)
-        assert.equal("Help", entries[#entries].text_func())
+        assert.equal("Help & updates", entries[#entries].text_func())
         local help = entries[#entries].sub_item_table
         assert.equal("Check for updates", help[3].text_func())
         instance.settings.update_available = "99.0.0"
-        assert.equal("Help · 99.0.0 available", entries[#entries].text_func())
+        assert.equal("Help & updates · 99.0.0 available", entries[#entries].text_func())
         assert.equal("Check for updates (99.0.0 available)", help[3].text_func())
         instance.settings.update_available = require("dpd/version")
-        assert.equal("Help", entries[#entries].text_func())
+        assert.equal("Help & updates", entries[#entries].text_func())
         assert.equal("Check for updates automatically", help[4].text)
         assert.equal("Diagnostics", help[5].text)
         local display, dictionaries

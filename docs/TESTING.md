@@ -147,12 +147,13 @@ which items you ran.
 10. If your device lets you rotate with a popup open, expand a sense, scroll,
     rotate, and check that the popup fits with its expansions and page kept.
     Open a component, rotate back and test Back.
-11. Before a release, install the previous release, open **Help → Check for
-    updates** and check the separate **Plugin** and **Database** lines. The
-    release-page buttons sit above **Close | Install**, with **Install** on
-    the right. A pending update also appears in the **Help** label. Tap
-    **Install** and restart. **Database status** and a lookup
-    work, and no `dpd.koplugin.previous` folder is left after the restart.
+11. Before a release, install the previous release, open **Help & updates →
+    Check for updates** and check the separate **Plugin** and **Database**
+    lines. The release-page buttons sit above **Close | Install**, with
+    **Install** on the right. A pending update also appears in the **Help &
+    updates** label. Tap **Install** and restart. **Database status** and a
+    lookup work, and no `dpd.koplugin.previous` folder is left after the
+    restart.
 12. If another plugin also changes dictionary lookup, turn DPD off and on a
     few times. Each time, open a DPD result and choose **KOReader
     dictionary**: it reaches the usual dictionary, not DPD again. The other
@@ -164,8 +165,9 @@ which items you ran.
     grammar and variant groups and many expanded alternatives. Check
     wrapping, margins, reachable controls and scrolling in both orientations.
     In an expanded sense, linked and plain construction words share a
-    baseline. Synonyms, antonyms and variants appear after the field table
-    and before the buttons; commentary and examples follow the buttons,
+    baseline. At sizes 16 and 20 the short fields sit two to a row under
+    the origin table, with synonyms, antonyms and variants last and before
+    the buttons; at 26 each field has its own row and synonyms, antonyms and variants share a line; commentary and examples follow the buttons,
     and the completion line stays last.
     At sizes 16 and 26, check that the popup stays on the page you tapped:
     - In `vajjakammappabhedanti`, open analyses 2–5, then expand and collapse
@@ -200,7 +202,11 @@ which items you ran.
     Cancel, Back and confirming **Clear recent lookups**, which leaves
     recording on.
 22. Long-press a long English word in your own book: your normal dictionary
-    opens.
+    opens. Tap its **DPD** button on `happiness`: English → Pāḷi opens with
+    23 entries. On `damage` it opens the English entries, not `dama`. On
+    `time` the Pāḷi entry opens and ends with **English → Pāḷi: time**; tap
+    it, then Back. `dhamma` has no such link. Repeat `happiness` with the
+    selection menu's **DPD** button.
 23. With all nine dictionaries chosen, use **Search other dictionaries** for
     `dharma` (Monier-Williams, Apte's `dharmaḥ` and Edgerton) and
     `Mahā Bodhi` (three DPPN entries). Search `kṛ`, open its Monier-Williams
@@ -223,12 +229,12 @@ Open an issue on [GitHub](https://github.com/digitalpalidictionary/dpd-koreader/
 its bug report form asks for the same things. Include:
 
 - the word you selected or searched, what you did and what you saw;
-- the DPD diagnostic log: turn on **Help → Diagnostics → Write diagnostic
-  log** in the DPD menu, repeat what went wrong (restart KOReader first if it
-  happens at startup), then send `dpd-debug.log` or a screenshot of **Show
-  diagnostic log** (see [troubleshooting](USAGE.md#troubleshooting)). Each
-  session in the log starts with the plugin version, KOReader version and
-  device;
+- the DPD diagnostic log: turn on **Help & updates → Diagnostics → Write
+  diagnostic log** in the DPD menu, repeat what went wrong (restart KOReader
+  first if it happens at startup), then send `dpd-debug.log` or a screenshot
+  of **Show diagnostic log** (see
+  [troubleshooting](USAGE.md#troubleshooting)). Each session in the log starts
+  with the plugin version, KOReader version and device;
 - if KOReader closed or froze, or DPD showed an error, KOReader's
   `crash.log`, which gets DPD's errors even with the diagnostic log off.
   KOReader's **Help → Report a bug** (in its main menu) shows where it is.
@@ -236,8 +242,8 @@ its bug report form asks for the same things. Include:
   problem. Over USB, it is `koreader/crash.log` on a Kindle,
   `.adds/koreader/crash.log` on a Kobo (a hidden folder) and
   `applications/koreader/crash.log` on a PocketBook;
-- without the diagnostic log, the plugin version (**Help → About & licenses**
-  in the DPD menu), your KOReader version and your device.
+- without the diagnostic log, the plugin version (**Help & updates → About &
+  licenses** in the DPD menu), your KOReader version and your device.
 
 Issues are public. The diagnostic log records the words you looked up, and
 `crash.log` can include the names and paths of books you opened, so remove

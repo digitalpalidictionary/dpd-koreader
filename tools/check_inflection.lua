@@ -10,10 +10,11 @@ local db=DB.new(path)
 local inflection=Inflection.new(db)
 
 -- Unique form counts of DPD's own generated tables, same release
--- (v0.4.20260926), from the October 2026 feature-parity research.
+-- (v0.4.20260926), from the October 2026 feature-parity research; sīlavant's
+-- count is from the ant adj template of v0.4.20261026.
 local expected={["buddha 1"]=19,["buddha 2"]=24,["gacchati 1"]=57,["ahaṃ"]=20,["atthi 1.1"]=17,
     ["atthi 1.2"]=17,bhikkhu=20,["bhikkhunā"]=20,["sabba 1"]=29,["dhamma 1.01"]=19,["khādati"]=57,
-    arahant=20,["mātar"]=22,pitar=18,["santa 1.1"]=36,["sīlavant"]=32}
+    arahant=20,["mātar"]=22,pitar=18,["santa 1.1"]=36,["sīlavant"]=36}
 for lemma,count in pairs(expected) do
     local row=db:sensesByLemma({lemma})[1]
     assert(row,"missing headword " .. lemma)

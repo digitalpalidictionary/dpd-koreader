@@ -411,7 +411,7 @@ describe("manual search recovery and history controls", function()
         files["/tmp/dpd.db"]={size=10}
         assert.equal("Database: not checked", database.text_func())
         assert.equal(0, opened)
-        for _, case in ipairs({{"v0.4.20260926","ready"},{"v0.5.20270101","newer release"},
+        for _, case in ipairs({{"v0.4.20261026","ready"},{"v0.5.20270101","newer release"},
                 {"v0.3.20250101","older release"},{nil,"unknown release"}}) do
             release=case[1]
             plugin:chooseDatabase(); state.confirm.onConfirm("/tmp/dpd.db")
@@ -428,8 +428,8 @@ describe("manual search recovery and history controls", function()
     it("puts the release verdict first in Database status", function()
         package.loaded["libs/libkoreader-lfs"].attributes=function() return 0 end
         plugin.settings.db_path="/tmp/dpd.db"
-        for _, case in ipairs({{"v0.4.20260926","^Database ready\nDPD v0.4.20260926, the release this plugin is tested with"},
-                {"v0.5.20270101","^Newer release, should work\nDPD v0.5.20270101. Tested with DPD v0.4.20260926"},
+        for _, case in ipairs({{"v0.4.20261026","^Database ready\nDPD v0.4.20261026, the release this plugin is tested with"},
+                {"v0.5.20270101","^Newer release, should work\nDPD v0.5.20270101. Tested with DPD v0.4.20261026"},
                 {"v0.3.20250101","^Older release, should work\n"},{nil,"^Release unknown\n"}}) do
             plugin.db={info={dpd_release_version=case[1]},journal_mode="wal"}
             plugin:databaseStatus()
@@ -450,7 +450,7 @@ describe("manual search recovery and history controls", function()
         local items={};plugin:addToMainMenu(items)
         local help
         for _,item in ipairs(items.dpd.sub_item_table) do
-            if item.text_func and item.text_func()=="Help" then help=item end
+            if item.text_func and item.text_func()=="Help & updates" then help=item end
         end
         for _,item in ipairs(help.sub_item_table) do
             if item.text=="DPD help" then item.callback() end
@@ -465,7 +465,7 @@ describe("manual search recovery and history controls", function()
         local items={};plugin:addToMainMenu(items)
         local help
         for _,item in ipairs(items.dpd.sub_item_table) do
-            if item.text_func and item.text_func()=="Help" then help=item end
+            if item.text_func and item.text_func()=="Help & updates" then help=item end
         end
         for _,item in ipairs(help.sub_item_table) do
             if item.text=="Diagnostics" then
